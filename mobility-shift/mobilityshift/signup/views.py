@@ -10,11 +10,11 @@ def index(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             print(form.cleaned_data['email'])
-            #Checking if error in signup
+            #Checking if error in saving
             try:
                 data = User(email=form.cleaned_data['email'], age_group=form.cleaned_data['age_group'], gender=form.cleaned_data['gender'])
                 data.save()
-                return HttpResponseRedirect("/confirm/")
+                return HttpResponseRedirect("confirm/")
             except Exception as e:
                 if str(e) == "UNIQUE constraint failed: signup_user.email":
                     form.add_error(None, _("A user with this Email already exists! You might want to check your inbox, including spam."))
@@ -28,3 +28,6 @@ def index(request):
     else:
         form = SignUpForm()
     return render(request, 'index.html', {"form": form})
+
+def confirm(request):
+    return render(request, 'confirm.html')
