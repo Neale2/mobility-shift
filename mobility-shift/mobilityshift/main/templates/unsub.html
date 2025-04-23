@@ -2,14 +2,15 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>No Logging</title>
+        <title>Unsubscribe</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     </head>
     <body>
         {% block content %}
-        <h1>No Logging</h1>
+        <h1>Unsubscribe</h1>
         <h3>Greetings, {{user.email}}.</h3>
-        <!--redirects to yes page-->
-        <a href=../yes/{{user.uuid}}>Oops! I meant to press yes!</a>
+        <h3 class="red">If you unsubscribe, all your progress will be lost.</h3>
         {% endblock %}
         <form method="post">
             {% csrf_token %} {{ form }}

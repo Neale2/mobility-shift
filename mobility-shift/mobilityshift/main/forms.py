@@ -13,3 +13,6 @@ class YesLogForm(forms.Form):
 class NoLogForm(forms.Form):
     #overriding default textinput widget since too small
     text_response = forms.CharField(label="Why didn't you do your trip this week?", widget=forms.Textarea)
+    
+class UnsubForm(forms.Form):
+    response = forms.ChoiceField(label="Do you want to unsubscribe from the program?", choices=[("no", "No :)"), ("yes", "Yes :(")])

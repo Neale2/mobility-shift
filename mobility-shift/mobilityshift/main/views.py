@@ -3,8 +3,8 @@ from django.shortcuts import render, get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
-from .forms import SignUpForm, YesLogForm, NoLogForm
-from .models import User, Trip
+from .forms import SignUpForm, YesLogForm, NoLogForm, UnsubForm
+from .models import User, Trip, DeletedUser, DeletedTrip
 
 def signup(request):
     if request.method == "POST":
@@ -82,3 +82,43 @@ def no(request, pk):
         
     context = {'user': user, 'form': form}
     return render(request, 'no.html', context)
+
+def unsub(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    
+    if request.method == "POST":
+        form = UnsubForm(request.POST)
+        if form.is_valid():
+            #Checking if error in saving
+            try:
+                if form.cleaned_data['response'] == 'yes':
+                    userdata = DeletedUser(uuid=user.uuid, age_group=user.age_group, gender=user.gender, sign_up_time=user.sign_up_time)
+                    userdata.save()
+                    trips = Trip.objects.filter(user_id=user.uuid)
+                    for trip in trips:
+                        tripdata = DeletedTrip(user=userdata, distance=trip.distance, text_response=trip.text_response, log_time=trip.log_time)
+                        tripdata.save()
+                    trips.delete()
+                    user.delete()
+                        
+                    
+                    return HttpResponseRedirect("unsubbed/")
+                else:
+                    return HttpResponseRedirect("stillsubbed/")
+            except Exception as e:
+                if str(e) == "database is locked":
+                    form.add_error(None, _("Unable to unsubscribe at this time since the database is in use - you might want to wait a couple seconds and try again."))
+                else:
+                    form.add_error(None, _("There's been an unidentified error! Sorry about that. The system error message is: " + str(e)))
+        
+    else:
+        form = UnsubForm()
+        
+    context = {'user': user, 'form': form}
+    return render(request, 'unsub.html', context)
+
+def stillsubbed(request):
+    return render(request, 'stillsubbed.html')
+
+def unsubbed(request):
+    return render(request, 'unsubbed.html')
