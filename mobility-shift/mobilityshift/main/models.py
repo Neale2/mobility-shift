@@ -19,8 +19,10 @@ class User(models.Model):
 class Trip(models.Model):
     """Model storing trips."""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    mode = models.CharField(choices=[("walk", "Walking"), ("bike", "Cycling"), ("bus", "Bussing")])
+    #left blank if response is no - used as a way to identify trip type
+    mode = models.CharField(choices=[("walk", "Walking"), ("bike", "Cycling"), ("bus", "Bussing")], null=True, blank=True)
     #NOT when the trip was, but when trip was logged
     log_time = models.DateTimeField(editable=False, default=(datetime.datetime.now))
-    #stored in METERS
-    distance = models.PositiveIntegerField(choices=[(500, "0.5km"), (1000, "1km"), (2500, "2.5km"), (5000, "5km"), (10000, "10km"), (25000, "25km"), (50000, "50km")])
+    #stored in METERS, set to 0 if response is no
+    distance = models.PositiveIntegerField(choices=[(0, "0km"), (500, "0.5km"), (1000, "1km"), (2500, "2.5km"), (5000, "5km"), (10000, "10km"), (25000, "25km"), (50000, "50km")])
+    text_response = models.TextField(null=True, blank=True)
