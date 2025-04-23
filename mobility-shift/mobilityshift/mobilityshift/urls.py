@@ -27,4 +27,5 @@ urlpatterns = [
     path('signup/', include('signup.urls')),
     #temporary redirect of main URL to signup - redirect to home when implemented
     path('', RedirectView.as_view(url='signup/', permanent=True)),
+    path('log/', include('log.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
