@@ -8,6 +8,8 @@
         {% block content %}
         <h1>Yes Logging</h1>
         <h3>Greetings, {{user.email}}.</h3>
+        <!--redirects to yes page-->
+        <a href=../no/{{user.uuid}}>Oops! I meant to press no!</a>
         {% endblock %}
         <form method="post">
             {% csrf_token %} {{ form }}
