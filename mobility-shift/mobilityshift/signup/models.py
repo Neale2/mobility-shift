@@ -3,7 +3,6 @@ import datetime
 from django.db import models
 
 from django.db.models import UniqueConstraint # Constrains fields to unique values
-from django.db.models.functions import Lower # Returns lower cased value of field
 
 class User(models.Model):
     """Model storing users."""
@@ -16,3 +15,12 @@ class User(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return self.email
+
+class Trip(models.Model):
+    """Model storing trips."""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    mode = models.CharField(choices=[("walk", "Walking"), ("bike", "Cycling"), ("bus", "Bussing")])
+    #NOT when the trip was, but when trip was logged
+    log_time = models.DateTimeField(editable=False, default=(datetime.datetime.now))
+    #stored in METERS
+    distance = models.PositiveIntegerField(choices=[(500, "0.5km"), (1000, "1km"), (2500, "2.5km"), (5000, "5km"), (10000, "10km"), (25000, "25km"), (50000, "50km")])
