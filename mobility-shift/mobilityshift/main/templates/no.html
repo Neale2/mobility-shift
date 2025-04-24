@@ -5,11 +5,13 @@
         <title>No Logging</title>
     </head>
     <body>
+        {% load mathfilters %}
         {% block content %}
         <h1>No Logging</h1>
         <h3>Greetings, {{user.email}}.</h3>
         <!--redirects to yes page-->
         <a href=../yes/{{user.uuid}}>Oops! I meant to press yes!</a>
+        <h4>Congrats! You have saved {{ user.emissions_saved|div:1000 }}kg of CO2e so far!</h4>
         {% endblock %}
         <form method="post">
             {% csrf_token %} {{ form }}

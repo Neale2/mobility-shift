@@ -11,6 +11,8 @@ class User(models.Model):
     sign_up_time = models.DateTimeField(editable=False, default=(datetime.datetime.now))
     age_group = models.CharField(choices=[("<13", "Less than 13"), ("13-17", "13 - 17"), ("18-24", "18 - 24"), ("25-34", "25 - 34"), ("35-44", "35 - 44"), ("45-64", "45 - 64"), (">65", "More than 65"), ("prefer_not", "Prefer not to say")], help_text='Select your age group')
     gender = models.CharField(choices=[("male", "Male"), ("female", "Female"), ("other", "Other"), ("prefer_not", "Prefer not to say")], help_text='Select your gender')
+    #1 gram = 1
+    emissions_saved = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         """String for representing the Model object."""
@@ -33,6 +35,7 @@ class DeletedUser(models.Model):
     sign_up_time = models.DateTimeField(editable=False)
     age_group = models.CharField(choices=[("<13", "Less than 13"), ("13-17", "13 - 17"), ("18-24", "18 - 24"), ("25-34", "25 - 34"), ("35-44", "35 - 44"), ("45-64", "45 - 64"), (">65", "More than 65"), ("prefer_not", "Prefer not to say")], help_text='Select your age group')
     gender = models.CharField(choices=[("male", "Male"), ("female", "Female"), ("other", "Other"), ("prefer_not", "Prefer not to say")], help_text='Select your gender')
+    emissions_saved = models.PositiveIntegerField()
     
 class DeletedTrip(models.Model):
     user = models.ForeignKey(DeletedUser, on_delete=models.CASCADE)

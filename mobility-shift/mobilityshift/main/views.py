@@ -43,6 +43,9 @@ def yes(request, pk):
         if form.is_valid():
             #Checking if error in saving
             try:
+                #based on petrol emissions of 0.243kg/km -> 0.243g/m so all values will be int
+                user.emissions_saved = user.emissions_saved + int(float(form.cleaned_data['distance']) * 0.243)
+                user.save()
                 data = Trip(user=user, mode=form.cleaned_data['mode'], distance=form.cleaned_data['distance'])
                 data.save()
                 return HttpResponseRedirect("thanks/")
@@ -92,7 +95,7 @@ def unsub(request, pk):
             #Checking if error in saving
             try:
                 if form.cleaned_data['response'] == 'yes':
-                    userdata = DeletedUser(uuid=user.uuid, age_group=user.age_group, gender=user.gender, sign_up_time=user.sign_up_time)
+                    userdata = DeletedUser(uuid=user.uuid, age_group=user.age_group, gender=user.gender, sign_up_time=user.sign_up_time, emissions_saved=user.emissions_saved)
                     userdata.save()
                     trips = Trip.objects.filter(user_id=user.uuid)
                     for trip in trips:
@@ -101,7 +104,6 @@ def unsub(request, pk):
                     trips.delete()
                     user.delete()
                         
-                    
                     return HttpResponseRedirect("unsubbed/")
                 else:
                     return HttpResponseRedirect("stillsubbed/")
