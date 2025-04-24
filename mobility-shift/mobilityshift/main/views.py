@@ -1,3 +1,11 @@
+import sys
+import os
+import uuid
+from bs4 import BeautifulSoup
+
+from importlib import resources
+from . import send_email
+
 from django.shortcuts import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import gettext_lazy as _
@@ -6,13 +14,30 @@ from django.views import generic
 from .forms import SignUpForm, YesLogForm, NoLogForm, UnsubForm
 from .models import User, Trip, DeletedUser, DeletedTrip
 
+
+
 def signup(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
             #Checking if error in saving
             try:
-                data = User(email=form.cleaned_data['email'], age_group=form.cleaned_data['age_group'], gender=form.cleaned_data['gender'])
+                user_uuid = str(uuid.uuid4())
+                
+                html_content = resources.files('main.emailtemplates').joinpath('signedup.html').read_text(encoding='utf-8')
+                soup = BeautifulSoup(html_content, 'html.parser')
+                
+                for i in soup.find_all("variable"):
+                    if i["class"] == ['email']:
+                        i.name = "span"
+                        i.string = form.cleaned_data['email']
+                    elif i["class"] == ['a-unsub-here']:
+                        i.name = "a"
+                        i["href"] = f'http://127.0.0.1:8000/unsubscribe/{user_uuid}'
+                        i.string = "here"
+                
+                print(send_email.send_email(form.cleaned_data['email'], "Welcome to the Programme!", str(soup), user_uuid))
+                data = User(email=form.cleaned_data['email'], age_group=form.cleaned_data['age_group'], gender=form.cleaned_data['gender'], uuid=user_uuid)
                 data.save()
                 return HttpResponseRedirect("confirm/")
             except Exception as e:
