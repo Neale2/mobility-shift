@@ -1,0 +1,36 @@
+<mjml>
+  <mj-body background-color="#f1f1f1">
+  
+    <mj-section>
+      <mj-column>
+        <mj-image width="100px" src="https://files.catbox.moe/b4fa8v.png"></mj-image>
+
+        <mj-divider border-color="#ff0000"></mj-divider>
+
+        <mj-text font-size="24px" color="#000" font-family="helvetica">Hi there,</mj-text>
+        <mj-text font-size="22px" color="#000" font-family="helvetica">
+          {{ email }}
+        </mj-text>
+        <mj-text font-size="18px" font-family="helvetica">So far you've saved <b>{% load mathfilters %}{{ emissions_saved|div:1000  }}kg</b> of emissions!</mj-text>
+
+        <mj-text font-size="20px" color="#000" font-family="helvetica">Did you drop one high-carbon commute this week?</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-group>
+        <mj-column>
+          <mj-button background-color="#cc0000" color="#000" font-size="20px" font-family="helvetica" href="http://127.0.0.1:8000/yes/{{ user_uuid }}">Yes!</mj-button>
+        </mj-column>
+        <mj-column>
+          <mj-button background-color="#cccccc" color="#000" font-size="20px" font-family="helvetica" href="http://127.0.0.1:8000/no/{{ user_uuid }}">No :(</mj-button>
+        </mj-column>
+      </mj-group>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-divider border-color="#ff0000"></mj-divider>
+        <mj-text font-size="16px" color="#000" font-family="helvetica">If you want to unsubscribe from our emails, click <a href="http://127.0.0.1:8000/unsubscribe/{{ user_uuid }}">here</a>.</mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

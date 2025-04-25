@@ -3,7 +3,7 @@
     <mj-section>
       <mj-column>
 
-        <mj-image width="100px" src="http://127.0.0.1:8000/static/images/cool-logo.png"></mj-image>
+        <mj-image width="100px" src="https://files.catbox.moe/b4fa8v.png"></mj-image>
 
         <mj-divider border-color="#ff0000"></mj-divider>
 

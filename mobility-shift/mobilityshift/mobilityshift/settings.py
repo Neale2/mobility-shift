@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
     'mathfilters',
-    'django_altcha'
+    'django_altcha',
 ]
 
 MIDDLEWARE = [
