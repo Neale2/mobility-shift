@@ -212,7 +212,7 @@
                                                             text-align: left;
                                                             color: #000000;
                                                         ">
-                                                        <variable class="email">email</variable>
+                                                        {{ email }}
                                                     </div>
                                                 </td>
                                             </tr>
@@ -294,8 +294,8 @@
                                                             color: #000000;
                                                         ">
                                                         If you want to unsubscribe from our emails, click
-                                                        <variable class="a-unsub-here"
-                                                            >Sorry, link not working.</variable
+                                                        <a href="http://127.0.0.1:8000/unsubscribe/{{ user_uuid }}"
+                                                            >here</a
                                                         >.
                                                     </div>
                                                 </td>
