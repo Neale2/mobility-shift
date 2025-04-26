@@ -118,7 +118,7 @@ def unsub(request, pk):
                     userdata.save()
                     trips = Trip.objects.filter(user_id=user.uuid)
                     for trip in trips:
-                        tripdata = DeletedTrip(user=userdata, distance=trip.distance, text_response=trip.text_response, log_time=trip.log_time)
+                        tripdata = DeletedTrip(user=userdata, distance=trip.distance, text_response=trip.text_response, log_time=trip.log_time, mode=trip.mode)
                         tripdata.save()
                     trips.delete()
                     user.delete()

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'mathfilters',
     'django_altcha',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [

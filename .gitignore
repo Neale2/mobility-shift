@@ -175,3 +175,8 @@ cython_debug/
 
 #secrets
 secrets.py
+client_secrets.json
+
+#user data
+data.csv
+.~lock.data.csv#
