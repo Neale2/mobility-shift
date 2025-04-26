@@ -10,6 +10,8 @@ from .secrets import aws_environ, bucket_name
 
 from .models import User, Trip, DeletedUser, DeletedTrip
 
+
+
 #weekly email sent to all users asking if they had done a trip
 def email_users():
     template = get_template('log-email.html')
@@ -24,7 +26,8 @@ def email_users():
         
         response = send_email.send_email(user.email, "It's your weekly logging time!", html_body, str(user.uuid))
         print(user.email, response)
-    
+
+
 def make_spreadsheet():
     all_data_list = [
         [
