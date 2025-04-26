@@ -2,7 +2,7 @@ import sys
 import os
 import uuid
 
-from . import send_email
+from .functions import send_email
 
 from django.template.loader import get_template
 from django.shortcuts import HttpResponseRedirect

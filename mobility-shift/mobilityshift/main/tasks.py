@@ -1,3 +1,4 @@
+#tasks to be run at a certain time - add function here, then call from management/commands/runapscheduler.py
 import os
 import csv
 import boto3
@@ -5,7 +6,7 @@ from botocore.exceptions import ClientError
 
 
 from django.template.loader import get_template
-from . import send_email
+from .functions import send_email
 from .secrets import aws_environ, bucket_name
 
 from .models import User, Trip, DeletedUser, DeletedTrip
@@ -24,7 +25,7 @@ def email_users():
         
         html_body = template.render(context)
         
-        response = send_email.send_email(user.email, "It's your weekly logging time!", html_body, str(user.uuid))
+        response = send_email(user.email, "It's your weekly logging time!", html_body, str(user.uuid))
         print(user.email, response)
 
 
@@ -107,6 +108,6 @@ def make_spreadsheet():
     except ClientError as e:
         raise RuntimeError(f"Could not generate presigned URL: {e}")
     if response:
-        email_response = send_email.send_email("arturo.neale@gmail.com", "Daily Database Dump", "Hi! Here's the database from today!" + response, 'N/A')
+        email_response = send_email("arturo.neale@gmail.com", "Daily Database Dump", "Hi! Here's the database from today!" + response, 'N/A')
         print(email_response)
     

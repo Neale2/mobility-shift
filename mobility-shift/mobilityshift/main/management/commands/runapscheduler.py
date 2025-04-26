@@ -55,7 +55,7 @@ class Command(BaseCommand):
         
         scheduler.add_job(
             logging_email,
-            trigger=CronTrigger(day_of_week="mon", hour='7', minute="0"),
+            trigger=CronTrigger(day_of_week="mon", hour='7', minute='0'),
             id="logging_email",
             max_instances=1,
             replace_existing=True,

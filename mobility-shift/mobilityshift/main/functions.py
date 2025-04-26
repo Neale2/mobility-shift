@@ -4,10 +4,9 @@ import os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formatdate
+
 from .secrets import aws_environ
-#credentials in report, set as env variables:
-#export AWS_ACCESS_KEY_ID="YOUR_ACCESS_KEY"
-#export AWS_SECRET_ACCESS_KEY="YOUR_SECRET_KEY"
+
 
 
 def send_email(recipient, subject, html_body, uuid):
@@ -39,5 +38,5 @@ def send_email(recipient, subject, html_body, uuid):
         )
     except Exception as e:
         return "Error: email could not be sent.", e
-
+    
 
