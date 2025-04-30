@@ -30,7 +30,7 @@ def signup(request):
         
                 html_body = template.render(context)
                 
-                print(send_email.send_email(form.cleaned_data['email'], "Welcome to the Programme!", html_body, user_uuid))
+                print(send_email(form.cleaned_data['email'], "Welcome to the Programme!", html_body, user_uuid))
                 data = User(email=form.cleaned_data['email'], age_group=form.cleaned_data['age_group'], gender=form.cleaned_data['gender'], uuid=user_uuid)
                 data.save()
                 return HttpResponseRedirect("confirm/")

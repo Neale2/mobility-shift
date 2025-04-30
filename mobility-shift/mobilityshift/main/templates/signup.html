@@ -8,15 +8,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <!-- Add additional CSS in static file -->
         {% load static %}
+
         <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     </head>
     <body>
-        <h1>Welcome:</h1>
-        <h3>to the sign up page! Here, you can sign up to the commute program!</h3>
-        <h3 class="red">As proven by the red text, HTML and (external) CSS are functioning on this webpage!!!</h3>
-        <form method="post">
-            {% csrf_token %} {{ form }}
-            <input type="submit" value="submit" />
-        </form>
+        <header>
+            <h1>Swap One Signup</h1>
+        </header>
+        <main>
+            <div class="blurb">
+                <h3>Welcome to Swap One!</h3>
+                <h3 class="red">We're so glad you're here - ready to cut your transport emissions?</h3>
+            </div>
+            <form method="post">
+                {% csrf_token %} {{ form }}
+                <input type="submit" value="submit" class="submit button input" />
+            </form>
+        </main>
     </body>
 </html>

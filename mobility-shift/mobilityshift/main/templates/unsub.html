@@ -8,13 +8,19 @@
     </head>
     <body>
         {% block content %}
-        <h1>Unsubscribe</h1>
-        <h3>Greetings, {{user.email}}.</h3>
-        <h3 class="red">If you unsubscribe, all your progress will be lost.</h3>
-        {% endblock %}
-        <form method="post">
-            {% csrf_token %} {{ form }}
-            <input type="submit" value="submit" />
-        </form>
+        <header>
+            <h1>Unsubscribe</h1>
+        </header>
+        <main>
+            <div class="blurb">
+                <h3>Greetings, {{user.email}}.</h3>
+                <h3 class="red">If you unsubscribe, all your progress will be lost.</h3>
+                {% endblock %}
+            </div>
+            <form method="post">
+                {% csrf_token %} {{ form }}
+                <input type="submit" value="submit" class="submit button input" />
+            </form>
+        </main>
     </body>
 </html>
