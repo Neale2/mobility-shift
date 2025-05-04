@@ -39,4 +39,10 @@ def send_email(recipient, subject, html_body, uuid):
     except Exception as e:
         return "Error: email could not be sent.", e
     
+    
+    
+    
+
+
+    
 

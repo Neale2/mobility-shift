@@ -41,9 +41,7 @@ def signup(request):
                     form.add_error(None, _("Unable to save your response at this time - you might want to wait a couple seconds and try again."))
                 else:
                     form.add_error(None, _("There's been an unidentified error! Sorry about that. The system error message is: " + str(e)))
-                
-            
-            
+
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {"form": form})
