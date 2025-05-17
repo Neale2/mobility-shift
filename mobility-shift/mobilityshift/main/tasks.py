@@ -33,7 +33,6 @@ def make_spreadsheet():
     all_data_list = [
         [
             'UUID',
-            'Gender',
             'Age Group',
             'Sign Up Time',
             'Emissions Saved',
@@ -53,7 +52,6 @@ def make_spreadsheet():
         try:
             data = [
                 str(trip.user.uuid),
-                trip.user.gender,
                 trip.user.age_group,
                 str(trip.user.sign_up_time),
                 trip.user.emissions_saved,

@@ -6,9 +6,12 @@
         {% endblock %}
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!--searchable dropdowns-->
+        <script src="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.min.js"></script>
+
         <!-- Add additional CSS in static file -->
         {% load static %}
-
+        <link rel="stylesheet" href="{% static 'css/dropdown.css' %}" />
         <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     </head>
     <body>
@@ -25,5 +28,21 @@
                 <input type="submit" value="submit" class="submit button input" />
             </form>
         </main>
+
+        <script>
+            document.querySelectorAll(".multi-search").forEach(function (element) {
+                const choicesInstance = new Choices(element, {
+                    searchEnabled: true
+                });
+
+                // transfer classes from the original element to the outer container
+                const originalClasses = element.classList;
+                const container = element.closest(".choices");
+
+                if (container && originalClasses.length > 0) {
+                    originalClasses.forEach((cls) => container.classList.add(cls));
+                }
+            });
+        </script>
     </body>
 </html>

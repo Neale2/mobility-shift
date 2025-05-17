@@ -30,9 +30,9 @@ def signup(request):
         
                 html_body = template.render(context)
                 
-                print(send_email(form.cleaned_data['email'], "Welcome to the Programme!", html_body, user_uuid))
-                data = User(email=form.cleaned_data['email'], age_group=form.cleaned_data['age_group'], gender=form.cleaned_data['gender'], uuid=user_uuid)
+                data = User(email=form.cleaned_data['email'], age_group=form.cleaned_data['age_group'], uuid=user_uuid)
                 data.save()
+                send_email(form.cleaned_data['email'], "Welcome to the Programme!", html_body, user_uuid)
                 return HttpResponseRedirect("confirm/")
             except Exception as e:
                 if str(e) == "UNIQUE constraint failed: main_user.email":
@@ -112,7 +112,7 @@ def unsub(request, pk):
             #Checking if error in saving
             try:
                 if form.cleaned_data['response'] == 'yes':
-                    userdata = DeletedUser(uuid=user.uuid, age_group=user.age_group, gender=user.gender, sign_up_time=user.sign_up_time, emissions_saved=user.emissions_saved)
+                    userdata = DeletedUser(uuid=user.uuid, age_group=user.age_group, sign_up_time=user.sign_up_time, emissions_saved=user.emissions_saved)
                     userdata.save()
                     trips = Trip.objects.filter(user_id=user.uuid)
                     for trip in trips:
