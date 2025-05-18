@@ -1,7 +1,7 @@
 from django import forms
 from django.db.models import Case, When, Value, IntegerField
 from django_altcha import AltchaField
-from .models import Employer
+from .models import Employer, Region
 
 class SignUpForm(forms.Form):
     
@@ -11,12 +11,23 @@ class SignUpForm(forms.Form):
     distance = forms.ChoiceField(widget=forms.Select(attrs={'class': "distance multi input"}), label="Approximately how far is your typical commute?", choices=[(500, "0.5km"), (1000, "1km"), (2500, "2.5km"), (5000, "5km"), (10000, "10km"), (25000, "25km"), (50000, "50km")])
     #numbers returned are emission factors (g/km) for ease. Don't know/other returns typical petrol number
     vehicle = forms.ChoiceField(widget=forms.Select(attrs={'class': "vehicle multi input"}), label="What type of vehicle do you normally use to commute?", choices=[(243, "Petrol"), (265, "Diesel"), (192, "Hybrid"), (98, "Plug-in Hybrid"), (19, "Electric"), (243, "Other / Don't know")])
-    employer = forms.ModelChoiceField(widget=forms.Select(attrs={'class': "employerMode multi-search input"}), label="Who is your employer?", queryset=Employer.objects.all(), blank=False, initial='None / Other / Prefer Not To Say')
+    employer = forms.ModelChoiceField(widget=forms.Select(attrs={'class': "employerMode multi input"}), label="Who is your employer?", queryset=Employer.objects.annotate(
+        #orders list so none at top
+        priority=Case(
+        When(name='None / Other / Prefer Not To Say', then=Value(0)),
+        default=Value(1),
+        output_field=IntegerField()
+    )
+).order_by('priority', 'name'), blank=False, initial='None / Other / Prefer Not To Say')
+    region = forms.ModelChoiceField(widget=forms.Select(attrs={'class': "employerMode multi input"}), label="What region do you live in?", queryset=Region.objects.all(), blank=False, initial='Nelson')
     captcha = AltchaField(debug=False, auto='onload')
+    
+    def clean_name(self):
+        name = self.cleaned_data.get('name', '')
+        return name.title()
 
 class YesLogForm(forms.Form):
     mode = forms.ChoiceField(widget=forms.Select(attrs={'class': "mode multi input"}), label="What mode of transport did you use?", choices=[("walk", "Walking"), ("bike", "Cycling"), ("bus", "Bussing")])
-    distance = forms.ChoiceField(widget=forms.Select(attrs={'class': "distance multi input"}), label="How far was the trip (pick the closest one to your real distance)?", choices=[(500, "0.5km"), (1000, "1km"), (2500, "2.5km"), (5000, "5km"), (10000, "10km"), (25000, "25km"), (50000, "50km")])
     captcha = AltchaField(debug=False, auto='onload')
 
 class NoLogForm(forms.Form):

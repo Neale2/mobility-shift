@@ -8,7 +8,7 @@
         <mj-divider border-color="#ff0000"></mj-divider>
 
          <mj-text font-size="24px" color="#000" font-family="helvetica">Hi there,</mj-text>
-        <mj-text font-size="22px" color="#000" font-family="helvetica">{{ email }}</mj-text>
+        <mj-text font-size="22px" color="#000" font-family="helvetica">{{ name }}</mj-text>
         
         <mj-text font-size="20px" color="#ff0000" font-family="helvetica">Thanks for signing up!</mj-text>
         <mj-text font-size="20px" color="#000" font-family="helvetica">See you next week for your first logging email! Until then... hang tight and commute sustainably!</mj-text>

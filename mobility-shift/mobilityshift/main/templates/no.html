@@ -14,7 +14,7 @@
         </header>
          <main>
             <div class="blurb">
-                <h3>Greetings, {{user.email}}.</h3>
+                <h3>Greetings, {{user.name}}.</h3>
                 <!--redirects to yes page-->
                 <a href=../yes/{{user.uuid}}>Oops! I meant to press yes!</a>
                 <h4>Congrats! You have saved {{ user.emissions_saved|div:1000 }}kg of CO2e so far!</h4>

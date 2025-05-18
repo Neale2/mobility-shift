@@ -9,7 +9,7 @@
 
         <mj-text font-size="24px" color="#000" font-family="helvetica">Hi there,</mj-text>
         <mj-text font-size="22px" color="#000" font-family="helvetica">
-          {{ email }}
+          {{ name }}
         </mj-text>
         <mj-text font-size="18px" font-family="helvetica">So far you've saved <b>{% load mathfilters %}{{ emissions_saved|div:1000  }}kg</b> of emissions!</mj-text>
 

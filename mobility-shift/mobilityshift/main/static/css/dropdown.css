@@ -5,9 +5,7 @@
 .choices:focus {
     outline: 0;
 }
-.choices:last-child {
-    margin-bottom: 0;
-}
+
 .choices.is-disabled .choices__inner,
 .choices.is-disabled .choices__input {
     background-color: #eaeaea;
@@ -284,7 +282,6 @@
     border: 0;
     border-radius: 0;
     max-width: 100%;
-    padding: 4px 0 4px 2px;
 }
 [dir="rtl"] .choices__input {
     padding-right: 2px;

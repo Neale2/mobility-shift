@@ -24,13 +24,13 @@ def signup(request):
                 user_uuid = str(uuid.uuid4())
                 template = get_template('signedup-email.html')
                 context = {
-                    'email': form.cleaned_data['email'],
+                    'name': form.cleaned_data['name'],
                     'user_uuid': user_uuid,
                 }
         
                 html_body = template.render(context)
                 
-                data = User(email=form.cleaned_data['email'], age_group=form.cleaned_data['age_group'], uuid=user_uuid)
+                data = User(email=form.cleaned_data['email'], age_group=form.cleaned_data['age_group'], uuid=user_uuid, name=form.cleaned_data['name'], distance=form.cleaned_data['distance'], vehicle=form.cleaned_data['vehicle'], employer=form.cleaned_data['employer'], region=form.cleaned_data['region'])
                 data.save()
                 send_email(form.cleaned_data['email'], "Welcome to the Programme!", html_body, user_uuid)
                 return HttpResponseRedirect("confirm/")
@@ -60,10 +60,10 @@ def yes(request, pk):
         if form.is_valid():
             #Checking if error in saving
             try:
-                #based on petrol emissions of 0.243kg/km -> 0.243g/m so all values will be int
-                user.emissions_saved = user.emissions_saved + int(float(form.cleaned_data['distance']) * 0.243)
+                #gets emmission factor in grams per km -> div by 1000 to get grams per meter. multiply by meters traveled 
+                user.emissions_saved = user.emissions_saved + int(user.distance * user.vehicle / 1000)
                 user.save()
-                data = Trip(user=user, mode=form.cleaned_data['mode'], distance=form.cleaned_data['distance'])
+                data = Trip(user=user, mode=form.cleaned_data['mode'])
                 data.save()
                 return HttpResponseRedirect("thanks/")
             except Exception as e:
@@ -112,11 +112,11 @@ def unsub(request, pk):
             #Checking if error in saving
             try:
                 if form.cleaned_data['response'] == 'yes':
-                    userdata = DeletedUser(uuid=user.uuid, age_group=user.age_group, sign_up_time=user.sign_up_time, emissions_saved=user.emissions_saved)
+                    userdata = DeletedUser(uuid=user.uuid, age_group=user.age_group, sign_up_time=user.sign_up_time, emissions_saved=user.emissions_saved, distance=user.distance, vehicle=user.vehicle, employer=user.employer, region=user.region)
                     userdata.save()
                     trips = Trip.objects.filter(user_id=user.uuid)
                     for trip in trips:
-                        tripdata = DeletedTrip(user=userdata, distance=trip.distance, text_response=trip.text_response, log_time=trip.log_time, mode=trip.mode)
+                        tripdata = DeletedTrip(user=userdata, text_response=trip.text_response, log_time=trip.log_time, mode=trip.mode)
                         tripdata.save()
                     trips.delete()
                     user.delete()

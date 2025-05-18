@@ -21,6 +21,7 @@ def email_users():
             'email': user.email,
             'user_uuid': user.uuid,
             'emissions_saved': user.emissions_saved,
+            'name': user.name,
         }
         
         html_body = template.render(context)
@@ -35,12 +36,17 @@ def make_spreadsheet():
             'UUID',
             'Age Group',
             'Sign Up Time',
-            'Emissions Saved',
-            'Distance',
+            'Emissions Saved (g)',
             'Mode',
             'Log Time',
             'Text Response',
-            'Email'
+            'Commute Distance (m)',
+            'Primary Vehicle (emission factor)',
+            'Employer',
+            'Region',
+            'Email',
+            'Name',
+            
         ]
     ]
     trips = []
@@ -55,14 +61,23 @@ def make_spreadsheet():
                 trip.user.age_group,
                 str(trip.user.sign_up_time),
                 trip.user.emissions_saved,
-                trip.distance,
                 trip.mode,
                 str(trip.log_time),
-                trip.text_response
+                trip.text_response,
+                str(trip.user.distance),
+                str(trip.user.vehicle),
+                trip.user.employer,
+                trip.user.region,
+                
             ]
             #deleted accounds don't have emails
             try:
                 data.append(trip.user.email)
+            except:
+                data.append("DELETED")
+            #deleted accounds don't have names
+            try:
+                data.append(trip.user.name)
             except:
                 data.append("DELETED")
             
