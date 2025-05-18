@@ -11,7 +11,7 @@ from .secrets import aws_environ
 
 def send_email(recipient, subject, html_body, uuid):
     aws_environ()
-    sender = 'no-reply@testing123.my'
+    sender = 'swap@testing123.my'
     unsubscribe_url = "http://127.0.0.1:8000/unsubscribe/" + uuid
     client = boto3.client('ses', region_name='ap-southeast-2')
 

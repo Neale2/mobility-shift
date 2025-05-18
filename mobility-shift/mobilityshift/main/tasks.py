@@ -60,11 +60,11 @@ def make_spreadsheet():
             data = [
                 str(trip.user.uuid),
                 trip.user.age_group,
-                str(trip.user.sign_up_time),
+                str(trip.user.sign_up_time.strftime('%Y-%m-%d %H:%M:%S')),
                 trip.user.emissions_saved,
                 trip.mode,
                 trip.quantity,
-                str(trip.log_time),
+                str(trip.log_time.strftime('%Y-%m-%d %H:%M:%S')),
                 trip.text_response,
                 str(trip.user.distance),
                 str(trip.user.vehicle),
