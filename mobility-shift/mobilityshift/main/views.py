@@ -60,10 +60,10 @@ def yes(request, pk):
         if form.is_valid():
             #Checking if error in saving
             try:
-                #gets emmission factor in grams per km -> div by 1000 to get grams per meter. multiply by meters traveled 
-                user.emissions_saved = user.emissions_saved + int(user.distance * user.vehicle / 1000)
+                #gets emmission factor in grams per km -> div by 1000 to get grams per meter. multiply by meters traveled and number of trips.
+                user.emissions_saved = user.emissions_saved + int(form.cleaned_data['quantity'] * user.distance * user.vehicle / 1000)
                 user.save()
-                data = Trip(user=user, mode=form.cleaned_data['mode'])
+                data = Trip(user=user, mode=form.cleaned_data['mode'], quantity=form.cleaned_data['quantity'])
                 data.save()
                 return HttpResponseRedirect("thanks/")
             except Exception as e:
@@ -87,8 +87,8 @@ def no(request, pk):
         if form.is_valid():
             #Checking if error in saving
             try:
-                #no mode included
-                data = Trip(user=user, distance=0, text_response=form.cleaned_data['text_response'])
+                #no mode or quantity included
+                data = Trip(user=user, text_response=form.cleaned_data['text_response'], quantity=0)
                 data.save()
                 return HttpResponseRedirect("thanks/")
             except Exception as e:

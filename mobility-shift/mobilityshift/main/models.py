@@ -39,10 +39,11 @@ class Trip(models.Model):
     """Model storing trips."""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     #left blank if response is no - used as a way to identify trip type
-    mode = models.CharField(choices=[("walk", "Walking"), ("bike", "Cycling"), ("bus", "Bussing")], null=True, blank=True)
+    mode = models.CharField(choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool")], null=True, blank=True)
     #NOT when the trip was, but when trip was logged
     log_time = models.DateTimeField(editable=False, default=(datetime.datetime.now))
     text_response = models.TextField(null=True, blank=True)
+    quantity = models.PositiveIntegerField()
 
 #when a user unsubscribes, they get moved here.    
 class DeletedUser(models.Model):
@@ -59,7 +60,8 @@ class DeletedUser(models.Model):
 class DeletedTrip(models.Model):
     user = models.ForeignKey(DeletedUser, on_delete=models.CASCADE)
     #left blank if response is no - used as a way to identify trip type
-    mode = models.CharField(choices=[("walk", "Walking"), ("bike", "Cycling"), ("bus", "Bussing")], null=True, blank=True)
+    mode = models.CharField(choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool")], null=True, blank=True)
     #NOT when the trip was, but when trip was logged
     log_time = models.DateTimeField(editable=False)
     text_response = models.TextField(null=True, blank=True)
+    quantity = models.PositiveIntegerField()
