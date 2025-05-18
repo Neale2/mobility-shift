@@ -57,11 +57,14 @@ def yes(request, pk):
     
     if request.method == "POST":
         form = YesLogForm(request.POST)
+        #grams of emissions per km - carpool is half of personal vehicle emissions - assuming 2 people carpooling
+        mode_emissions = {'walk': 0, 'bike': 0, 'bus': 15, 'ev': 19, 'carpool': user.vehicle / 2}
+        choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool")]
         if form.is_valid():
             #Checking if error in saving
             try:
-                #gets emmission factor in grams per km -> div by 1000 to get grams per meter. multiply by meters traveled and number of trips.
-                user.emissions_saved = user.emissions_saved + int(form.cleaned_data['quantity'] * user.distance * user.vehicle / 1000)
+                #gets emission factor in grams per km. subtracts factor of changed mode of transport. div by 1000 to get grams per meter. multiply by meters traveled and number of trips.
+                user.emissions_saved = user.emissions_saved + int(form.cleaned_data['quantity'] * user.distance * (user.vehicle - mode_emissions[form.cleaned_data['mode']]) / 1000)
                 user.save()
                 data = Trip(user=user, mode=form.cleaned_data['mode'], quantity=form.cleaned_data['quantity'])
                 data.save()
