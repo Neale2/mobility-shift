@@ -1,48 +1,44 @@
-import boto3
 import json
 import os
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.utils import formatdate
 
-from .secrets import aws_environ
+from azure.communication.email import EmailClient
+from django.shortcuts import get_object_or_404
+
+from .secrets import azure_email_connection_string
+from .models import User
 
 
 
 def send_email(recipient, subject, html_body, uuid):
-    aws_environ()
-    sender = 'swap@testing123.my'
-    unsubscribe_url = "http://127.0.0.1:8000/unsubscribe/" + uuid
-    client = boto3.client('ses', region_name='ap-southeast-2')
-
-    # Construct MIME message
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = subject
-    msg['From'] = sender
-    msg['To'] = recipient
-    msg['Date'] = formatdate(localtime=True)
-    
-    # Unsubscribe header
-    msg.add_header('List-Unsubscribe', f'<{unsubscribe_url}>')
-
-    # Email body parts
-    part_html = MIMEText(html_body, 'html', 'utf-8')
-    msg.attach(part_html)
-
-    # Send email
     try:
-        response = client.send_raw_email(
-            Source=sender,
-            Destinations=[recipient],
-            RawMessage={'Data': msg.as_string()}
-        )
-    except Exception as e:
-        return "Error: email could not be sent.", e
-    
-    
-    
-    
+        try:
+            name = get_object_or_404(User, pk=uuid).name
+        except:
+            name = "None"
+        connection_string = azure_email_connection_string()
+        client = EmailClient.from_connection_string(connection_string)
 
+        message = {
+            "senderAddress": "no-reply@swapone.nz",
+            "recipients": {
+                "to": [{
+                    "address": recipient,
+                    "displayName": name
+                }]
+            },
+            "content": {
+                "subject": subject,
+                "plainText": "Inbox not supported.",
+                "html": html_body
+            },
+            
+        }
+
+        poller = client.begin_send(message)
+        result = poller.result()
+
+    except Exception as ex:
+        print("Email Send error:", ex)
 
     
 

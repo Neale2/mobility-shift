@@ -1,14 +1,14 @@
 #tasks to be run at a certain time - add function here, then call from management/commands/runapscheduler.py
 import os
 import csv
-import boto3
-from botocore.exceptions import ClientError
+
+from azure.storage.blob import BlobServiceClient, BlobSasPermissions, generate_blob_sas
+from datetime import datetime, timedelta
+from .secrets import azure_storage_connection_string, azure_spreadsheet_bucket_name
 
 
 from django.template.loader import get_template
 from .functions import send_email
-from .secrets import aws_environ, bucket_name
-
 from .models import User, Trip, DeletedUser, DeletedTrip
 
 
@@ -101,28 +101,27 @@ def make_spreadsheet():
     except Exception as e:
         print("CSV GEN ERROR:", e)
     
-    file_size = os.path.getsize("data.csv")
+
+    #azure connect to storage
+    blob_service_client = BlobServiceClient.from_connection_string(azure_storage_connection_string())
+    blob_client = blob_service_client.get_blob_client(container=azure_spreadsheet_bucket_name(), blob="data.csv")
+
+    with open("data.csv", "rb") as data:
+        blob_client.upload_blob(data, overwrite=True)
+
+
+    sas_token = generate_blob_sas(
+        account_name=blob_service_client.account_name,
+        container_name=azure_spreadsheet_bucket_name(),
+        blob_name="data.csv",
+        account_key=blob_service_client.credential.account_key,
+        permission=BlobSasPermissions(read=True),
+        expiry=datetime.utcnow() + timedelta(days=1)
+    )
+
+    download_url = f"{blob_client.url}?{sas_token}"
     
-    #configure AWS keys as environment variables
-    aws_environ()
+    email_response = send_email("arturo.neale@gmail.com", "Daily Database Dump", "Hi! Here's the database from today: " + download_url, 'N/A')
+    print(email_response)
     
-    s3 = boto3.client('s3')
-    s3.upload_file('data.csv', bucket_name(), 'data.csv')
-    
-    try:
-        response = s3.generate_presigned_url(
-            ClientMethod='get_object',
-            Params={
-                #returns string of bucket name
-                'Bucket': bucket_name(),
-                'Key': 'data.csv'
-            },
-            #86400s = one day
-            ExpiresIn=86400
-        )
-    except ClientError as e:
-        raise RuntimeError(f"Could not generate presigned URL: {e}")
-    if response:
-        email_response = send_email("arturo.neale@gmail.com", "Daily Database Dump", "Hi! Here's the database from today!" + response, 'N/A')
-        print(email_response)
     
