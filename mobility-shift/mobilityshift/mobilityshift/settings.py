@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
+from main.secrets import cloudflare_turnstile_sitekey, cloudflare_turnstile_secretkey, django_secretkey
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ofdum^rzifhlq07)ujy(gnx%+#ely5_wryyk&0a%jv=+inhtgw'
+SECRET_KEY = django_secretkey()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,8 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
     'mathfilters',
-    'django_altcha',
-    'django_apscheduler'
+    'django_apscheduler',
+    'turnstile'
 ]
 
 MIDDLEWARE = [
@@ -124,5 +126,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+TURNSTILE_SITEKEY = cloudflare_turnstile_sitekey()
+TURNSTILE_SECRET = cloudflare_turnstile_secretkey()
 
 

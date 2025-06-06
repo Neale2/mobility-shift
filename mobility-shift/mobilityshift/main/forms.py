@@ -1,10 +1,10 @@
 from django import forms
 from django.db.models import Case, When, Value, IntegerField
-from django_altcha import AltchaField
+from turnstile.fields import TurnstileField
 from .models import Employer, Region
 
 class SignUpForm(forms.Form):
-    
+
     name = forms.CharField(widget=forms.TextInput(attrs={'class': "name short-text input"}), label="What would you like us to call you?", max_length=20)
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': "email short-text input"}), label="What's your email?", max_length=320)
     age_group = forms.ChoiceField(widget=forms.Select(attrs={'class': "age multi input"}), label="How old are you?", choices=[("<13", "Less than 13"), ("13-17", "13 - 17"), ("18-24", "18 - 24"), ("25-34", "25 - 34"), ("35-44", "35 - 44"), ("45-64", "45 - 64"), (">65", "More than 65"), ("prefer_not", "Prefer not to say")])
@@ -20,7 +20,7 @@ class SignUpForm(forms.Form):
     )
 ).order_by('priority', 'name'), blank=False, initial='None / Other / Prefer Not To Say')
     region = forms.ModelChoiceField(widget=forms.Select(attrs={'class': "employerMode multi input"}), label="What region do you live in?", queryset=Region.objects.all(), blank=False, initial='Nelson')
-    captcha = AltchaField(debug=False, auto='onload')
+    captcha = TurnstileField(label="")
     
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
@@ -29,13 +29,13 @@ class SignUpForm(forms.Form):
 class YesLogForm(forms.Form):
     quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': "quantity multi input"}), label="How many one-way sustainable commute trips did you do this week?", min_value=1, max_value=14)
     mode = forms.ChoiceField(widget=forms.Select(attrs={'class': "mode multi input"}), label="What mode of transport did you use?", choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool")])
-    captcha = AltchaField(debug=False, auto='onload')
+    captcha = TurnstileField()
 
 class NoLogForm(forms.Form):
     #overriding default textinput widget since too small
     text_response = forms.CharField(widget=forms.Textarea(attrs={'class': "no-log long-text input"}), label="Why didn't you do your trip this week?")
-    captcha = AltchaField(debug=False, auto='onload')
+    captcha = TurnstileField()
     
 class UnsubForm(forms.Form):
     response = forms.ChoiceField(widget=forms.Select(attrs={'class': "unsub multi input"}), label="Do you want to unsubscribe from the program?", choices=[("no", "No :)"), ("yes", "Yes :(")])
-    captcha = AltchaField(debug=False, auto='onload')
+    captcha = TurnstileField()
