@@ -27,7 +27,7 @@ SECRET_KEY = django_secretkey()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["app.swapone.nz"]
+ALLOWED_HOSTS = ["app.swapone.nz", "127.0.0.1"]
 
 
 # Application definition
@@ -106,6 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CSRF_TRUSTED_ORIGINS = [
     "https://app.swapone.nz",
+    "http://127.0.0.1"
 ]
 
 # Internationalization
