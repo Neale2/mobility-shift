@@ -3,7 +3,7 @@
     <mj-section>
       <mj-column>
 
-        <mj-image width="100px" src={% static 'images/cool-logo.png' %}></mj-image>
+        <mj-image width="100px" src="https://app.swapone.nz/static/images/cool-logo.png"></mj-image>
 
         <mj-divider border-color="#ff0000"></mj-divider>
 
@@ -13,7 +13,7 @@
         <mj-text font-size="20px" color="#ff0000" font-family="helvetica">Thanks for signing up!</mj-text>
         <mj-text font-size="20px" color="#000" font-family="helvetica">See you next week for your first logging email! Until then... hang tight and commute sustainably!</mj-text>
 				<mj-divider border-color="#ff0000"></mj-divider>
-        <mj-text font-size="16px" color="#000" font-family="helvetica">If you want to unsubscribe from our emails, click <a href="http://127.0.0.1:8000/unsubscribe/{{ user_uuid }}">here</a>.</mj-text>
+        <mj-text font-size="16px" color="#000" font-family="helvetica">If you want to unsubscribe from our emails, click <a href="https://app.swapone.nz/unsubscribe/{{ user_uuid }}">here</a>.</mj-text>
       </mj-column>
     </mj-section>
   </mj-body>
