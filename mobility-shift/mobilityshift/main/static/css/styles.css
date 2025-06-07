@@ -81,6 +81,7 @@ header {
     font-size: 16px;
     display: flex;
     align-items: center;
+    color: black;
 }
 
 .button {

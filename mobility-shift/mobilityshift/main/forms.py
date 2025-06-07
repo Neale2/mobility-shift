@@ -29,13 +29,13 @@ class SignUpForm(forms.Form):
 class YesLogForm(forms.Form):
     quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': "quantity multi input"}), label="How many one-way sustainable commute trips did you do this week?", min_value=1, max_value=14)
     mode = forms.ChoiceField(widget=forms.Select(attrs={'class': "mode multi input"}), label="What mode of transport did you use?", choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool")])
-    captcha = TurnstileField()
+    captcha = TurnstileField(label="")
 
 class NoLogForm(forms.Form):
     #overriding default textinput widget since too small
     text_response = forms.CharField(widget=forms.Textarea(attrs={'class': "no-log long-text input"}), label="Why didn't you do your trip this week?")
-    captcha = TurnstileField()
+    captcha = TurnstileField(label="")
     
 class UnsubForm(forms.Form):
     response = forms.ChoiceField(widget=forms.Select(attrs={'class': "unsub multi input"}), label="Do you want to unsubscribe from the program?", choices=[("no", "No :)"), ("yes", "Yes :(")])
-    captcha = TurnstileField()
+    captcha = TurnstileField(label="")
