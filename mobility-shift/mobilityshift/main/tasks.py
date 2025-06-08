@@ -6,6 +6,9 @@ from azure.storage.blob import BlobServiceClient, BlobSasPermissions, generate_b
 from datetime import datetime, timedelta
 from .secrets import azure_storage_connection_string, azure_spreadsheet_bucket_name
 
+import time
+
+from concurrent.futures import ThreadPoolExecutor
 
 from django.template.loader import get_template
 from .functions import send_email
@@ -16,7 +19,8 @@ from .models import User, Trip, DeletedUser, DeletedTrip
 #weekly email sent to all users asking if they had done a trip
 def email_users():
     template = get_template('log-email.html')
-    for user in User.objects.all():
+    users = list(User.objects.all())
+    def send(user):
         context = {
             'email': user.email,
             'user_uuid': user.uuid,
@@ -24,10 +28,11 @@ def email_users():
             'name': user.name,
         }
         
-        html_body = template.render(context)
-        
+        html_body = template.render(context)      
         response = send_email(user.email, "It's your weekly logging time!", html_body, str(user.uuid))
         print(user.email, response)
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        executor.map(send, users)
 
 
 def make_spreadsheet():
