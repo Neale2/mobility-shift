@@ -6,12 +6,21 @@ from django.db.models import UniqueConstraint # Constrains fields to unique valu
 
 class Employer(models.Model):
     name = models.CharField(primary_key=True, unique=True)
+    emissions_saved = models.PositiveIntegerField(default=0)
     def __str__(self):
         """String for representing the Model object."""
         return self.name
 
 class Region(models.Model):
     name = models.CharField(primary_key=True, unique=True)
+    emissions_saved = models.PositiveIntegerField(default=0)
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
+
+class All(models.Model):
+    name = models.CharField(primary_key=True, unique=True)
+    emissions_saved = models.PositiveIntegerField(default=0)
     def __str__(self):
         """String for representing the Model object."""
         return self.name

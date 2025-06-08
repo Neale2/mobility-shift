@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {% block title %}
+        <title>Thanks!</title>
+        {% endblock %}
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- Add additional CSS in static file -->
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+        <script>
+            const TreePerYear = 54352
+
+            //grams of CO2e
+            var userName = "{{ user.name }}";
+            var userSaved = {{ user.emissions_saved }};
+            var employerName = "{{ employer.name }}";
+            var employerSaved = {{ employer.emissions_saved }};
+            var regionName = "{{ region.name }}";
+            var regionSaved = {{ region.emissions_saved }};
+            var allSaved = {{ all.emissions_saved }};
+
+            console.log(userSaved / TreePerYear)
+        </script>
+    </head>
+    <body>
+        <header>
+            <h1>Swap One Dashboard</h1>
+        </header>
+        <main>
+            <div class="blurb">
+                <h3>Hi {{ user.name }}! Welcome to the dashboard!</h3>
+            </div>
+        </main>
+    </body>
+</html>
