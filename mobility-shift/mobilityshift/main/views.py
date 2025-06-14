@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from .forms import SignUpForm, YesLogForm, NoLogForm, UnsubForm
-from .models import User, Trip, DeletedUser, DeletedTrip, Employer, Region, All
+from .models import User, Trip, DeletedUser, DeletedTrip, Employer, Region, All, Post
 
 
 
@@ -55,8 +55,10 @@ def dash(request, pk):
     employer = get_object_or_404(Employer, pk=user.employer)
     region = get_object_or_404(Region, pk=user.region)
     all_model = get_object_or_404(All, pk="all")
+    #gets first post
+    post = Post.objects.order_by('-updated_at').first()
     
-    context = {'user': user, 'employer': employer, 'region': region, 'all': all_model}
+    context = {'user': user, 'employer': employer, 'region': region, 'all': all_model, 'post': post}
     return render(request, 'dash.html', context)
 
 def yes(request, pk):

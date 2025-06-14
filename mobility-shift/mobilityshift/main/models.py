@@ -4,6 +4,20 @@ from django.db import models
 
 from django.db.models import UniqueConstraint # Constrains fields to unique values
 
+from markdownx.models import MarkdownxField
+from markdownx.utils import markdownify
+
+class Post(models.Model):
+    title = models.CharField(max_length=30)
+    content = MarkdownxField()
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.title
+    
+    def formatted_markdown(self):
+        return markdownify(self.content)
+
 class Employer(models.Model):
     name = models.CharField(primary_key=True, unique=True)
     emissions_saved = models.PositiveIntegerField(default=0)

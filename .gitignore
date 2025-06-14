@@ -181,3 +181,5 @@ client_secrets.json
 #user data
 data.csv
 .~lock.data.csv#
+/media/
+/mobility-shift/mobilityshift/media/
