@@ -10,10 +10,8 @@ from django.shortcuts import render, get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
-from .forms import SignUpForm, YesLogForm, NoLogForm, UnsubForm
+from .forms import SignUpForm, YesLogForm, NoLogForm, UnsubForm, EditProfileForm
 from .models import User, Trip, DeletedUser, DeletedTrip, Employer, Region, All, Post
-
-
 
 def signup(request):
     if request.method == "POST":
@@ -45,6 +43,30 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {"form": form})
+
+def edit(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    
+    
+    if request.method == "POST":
+        form = EditProfileForm(request.POST, instance=user)
+        if form.is_valid():
+            #Checking if error in saving
+            try:
+                form.save()
+                
+                return redirect(f"/dash/{pk}")
+            except Exception as e:
+                if str(e) == "UNIQUE constraint failed: main_user.email":
+                    form.add_error(None, _("A user with this Email already exists! You might want to check your inbox, including spam."))
+                elif str(e) == "database is locked":
+                    form.add_error(None, _("Unable to save your response at this time - you might want to wait a couple seconds and try again."))
+                else:
+                    form.add_error(None, _("There's been an unidentified error! Sorry about that. The system error message is: " + str(e)))
+
+    else:
+        form = EditProfileForm(instance=user)
+    return render(request, 'edit.html', {"form": form})
 
 def confirm(request):
     

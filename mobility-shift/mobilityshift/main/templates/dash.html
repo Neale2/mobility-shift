@@ -14,6 +14,7 @@
             const TreePerYear = 54352;
             const Targets = [0, 100, 500, 1000, 2500, 5000, 7500, 10000, 12500, 15000, 17500, 20000, 22500, 25000, 30000, 40000, 50000, 75000, 100000, 125000, 150000, 200000, 250000, 500000, 750000, 1000000, 2500000, 5000000, 10000000, 50000000, 100000000]
 
+
             var userName = "{{ user.name }}";
             var userSaved = {{ user.emissions_saved }};
             var employerName = "{{ employer.name }}";
@@ -85,7 +86,10 @@
         </header>
         <main>
             <div class="blurb">
-                <h3>Hi {{ user.name }}! Welcome to the dashboard!</h3>
+                <h3>
+                    Hi {{ user.name }}! Welcome to the dashboard! Click
+                    <a href="/edit/{{ user.uuid }}">here</a> to edit your profile.
+                </h3>
             </div>
             <div id="emissions">
                 <h3>Our progress:</h3>
