@@ -5,11 +5,11 @@ from django.db import models
 from django.db.models import UniqueConstraint # Constrains fields to unique values
 
 from markdownx.models import MarkdownxField
-from markdownx.utils import markdownify
+
 
 class Post(models.Model):
-    title = models.CharField(max_length=30)
-    content = MarkdownxField()
+    title = models.CharField(max_length=30, help_text='For system use only - will not be displayed to users.')
+    content = MarkdownxField(help_text="Use markdown to style post (https://www.markdownguide.org/basic-syntax/). Do not use single hashtag heading (#) as is too large. Drag images in to add, as that will automatically store the image.")
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         """String for representing the Model object."""
