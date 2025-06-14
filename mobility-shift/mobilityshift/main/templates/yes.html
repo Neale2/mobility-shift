@@ -6,13 +6,9 @@
         <title>Yes Logging</title>
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-        <script>
-            addEventListener("DOMContentLoaded", function(){
-                if ("{{ user.logged_this_week }}" == "True") {
-                    alert("You've already logged a trip this week! Feel free to log another if you want.");
-                }
-            });
-        </script>
+        {% if request.method == 'GET' and user.logged_this_week %}
+            <script>alert("You've already logged a trip this week! Feel free to log another if you want.");</script>
+        {% endif %}
     </head>
     <body>
         {% load mathfilters %}
