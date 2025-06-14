@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         {% block title %}
-        <title>Sign Up</title>
+        <title>Edit Profile</title>
         {% endblock %}
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -16,19 +16,16 @@
     </head>
     <body>
         <header>
-            <h1>Swap One Signup</h1>
+            <h1>Edit Profile</h1>
         </header>
         <main>
             <div class="blurb">
-                <h3>Welcome to Swap One!</h3>
-                <h3 class="red">We're so glad you're here - ready to cut your transport emissions?</h3>
-            </div>
-            <div>
-                <p>Swap One is a programme designed to incentivise users to reduce their high carbon commutes (read: car trips). We are working with Nelson organisaions to reduce the carbon impact. Any data you share with us will be used only for app operation or for climate related research.</p>
+                <h3>Edit your profile:</h3>
+                <h3>Change any needed values and then submit.</h3>
             </div>
             <form method="post">
                 {% csrf_token %} {{ form }}
-                <input type="submit" value="Sign Up!" class="submit button input" />
+                <input type="submit" value="Submit" class="submit button input" />
             </form>
         </main>
 

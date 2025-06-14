@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {% block title %}
+        <title>Thanks!</title>
+        {% endblock %}
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- Add additional CSS in static file -->
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+        <script>
+            //grams of CO2e
+            const TreePerYear = 54352;
+            const Targets = [0, 100, 500, 1000, 2500, 5000, 7500, 10000, 12500, 15000, 17500, 20000, 22500, 25000, 30000, 40000, 50000, 75000, 100000, 125000, 150000, 200000, 250000, 500000, 750000, 1000000, 2500000, 5000000, 10000000, 50000000, 100000000]
+
+
+            var userName = "{{ user.name }}";
+            var userSaved = {{ user.emissions_saved }};
+            var employerName = "{{ employer.name }}";
+            var employerSaved = {{ employer.emissions_saved }};
+            var regionName = "{{ region.name }}";
+            var regionSaved = {{ region.emissions_saved }};
+            var allSaved = {{ all.emissions_saved }};
+
+            var prevGoal = 50;
+            var targetGoal = 100;
+
+            Targets.forEach(function(target, index){
+                if (target <= userSaved){
+                    targetGoal = Targets[index + 1];
+                    prevGoal = target;
+                }
+            });
+
+            var distToGoal = targetGoal - userSaved;
+
+            addEventListener("DOMContentLoaded", function(){
+                var parent = document.getElementById("emissions");
+                parent.innerHTML = `
+                <div class="emissionsbox">
+                    <h4>You've saved ${(userSaved/1000).toFixed(1)}kg of CO2e so far!</h4>
+                    <p>You've hit the milestone of saving ${(prevGoal/1000).toFixed(1)}kg!</p>
+                    <p>Keep swapping - you're just ${(distToGoal/1000).toFixed(1)} kilograms away from hitting your next milestone of ${(targetGoal/1000).toFixed(1)}kg!</p>
+                </div>
+                `;
+                if (employerName != "None / Other / Prefer Not To Say") {
+                    parent.innerHTML = parent.innerHTML + `
+                        <div class="emissionsbox">
+                            <h4>So far, ${employerName} has saved ${(employerSaved/1000).toFixed(0)}kg of CO2e!</h4>
+                            <p>Encourage your coworkers to keep up the great work!</p>
+                        </div>
+                        `
+                };
+                if (regionName != "Other") {
+                    if (regionName == "Nelson") {
+                        parent.innerHTML = parent.innerHTML + `
+                        <div class="emissionsbox">
+                            <h4>Together, ${regionName} has saved ${(regionSaved/1000).toFixed(0)}kg of CO2e!</h4>
+                            <p>Great job, Nelsonians!</p>
+                        </div>
+                        `
+                    }
+                    else {
+                        parent.innerHTML = parent.innerHTML + `
+                        <div class="emissionsbox">
+                            <h4>Together, ${regionName} has saved ${(regionSaved/1000).toFixed(0)}kg of CO2e!</h4>
+                            <p>Great job, residents of ${regionName}!</p>
+                        </div>
+                        `
+                    }
+
+                };
+                parent.innerHTML = parent.innerHTML + `
+                        <div class="emissionsbox">
+                            <h4>In total, we've saved ${(allSaved/1000).toFixed(0)}kg of CO2e!</h4>
+                            <p>That's as much as ${(allSaved/TreePerYear).toFixed(0)} fully-grown pine trees absorb in a year!</p>
+                        </div>
+                        `
+            });
+        </script>
+    </head>
+    <body>
+        <header>
+            <h1>Swap One Dashboard</h1>
+        </header>
+        <main>
+            <div class="blurb">
+                <h3>
+                    Hi {{ user.name }}! Welcome to the dashboard! Click
+                    <a href="/edit/{{ user.uuid }}">here</a> to edit your profile.
+                </h3>
+            </div>
+            <div id="emissions">
+                <h3>Our progress:</h3>
+            </div>
+            <div>{{ post.formatted_markdown|safe }}</div>
+        </main>
+    </body>
+</html>
