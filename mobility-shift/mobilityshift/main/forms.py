@@ -27,7 +27,7 @@ class SignUpForm(forms.Form):
         return name.title()
 
 class YesLogForm(forms.Form):
-    quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': "quantity multi input"}), label="How many one-way sustainable commute trips did you do this week?", min_value=1, max_value=14)
+    quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': "quantity multi input"}), label="How many high carbon trips (one way) did you swap this week?", min_value=1, max_value=14)
     mode = forms.ChoiceField(widget=forms.Select(attrs={'class': "mode multi input"}), label="What mode of transport did you use?", choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool")])
     captcha = TurnstileField(label="")
 

@@ -6,6 +6,13 @@
         <title>Yes Logging</title>
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+        <script>
+            addEventListener("DOMContentLoaded", function(){
+                if ("{{ user.logged_this_week }}" == "True") {
+                    alert("You've already logged a trip this week! Feel free to log another if you want.");
+                }
+            });
+        </script>
     </head>
     <body>
         {% load mathfilters %}
@@ -13,6 +20,8 @@
         <header>
             <h1>Yes Logging</h1>
         </header>
+        <script>
+        </script>
         <main>
             <div class="blurb">
                 <h3>Greetings, {{user.name}}.</h3>

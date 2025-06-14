@@ -30,6 +30,8 @@ def email_users():
         
         html_body = template.render(context)      
         response = send_email(user.email, "It's your weekly logging time!", html_body, str(user.uuid))
+        user.logged_this_week = False
+        user.save()
         print(user.email, response)
     with ThreadPoolExecutor(max_workers=10) as executor:
         executor.map(send, users)

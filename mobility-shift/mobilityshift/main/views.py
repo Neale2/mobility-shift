@@ -100,6 +100,7 @@ def yes(request, pk):
                 #gets emission factor in grams per km. subtracts factor of changed mode of transport. div by 1000 to get grams per meter. multiply by meters traveled and number of trips.
                 emissions_saved = int(form.cleaned_data['quantity'] * user.distance * (user.vehicle - mode_emissions[form.cleaned_data['mode']]) / 1000)
                 user.emissions_saved = user.emissions_saved + emissions_saved
+                user.logged_this_week = True
                 user.save()
                 region.emissions_saved = region.emissions_saved + emissions_saved
                 region.save()
@@ -134,6 +135,8 @@ def no(request, pk):
             #Checking if error in saving
             try:
                 #no mode or quantity included
+                user.logged_this_week = True
+                user.save()
                 data = Trip(user=user, text_response=form.cleaned_data['text_response'], quantity=0)
                 data.save()
                 return redirect(f"/dash/{pk}")
