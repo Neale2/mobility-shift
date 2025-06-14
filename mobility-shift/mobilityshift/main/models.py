@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models import UniqueConstraint # Constrains fields to unique values
 
 from markdownx.models import MarkdownxField
+from markdownx.utils import markdownify
 
 
 class Post(models.Model):
