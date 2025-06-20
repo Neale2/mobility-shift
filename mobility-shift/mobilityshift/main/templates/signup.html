@@ -51,6 +51,16 @@
                     originalClasses.forEach((cls) => container.classList.add(cls));
                 }
             });
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const form = document.querySelector("form");
+                const submitButton = form.querySelector('[type="submit"]');
+
+                form.addEventListener("submit", function () {
+                    submitButton.disabled = true;
+                    submitButton.innerText = "Processing...";
+                });
+            });
         </script>
     </body>
 </html>
