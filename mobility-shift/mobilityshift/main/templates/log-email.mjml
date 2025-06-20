@@ -1,6 +1,6 @@
 <mjml>
   <mj-body background-color="#f1f1f1">
-  
+
     <mj-section>
       <mj-column>
         <mj-image width="100px" src="https://app.swapone.nz/static/images/cool-logo.png"></mj-image>
@@ -21,6 +21,12 @@
           <mj-button background-color="#cccccc" color="#000" font-size="20px" font-family="helvetica" href="https://app.swapone.nz/no/{{ user_uuid }}">No :(</mj-button>
         </mj-column>
       </mj-group>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="18px" font-family="helvetica">Or, go to your dashboard:</mj-text>
+        <mj-button background-color="#cccccc" color="#000" font-size="20px" font-family="helvetica" href="https://app.swapone.nz/dash/{{ user_uuid }}">Dash</mj-button>
+      </mj-column>
     </mj-section>
     <mj-section>
       <mj-column>
