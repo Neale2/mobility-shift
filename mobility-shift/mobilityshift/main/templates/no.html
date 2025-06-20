@@ -18,7 +18,7 @@
                 <h3>Greetings, {{user.name}}.</h3>
                 <!--redirects to yes page-->
                 <a href=../yes/{{user.uuid}}>Oops! I meant to press yes!</a>
-                <h4>Congrats! You have saved {{ user.emissions_saved|div:1000 }}kg of CO2e so far!</h4>
+                <h4>Sorry you didn't manage to swap a trip this week, but you have saved {{ user.emissions_saved|div:1000 }}kg of CO2e so far!</h4>
                 {% endblock %}
              </div>
             <form method="post">

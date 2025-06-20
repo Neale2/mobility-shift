@@ -39,7 +39,8 @@
                 var parent = document.getElementById("emissions");
                 parent.innerHTML = `
                 <div class="emissionsbox">
-                    <h4>You've saved ${(userSaved/1000).toFixed(1)}kg of CO2e so far!</h4>
+                    <h4>You</h4>
+                    <p>You've saved ${(userSaved/1000).toFixed(1)}kg of CO2e so far!</p>
                     <p>You've hit the milestone of saving ${(prevGoal/1000).toFixed(1)}kg!</p>
                     <p>Keep swapping - you're just ${(distToGoal/1000).toFixed(1)} kilograms away from hitting your next milestone of ${(targetGoal/1000).toFixed(1)}kg!</p>
                 </div>
@@ -47,7 +48,8 @@
                 if (employerName != "None / Other / Prefer Not To Say") {
                     parent.innerHTML = parent.innerHTML + `
                         <div class="emissionsbox">
-                            <h4>So far, ${employerName} has saved ${(employerSaved/1000).toFixed(0)}kg of CO2e!</h4>
+                            <h4>${employerName}</h4>
+                            <p>So far, ${employerName} has saved ${(employerSaved/1000).toFixed(0)}kg of CO2e!</p>
                             <p>Encourage your coworkers to keep up the great work!</p>
                         </div>
                         `
@@ -56,7 +58,8 @@
                     if (regionName == "Nelson") {
                         parent.innerHTML = parent.innerHTML + `
                         <div class="emissionsbox">
-                            <h4>Together, ${regionName} has saved ${(regionSaved/1000).toFixed(0)}kg of CO2e!</h4>
+                            <h4>${regionName}</h4>
+                            <p>Together, ${regionName} has saved ${(regionSaved/1000).toFixed(0)}kg of CO2e!</p>
                             <p>Great job, Nelsonians!</p>
                         </div>
                         `
@@ -64,7 +67,8 @@
                     else {
                         parent.innerHTML = parent.innerHTML + `
                         <div class="emissionsbox">
-                            <h4>Together, ${regionName} has saved ${(regionSaved/1000).toFixed(0)}kg of CO2e!</h4>
+                            <h4>${regionName}</h4>
+                            <p>Together, ${regionName} has saved ${(regionSaved/1000).toFixed(0)}kg of CO2e!</p>
                             <p>Great job, residents of ${regionName}!</p>
                         </div>
                         `
@@ -73,10 +77,15 @@
                 };
                 parent.innerHTML = parent.innerHTML + `
                         <div class="emissionsbox">
-                            <h4>In total, we've saved ${(allSaved/1000).toFixed(0)}kg of CO2e!</h4>
+                            <h4>Whole Programme</h4>
+                            <p>In total, we've saved ${(allSaved/1000).toFixed(0)}kg of CO2e!</p>
                             <p>That's as much as ${(allSaved/TreePerYear).toFixed(0)} fully-grown pine trees absorb in a year!</p>
                         </div>
                         `
+
+                if (window.location.search.slice(1) == "confirm_edit=true") {
+                    alert("Successfully edited profile!");
+                }
             });
         </script>
     </head>

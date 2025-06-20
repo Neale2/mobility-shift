@@ -21,7 +21,7 @@
         <main>
             <div class="blurb">
                 <h3>Welcome to Swap One!</h3>
-                <h3 class="red">We're so glad you're here - ready to cut your transport emissions?</h3>
+                <h3>About the programme:</h3>
             </div>
             <div class="content">
                 <p>
@@ -29,10 +29,11 @@
                     car trips). We are working with Nelson organisaions to reduce the carbon impact. Any data you share
                     with us will be used only for app operation or for climate related research.
                 </p>
+                <h3>Register:</h3>
             </div>
             <form method="post">
                 {% csrf_token %} {{ form }}
-                <input type="submit" value="Sign Up!" class="submit button input" />
+                <input type="submit" value="Register" class="submit button input" />
             </form>
         </main>
 

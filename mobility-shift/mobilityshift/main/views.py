@@ -55,7 +55,7 @@ def edit(request, pk):
             try:
                 form.save()
                 
-                return redirect(f"/dash/{pk}")
+                return redirect(f"/dash/{pk}?confirm_edit=true")
             except Exception as e:
                 if str(e) == "UNIQUE constraint failed: main_user.email":
                     form.add_error(None, _("A user with this Email already exists! You might want to check your inbox, including spam."))
