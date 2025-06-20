@@ -20,5 +20,17 @@
                 <h3 class="red">See you next week! Feel free to close the page now.</h3>
             </div>
         </main>
+        <script>
+             document.addEventListener("DOMContentLoaded", function () {
+                const form = document.querySelector("form");
+                const submitButton = form.querySelector('[type="submit"]');
+
+                form.addEventListener("submit", function () {
+                    submitButton.disabled = true;
+                    submitButton.value = "Processing...";
+                });
+            });
+            
+        </script>
     </body>
 </html>
