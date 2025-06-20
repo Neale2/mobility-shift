@@ -38,20 +38,6 @@
         </main>
 
         <script>
-            document.querySelectorAll(".multi-search").forEach(function (element) {
-                const choicesInstance = new Choices(element, {
-                    searchEnabled: true
-                });
-
-                // transfer classes from the original element to the outer container
-                const originalClasses = element.classList;
-                const container = element.closest(".choices");
-
-                if (container && originalClasses.length > 0) {
-                    originalClasses.forEach((cls) => container.classList.add(cls));
-                }
-            });
-
             document.addEventListener("DOMContentLoaded", function () {
                 const form = document.querySelector("form");
                 const submitButton = form.querySelector('[type="submit"]');
