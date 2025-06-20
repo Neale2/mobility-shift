@@ -31,7 +31,7 @@ def signup(request):
                 data = User(email=form.cleaned_data['email'], age_group=form.cleaned_data['age_group'], uuid=user_uuid, name=form.cleaned_data['name'], distance=form.cleaned_data['distance'], vehicle=form.cleaned_data['vehicle'], employer=form.cleaned_data['employer'], region=form.cleaned_data['region'])
                 data.save()
                 send_email(form.cleaned_data['email'], "Welcome to the Programme!", html_body, user_uuid)
-                return HttpResponseRedirect("confirm/")
+                return HttpResponseRedirect("signup/confirm/")
             except Exception as e:
                 if str(e) == "UNIQUE constraint failed: main_user.email":
                     form.add_error(None, _("A user with this Email already exists! You might want to check your inbox, including spam."))
