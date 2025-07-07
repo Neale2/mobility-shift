@@ -11,6 +11,6 @@ urlpatterns = [
     path('dash/<pk>/', views.dash, name='dash'),
     path('edit/<pk>/', views.edit, name='edit'),
     path('unsubscribe/<pk>', views.unsub, name='unsub'),
-    path('unsubscribe/stillsubbed/', views.stillsubbed, name='stillsubbed'),
+    path('unsubscribe/stillsubbed/<pk>', views.stillsubbed, name='stillsubbed'),
     path('unsubscribe/unsubbed/', views.unsubbed, name='unsubbed')
 ]

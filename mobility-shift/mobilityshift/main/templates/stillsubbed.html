@@ -17,11 +17,14 @@
         <main>
             <div class="blurb">
                 <h3>You're still subscribed!</h3>
-                <h3 class="red">See you next week! Feel free to close the page now.</h3>
+                <h3 class="red">
+                    See you next week! Feel free to close the page now, or
+                    <a href="/dash/{{ user.uuid }}">go back to the dashboard</a>.
+                </h3>
             </div>
         </main>
         <script>
-             document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function () {
                 const form = document.querySelector("form");
                 const submitButton = form.querySelector('[type="submit"]');
 
@@ -30,7 +33,6 @@
                     submitButton.value = "Processing...";
                 });
             });
-            
         </script>
     </body>
 </html>

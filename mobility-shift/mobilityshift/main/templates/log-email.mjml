@@ -24,13 +24,7 @@
     </mj-section>
     <mj-section>
       <mj-column>
-        <mj-text font-size="18px" font-family="helvetica">Or, go to your dashboard:</mj-text>
-        <mj-button background-color="#cccccc" color="#000" font-size="20px" font-family="helvetica" href="https://app.swapone.nz/dash/{{ user_uuid }}">Dash</mj-button>
-      </mj-column>
-    </mj-section>
-    <mj-section>
-      <mj-column>
-        <mj-text font-size="16px" color="#000" font-family="helvetica">If you want to stop participating in the programme, press <a href="https://app.swapone.nz/unsubscribe/{{ user_uuid }}">here</a>.</mj-text>
+        <mj-text font-size="16px" color="#000" font-family="helvetica" align="center" ><p>                     <a href="https://app.swapone.nz/edit/{{ user_uuid }}">Edit Profile</a> | <a href="https://app.swapone.nz/dash/{{ user_uuid }}">View Dashboard</a> |                     <a href="https://app.swapone.nz/unsubscribe/{{ user_uuid }}">Unsubscribe from Programme :(</a>                 </p>.</mj-text>
       </mj-column>
     </mj-section>
   </mj-body>

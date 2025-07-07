@@ -172,7 +172,7 @@ def unsub(request, pk):
                         
                     return HttpResponseRedirect("unsubbed/")
                 else:
-                    return HttpResponseRedirect("stillsubbed/")
+                    return HttpResponseRedirect(f"stillsubbed/{pk}")
             except Exception as e:
                 if str(e) == "database is locked":
                     form.add_error(None, _("Unable to unsubscribe at this time since the database is in use - you might want to wait a couple seconds and try again."))
@@ -185,8 +185,10 @@ def unsub(request, pk):
     context = {'user': user, 'form': form}
     return render(request, 'unsub.html', context)
 
-def stillsubbed(request):
-    return render(request, 'stillsubbed.html')
+def stillsubbed(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    context = {'user': user}
+    return render(request, 'stillsubbed.html', context)
 
 def unsubbed(request):
     return render(request, 'unsubbed.html')

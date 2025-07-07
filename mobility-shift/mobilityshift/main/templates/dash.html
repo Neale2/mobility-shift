@@ -94,11 +94,11 @@
             <h1>Swap One Dashboard</h1>
         </header>
         <main>
-            <div class="blurb">
-                <h3>
-                    Hi {{ user.name }}! Welcome to the dashboard! Click
-                    <a href="/edit/{{ user.uuid }}">here</a> to edit your profile.
-                </h3>
+            <div class="nav">
+                <p>
+                    <a href="/edit/{{ user.uuid }}">Edit Profile</a> | <a>View Dashboard</a> |
+                    <a href="/unsubscribe/{{ user.uuid }}">Unsubscribe from Programme :(</a>
+                </p>
             </div>
             <div class="content" id="emissions">
                 <h3>Our progress:</h3>
