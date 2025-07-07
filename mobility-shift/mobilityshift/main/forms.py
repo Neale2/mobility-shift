@@ -6,9 +6,9 @@ from .models import Employer, Region, User
 
 class SignUpForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': "name short-text input info", 'id': 'name'}), label="Name", max_length=20)
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': "email short-text input"}), label="Email", max_length=320)
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': "email short-text input info", 'id': 'email'}), label="Email", max_length=320)
     age_group = forms.ChoiceField(widget=forms.Select(attrs={'class': "age multi input"}), label="Age Group", choices=[("<13", "Under 13"), ("13-17", "13 - 17"), ("18-24", "18 - 24"), ("25-34", "25 - 34"), ("35-44", "35 - 44"), ("45-64", "45 - 64"), (">65", "More than 65"), ("prefer_not", "Prefer not to say")])
-    distance = forms.ChoiceField(widget=forms.Select(attrs={'class': "distance multi input"}), label="Commute Distance (one way)", choices=[(500, "0.5km"), (1000, "1km"), (2500, "2.5km"), (5000, "5km"), (10000, "10km"), (25000, "25km"), (50000, "50km")])
+    distance = forms.ChoiceField(widget=forms.Select(attrs={'class': "distance multi input info", 'id': 'distance'}), label="Commute Distance", choices=[(500, "0.5km"), (1000, "1km"), (2500, "2.5km"), (5000, "5km"), (10000, "10km"), (25000, "25km"), (50000, "50km")])
     #numbers returned are emission factors (g/km) for ease. Don't know/other returns typical petrol number
     vehicle = forms.ChoiceField(widget=forms.Select(attrs={'class': "vehicle multi input info", 'id': 'vehicle'}), label="Vehicle Type", choices=[(243, "Petrol"), (265, "Diesel"), (192, "Hybrid"), (98, "Plug-in Hybrid"), (19, "Electric"), (243, "Other / Don't know")])
     employer = forms.ModelChoiceField(widget=forms.Select(attrs={'class': "employer multi input"}), label="Employer", queryset=Employer.objects.annotate(

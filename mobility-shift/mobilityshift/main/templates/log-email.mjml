@@ -24,7 +24,10 @@
     </mj-section>
     <mj-section>
       <mj-column>
-        <mj-text font-size="16px" color="#000" font-family="helvetica" align="center" ><p>                     <a href="https://app.swapone.nz/edit/{{ user_uuid }}">Edit Profile</a> | <a href="https://app.swapone.nz/dash/{{ user_uuid }}">View Dashboard</a> |                     <a href="https://app.swapone.nz/unsubscribe/{{ user_uuid }}">Unsubscribe from Programme :(</a>                 </p>.</mj-text>
+        <mj-text font-size="14px" color="#ff0000" font-family="helvetica" align="center">SECURITY WARNING: This email contains your permanent access link to your Swap One profile. Do NOT forward or share this email. Sharing it gives anyone full access to the personal information you have provided.</mj-text>
+        <mj-text font-size="16px" color="#000" font-family="helvetica" align="center">
+          <a href="https://app.swapone.nz/edit/{{ user_uuid }}">Edit Profile</a> | <a href="https://app.swapone.nz/dash/{{ user_uuid }}">View Dashboard</a> | <a href="https://app.swapone.nz/unsubscribe/{{ user_uuid }}">Unsubscribe from Programme :(</a> .
+        </mj-text>
       </mj-column>
     </mj-section>
   </mj-body>
