@@ -46,6 +46,19 @@
                     submitButton.disabled = true;
                     submitButton.value = "Processing...";
                 });
+
+                const infocontent = {
+                    name: "Input your first name, or whatever you want us to call you!",
+                    vehicle:
+                        "If you already don't commute using a high-carbon method, then you're amazing, but this program probably isn't for you. Check out alternatives like Love To Ride!"
+                };
+
+                for (elem of document.getElementsByClassName("info")) {
+                    var infobox = document.createElement("div");
+                    var parent = elem.parentElement;
+                    parent.insertBefore(infobox, elem);
+                    infobox.outerHTML = "<div class='infobox'>" + infocontent[elem.id] + "</div>";
+                }
             });
         </script>
     </body>
