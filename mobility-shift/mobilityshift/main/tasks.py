@@ -14,7 +14,26 @@ from django.template.loader import get_template
 from .functions import send_email
 from .models import User, Trip, DeletedUser, DeletedTrip
 
-
+#hacked together way to send a single user an email for demos
+def email_user(imp_user):
+    template = get_template('log-email.html')
+    users = [imp_user]
+    def send(user):
+        context = {
+            'email': user.email,
+            'user_uuid': user.uuid,
+            'emissions_saved': user.emissions_saved,
+            'name': user.name,
+        }
+        
+        html_body = template.render(context)      
+        response = send_email(user.email, "It's your weekly logging time!", html_body, str(user.uuid))
+        user.logged_this_week = False
+        user.save()
+        print(user.email, response)
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        executor.map(send, users)
+    
 
 #weekly email sent to all users asking if they had done a trip
 def email_users():

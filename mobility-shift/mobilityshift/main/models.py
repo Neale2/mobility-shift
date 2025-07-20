@@ -55,6 +55,7 @@ class User(models.Model):
     #1 gram = 1
     emissions_saved = models.PositiveIntegerField(default=0)
     logged_this_week = models.BooleanField(default=False)
+    trigger_email = models.BooleanField(default=False)
 
     def __str__(self):
         """String for representing the Model object."""
