@@ -49,8 +49,7 @@ h4 {
     margin-top: 10px;
 }
 img {
-    width: 90vw;
-    max-width: 800px;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
@@ -188,7 +187,7 @@ label {
 
 .logo {
     height: 80px;
-    width: fit-content;
+    width: auto;
 }
 
 .infobox {
