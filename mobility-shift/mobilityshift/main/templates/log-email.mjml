@@ -1,33 +1,60 @@
 <mjml>
-  <mj-body background-color="#f1f1f1">
-
-    <mj-section>
+  <mj-head>
+    <mj-font name="Lora" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,700;1,700&display=swap" />
+    <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;1,400&display=swap" />
+  </mj-head>
+  <mj-body background-color="#FFF7D8">
+    <mj-section background-color="#FFF7D8">
       <mj-column>
-        <mj-image width="100px" src="https://app.swapone.nz/static/images/cool-logo.png"></mj-image>
-
-        <mj-text font-size="24px" color="#000" font-family="helvetica">Hi {{ name }}!</mj-text>
-
-        <mj-text font-size="18px" font-family="helvetica">So far you've saved <b>{% load mathfilters %}{{ emissions_saved|div:1000  }}kg</b> of emissions!</mj-text>
-
-        <mj-text font-size="20px" color="#000" font-family="helvetica">Did you swap one high-carbon commute this week?</mj-text>
+        <mj-image href="https://www.swapone.nz" width="100px" src="https://app.swapone.nz/static/images/cool_logo.png" padding="0"></mj-image>
       </mj-column>
     </mj-section>
-    <mj-section>
-      <mj-group>
+    <mj-section background-color="#FFFFFF" padding-bottom="0">
+      <mj-column>
+        <mj-text font-size="20px" color="#000" font-family="Lora, 'Times New Roman', Times, serif">Hi {{ name }}!</mj-text>
+
+        <mj-text font-size="16px" color="#000" font-family="Inter, Arial, Helvetica, sans-serif">So far you've saved {{ emissions }}kg of emissions. It's time to log last week's commute.
+
+        </mj-text>
+        <mj-text font-size="16px" color="#000" font-family="Inter, Arial, Helvetica, sans-serif" font-weight="900">Did you Swap One last week?</mj-text>
+        <mj-text font-size="14px" color="#000" font-family="Inter, Arial, Helvetica, sans-serif">Warning: This email contains the permanent access link to your Swap One profile. Sharing it gives full access to any personal information you have provided.</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#fff" >
+      <mj-column>
+        <mj-button background-color="#F9D22C" color="#4A4A4A" font-size="20px" font-family="Lora, 'Times New Roman', Times, serif" href="https://app.swapone.nz/yes/{{ user_uuid }}" width="150px">Yes!</mj-button>
+      </mj-column>
+      <mj-column>
+        <mj-button background-color="#4A4A4A" color="#FFF" font-size="20px" font-family="Lora, 'Times New Roman', Times, serif" href="https://app.swapone.nz/no/{{ user_uuid }}" width="150px">No</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#F9D22C" full-width="full-width" padding="0">
+      <mj-column>
+        <mj-text font-size="13px" color="#000" font-family="Inter, Arial, Helvetica, sans-serif" align="center">
+          <a href="https://app.swapone.nz/edit/{{ user_uuid }}">Edit Profile</a> | <a href="https://app.swapone.nz/dash/{{ user_uuid }}">View Dashboard</a> |
+          <a href="https://app.swapone.nz/unsubscribe/{{ user_uuid }}">Unsubscribe</a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#F9D22C" full-width="full-width" padding="0">
+      <mj-group width="400px">
         <mj-column>
-          <mj-button background-color="#cc0000" color="#000" font-size="20px" font-family="helvetica" href="https://app.swapone.nz/yes/{{ user_uuid }}">Yes!</mj-button>
+          <mj-image href="https://nelsontasmanclimateforum.nz" src="https://app.swapone.nz/static/images/Logos/ntcf.png" padding="0"></mj-image>
         </mj-column>
         <mj-column>
-          <mj-button background-color="#cccccc" color="#000" font-size="20px" font-family="helvetica" href="https://app.swapone.nz/no/{{ user_uuid }}">No :(</mj-button>
+          <mj-image href="https://missionzero.nz" src="https://app.swapone.nz/static/images/Logos/missionzero.png" padding="0"></mj-image>
+        </mj-column>
+        <mj-column>
+          <mj-image href="https://nelsust.org.nz" src="https://app.swapone.nz/static/images/Logos/nelsust.png" padding="0"></mj-image>
+        </mj-column>
+        <mj-column>
+          <mj-image href="https://nelson.govt.nz" src="https://app.swapone.nz/static/images/Logos/ncc.png" padding="0"></mj-image>
         </mj-column>
       </mj-group>
     </mj-section>
-    <mj-section>
+    <mj-section background-color="#F9D22C" full-width="full-width" padding="0">
       <mj-column>
-        <mj-text font-size="14px" color="#ff0000" font-family="helvetica" align="center">SECURITY WARNING: This email contains your permanent access link to your Swap One profile. Do NOT forward or share this email. Sharing it gives anyone full access to the personal information you have provided.</mj-text>
-        <mj-text font-size="16px" color="#000" font-family="helvetica" align="center">
-          <a href="https://app.swapone.nz/edit/{{ user_uuid }}">Edit Profile</a> | <a href="https://app.swapone.nz/dash/{{ user_uuid }}">View Dashboard</a> | <a href="https://app.swapone.nz/unsubscribe/{{ user_uuid }}">Unsubscribe from Programme :(</a> .
-        </mj-text>
+        <mj-text font-size="12px" color="#000" align="center" font-family="Inter, Arial, Helvetica, sans-serif">Made with love by Arturo Neale | <a href="https://docs.google.com/document/d/16ZJs5ThK508UCH08u0rqlp89AmkNzo0Klvcf2od-W18/edit?usp=sharing">Privacy Policy</a></mj-text>
       </mj-column>
     </mj-section>
   </mj-body>
