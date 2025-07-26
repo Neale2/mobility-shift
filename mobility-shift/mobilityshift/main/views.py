@@ -66,11 +66,10 @@ def edit(request, pk):
 
     else:
         form = EditProfileForm(instance=user)
-        context = {'user': user, 'form': form}
+    context = {'user': user, 'form': form}
     return render(request, 'edit.html', context)
 
 def confirm(request):
-    
     return render(request, 'confirm.html')
 
 def dash(request, pk):
