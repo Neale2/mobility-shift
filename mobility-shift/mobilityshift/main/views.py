@@ -66,7 +66,8 @@ def edit(request, pk):
 
     else:
         form = EditProfileForm(instance=user)
-    return render(request, 'edit.html', {"form": form})
+        context = {'user': user, 'form': form}
+    return render(request, 'edit.html', context)
 
 def confirm(request):
     
@@ -92,11 +93,12 @@ def yes(request, pk):
     if request.method == "POST":
         form = YesLogForm(request.POST)
         #grams of emissions per km - carpool is half of personal vehicle emissions - assuming 2 people carpooling
-        mode_emissions = {'walk': 0, 'bike': 0, 'bus': 15, 'ev': 19, 'carpool': user.vehicle / 2}
-        choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool")]
+        mode_emissions = {'walk': 0, 'bike': 0, 'bus': 15, 'ev': 19, 'carpool': user.vehicle / 2, 'wfh': 0}
+        choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool"), ('wfh', 'Work from Home')]
         if form.is_valid():
             #Checking if error in saving
             try:
+                print(mode_emissions[form.cleaned_data['mode']])
                 #gets emission factor in grams per km. subtracts factor of changed mode of transport. div by 1000 to get grams per meter. multiply by meters traveled and number of trips.
                 emissions_saved = int(form.cleaned_data['quantity'] * user.distance * (user.vehicle - mode_emissions[form.cleaned_data['mode']]) / 1000)
                 user.emissions_saved = user.emissions_saved + emissions_saved

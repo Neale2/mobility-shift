@@ -9,13 +9,19 @@
         <!-- Add additional CSS in static file -->
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+        <link rel="icon" type="image/x-icon" href="{% static '/images/favicon.ico' %}" />
     </head>
     <body>
         <header>
-            <h1>Thank You!</h1>
+            <div class="visdiv">
+                <div class="headerbox">
+                    <a href="https://www.swapone.nz"><img class="logo" src="{% static 'images/cool_logo.png' %}" /></a>
+                </div>
+            </div>
         </header>
         <main>
-            <div class="blurb">
+            <h1>Welcome to Swap One!</h1>
+            <div class="content">
                 <h3>Thanks for signing up!</h3>
                 <h3>
                     You'll recieve an email within the next 5 minutes, but this is all you need to do for now. If you
@@ -23,5 +29,30 @@
                 </h3>
             </div>
         </main>
+        <footer>
+            <div class="logobox">
+                <a href="https://www.nelsontasmanclimateforum.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/ntcf.png' %}"
+                /></a>
+                <a href="https://missionzero.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/missionzero.png' %}"
+                /></a>
+                <a href="https://www.nelsust.org.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/nelsust.png' %}"
+                /></a>
+                <a href="https://www.nelson.govt.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/ncc.png' %}"
+                /></a>
+            </div>
+            <p>
+                <b>
+                    Made with love by Arturo Neale |
+                    <a
+                        href="https://docs.google.com/document/d/16ZJs5ThK508UCH08u0rqlp89AmkNzo0Klvcf2od-W18/edit?usp=sharing"
+                        >Privacy Policy</a
+                    >
+                </b>
+            </p>
+        </footer>
     </body>
 </html>

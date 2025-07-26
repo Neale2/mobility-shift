@@ -137,4 +137,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 TURNSTILE_SITEKEY = cloudflare_turnstile_sitekey()
 TURNSTILE_SECRET = cloudflare_turnstile_secretkey()
 
-
+TURNSTILE_DEFAULT_CONFIG = {
+    'theme': 'light',  # do not use data- prefix
+}

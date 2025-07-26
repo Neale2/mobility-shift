@@ -2,18 +2,23 @@
 <html lang="en">
     <head>
         {% block title %}
-        <title>Thanks!</title>
+        <title>Dashboard</title>
         {% endblock %}
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <!-- Add additional CSS in static file -->
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+        <link rel="icon" type="image/x-icon" href="{% static '/images/favicon.ico' %}" />
         <script>
             //grams of CO2e
             const TreePerYear = 54352;
-            const Targets = [0, 100, 500, 1000, 2500, 5000, 7500, 10000, 12500, 15000, 17500, 20000, 22500, 25000, 30000, 40000, 50000, 75000, 100000, 125000, 150000, 200000, 250000, 500000, 750000, 1000000, 2500000, 5000000, 10000000, 50000000, 100000000]
-
+            const Targets = [
+                0, 100, 500, 1000, 2500, 5000, 7500, 10000, 12500, 15000, 17500, 20000, 22500, 25000, 30000, 40000,
+                50000, 75000, 100000, 125000, 150000, 200000, 250000, 500000, 750000, 1000000, 2500000, 5000000,
+                10000000, 25000000, 50000000, 100000000, 250000000, 500000000, 1000000000, 2500000000, 5000000000,
+                10000000000, 25000000000, 50000000000, 100000000000, 250000000000, 500000000000, 1000000000000
+            ];
 
             var userName = "{{ user.name }}";
             var userSaved = {{ user.emissions_saved }};
@@ -26,8 +31,8 @@
             var prevGoal = 50;
             var targetGoal = 100;
 
-            Targets.forEach(function(target, index){
-                if (target <= userSaved){
+            Targets.forEach(function (target, index) {
+                if (target <= userSaved) {
                     targetGoal = Targets[index + 1];
                     prevGoal = target;
                 }
@@ -35,78 +40,191 @@
 
             var distToGoal = targetGoal - userSaved;
 
-            addEventListener("DOMContentLoaded", function(){
+            var prevGoalEmp = 50;
+            var targetGoalEmp = 100;
+
+            Targets.forEach(function (target, index) {
+                if (target <= employerSaved) {
+                    targetGoalEmp = Targets[index + 1];
+                    prevGoalEmp = target;
+                }
+            });
+
+            var prevGoalReg = 50;
+            var targetGoalReg = 100;
+
+            Targets.forEach(function (target, index) {
+                if (target <= regionSaved) {
+                    targetGoalReg = Targets[index + 1];
+                    prevGoalReg = target;
+                }
+            });
+
+            var prevGoalAll = 50;
+            var targetGoalAll = 100;
+
+            Targets.forEach(function (target, index) {
+                if (target <= allSaved) {
+                    targetGoalAll = Targets[index + 1];
+                    prevGoalAll = target;
+                }
+            });
+            addEventListener("DOMContentLoaded", function () {
+                console.log(prevGoalEmp);
                 var parent = document.getElementById("emissions");
                 parent.innerHTML = `
                 <div class="emissionsbox">
                     <h4>You</h4>
-                    <p>You've saved ${(userSaved/1000).toFixed(1)}kg of CO2e so far!</p>
-                    <p>You've hit the milestone of saving ${(prevGoal/1000).toFixed(1)}kg!</p>
-                    <p>Keep swapping - you're just ${(distToGoal/1000).toFixed(1)} kilograms away from hitting your next milestone of ${(targetGoal/1000).toFixed(1)}kg!</p>
-                </div>
+                    <div class="graphback">
+                        <div class="graphfront" style="width:${((userSaved / targetGoal) * 100).toFixed(1)}%;"></div>
+                        <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
+                        <span class="graphlabel" style="left:calc(${((prevGoal / targetGoal) * 100).toFixed(1)}% - 200px);">${(prevGoal / 1000).toFixed(1)}kg</span>
+                        <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoal / 1000}kg</span>
+                    </div>
+                    <div class="yroundbox">
+                    <p>You've saved ${(userSaved / 1000).toFixed(1)}kg of CO2e so far.</p>
+                    <p>You've hit the milestone of saving ${(prevGoal / 1000).toFixed(1)}kg!</p>
+                    <p>Keep up the great work - you're only ${(distToGoal / 1000).toFixed(1)} kilograms away from hitting your next milestone of ${(targetGoal / 1000).toFixed(1)}kg!</p>
+                </div></div>
                 `;
                 if (employerName != "None / Other / Prefer Not To Say") {
-                    parent.innerHTML = parent.innerHTML + `
+                    parent.innerHTML =
+                        parent.innerHTML +
+                        `
                         <div class="emissionsbox">
                             <h4>${employerName}</h4>
-                            <p>So far, ${employerName} has saved ${(employerSaved/1000).toFixed(0)}kg of CO2e!</p>
+                            <div class="graphback">
+                                <div class="graphfront" style="width:${((employerSaved / targetGoalEmp) * 100).toFixed(1)}%;"></div>
+                                <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
+                                <span class="graphlabel" style="left:calc(${((prevGoalEmp / targetGoalEmp) * 100).toFixed(1)}% - 200px);">${(prevGoalEmp / 1000).toFixed(1)}kg</span>
+                                <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalEmp / 1000}kg</span>
+                            </div>
+                            <div class="yroundbox">
+                            <p>So far, ${employerName} has saved ${(employerSaved / 1000).toFixed(0)}kg of CO2e.</p>
                             <p>Encourage your coworkers to keep up the great work!</p>
-                        </div>
-                        `
-                };
+                        </div></div>
+                        `;
+                }
                 if (regionName != "Other") {
                     if (regionName == "Nelson") {
-                        parent.innerHTML = parent.innerHTML + `
+                        parent.innerHTML =
+                            parent.innerHTML +
+                            `
                         <div class="emissionsbox">
                             <h4>${regionName}</h4>
-                            <p>Together, ${regionName} has saved ${(regionSaved/1000).toFixed(0)}kg of CO2e!</p>
+                            <div class="graphback">
+                                <div class="graphfront" style="width:${((regionSaved / targetGoalReg) * 100).toFixed(1)}%;"></div>
+                                <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
+                                <span class="graphlabel" style="left:calc(${((prevGoalReg / targetGoalReg) * 100).toFixed(1)}% - 200px);">${(prevGoalReg / 1000).toFixed(1)}kg</span>
+                                <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalReg / 1000}kg</span>
+                            </div>
+                            <div class="yroundbox">
+                            <p>Together, ${regionName} has saved ${(regionSaved / 1000).toFixed(0)}kg of CO2e.</p>
                             <p>Great job, Nelsonians!</p>
-                        </div>
-                        `
-                    }
-                    else {
-                        parent.innerHTML = parent.innerHTML + `
+                        </div></div>
+                        `;
+                    } else {
+                        parent.innerHTML =
+                            parent.innerHTML +
+                            `
                         <div class="emissionsbox">
                             <h4>${regionName}</h4>
-                            <p>Together, ${regionName} has saved ${(regionSaved/1000).toFixed(0)}kg of CO2e!</p>
+                            <div class="graphback">
+                                <div class="graphfront" style="width:${((regionSaved / targetGoalReg) * 100).toFixed(1)}%;"></div>
+                                <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
+                                <span class="graphlabel" style="left:calc(${((prevGoalReg / targetGoalReg) * 100).toFixed(1)}% - 200px);">${(prevGoalReg / 1000).toFixed(1)}kg</span>
+                                <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalReg / 1000}kg</span>
+                            </div>
+                            <div class="yroundbox">
+                            <p>Together, ${regionName} has saved ${(regionSaved / 1000).toFixed(0)}kg of CO2e.</p>
                             <p>Great job, residents of ${regionName}!</p>
-                        </div>
-                        `
+                        </div></div>
+                        `;
                     }
-
-                };
-                parent.innerHTML = parent.innerHTML + `
+                }
+                parent.innerHTML =
+                    parent.innerHTML +
+                    `
                         <div class="emissionsbox">
-                            <h4>Whole Programme</h4>
-                            <p>In total, we've saved ${(allSaved/1000).toFixed(0)}kg of CO2e!</p>
-                            <p>That's as much as ${(allSaved/TreePerYear).toFixed(0)} fully-grown pine trees absorb in a year!</p>
-                        </div>
-                        `
+                            <h4>Swap One</h4>
+                            <div class="graphback">
+                                <div class="graphfront" style="width:${((allSaved / targetGoalAll) * 100).toFixed(1)}%;"></div>
+                                <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
+                                <span class="graphlabel" style="left:calc(${((prevGoalAll / targetGoalAll) * 100).toFixed(1)}% - 200px);">${(prevGoalAll / 1000).toFixed(1)}kg</span>
+                                <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalAll / 1000}kg</span>
+                            </div>
+                            <div class="yroundbox">
+                            <p>In total, we've saved ${(allSaved / 1000).toFixed(0)}kg of CO2e.</p>
+                            <p>That's as much as ${(allSaved / TreePerYear).toFixed(0)} trees absorb in a year!</p>
+                        </div></div>
+                        `;
 
                 if (window.location.search.slice(1) == "confirm_edit=true") {
                     alert("Successfully edited profile!");
                 }
             });
+
+            function navToggle() {
+                var x = document.getElementById("navlinks");
+                var y = document.getElementById("navbutton");
+                if (x.style.display === "flex") {
+                    console.log("a");
+                    x.style.display = "none";
+                    y.innerHTML = "☰";
+                } else {
+                    x.style.display = "flex";
+                    y.innerHTML = "✕";
+                    console.log("b");
+                    console.log("b");
+                }
+            }
         </script>
     </head>
     <body>
         <header>
-            <h1>Swap One Dashboard</h1>
+            <div class="visdiv">
+                <button id="navbutton" onclick="navToggle()">☰</button>
+                <div class="headerbox">
+                    <a href="https://www.swapone.nz"><img class="logo" src="{% static 'images/cool_logo.png' %}" /></a>
+                </div>
+            </div>
+            <div id="navlinks">
+                <a class="button" href="/edit/{{ user.uuid }}">Edit Profile</a>
+                <a class="button" href="/dash/{{ user.uuid }}">View Dashboard</a>
+                <a class="button" href="/unsubscribe/{{ user.uuid }}">Unsubscribe</a>
+            </div>
         </header>
         <main>
-            <div class="nav">
-                <p>
-                    <a href="/edit/{{ user.uuid }}">Edit Profile</a> | <a>View Dashboard</a> |
-                    <a href="/unsubscribe/{{ user.uuid }}">Unsubscribe from Programme :(</a>
-                </p>
-            </div>
-            <div class="content" id="emissions">
-                <h3>Our progress:</h3>
-            </div>
-            <br />
-            <br />
-            <br />
+            <h1>Dashboard</h1>
+            <h2>Your Info</h2>
+            <div class="content" id="emissions"></div>
+            <hr class="divider" />
             <div class="content">{{ post.formatted_markdown|safe }}</div>
         </main>
+        <footer>
+            <div class="logobox">
+                <a href="https://www.nelsontasmanclimateforum.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/ntcf.png' %}"
+                /></a>
+                <a href="https://missionzero.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/missionzero.png' %}"
+                /></a>
+                <a href="https://www.nelsust.org.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/nelsust.png' %}"
+                /></a>
+                <a href="https://www.nelson.govt.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/ncc.png' %}"
+                /></a>
+            </div>
+            <p>
+                <b>
+                    Made with love by Arturo Neale |
+                    <a
+                        href="https://docs.google.com/document/d/16ZJs5ThK508UCH08u0rqlp89AmkNzo0Klvcf2od-W18/edit?usp=sharing"
+                        >Privacy Policy</a
+                    >
+                </b>
+            </p>
+        </footer>
     </body>
 </html>

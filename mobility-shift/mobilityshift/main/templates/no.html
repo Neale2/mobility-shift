@@ -6,27 +6,87 @@
         <title>No Logging</title>
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+        <link rel="icon" type="image/x-icon" href="{% static '/images/favicon.ico' %}" />
     </head>
     <body>
         {% load mathfilters %}
         {% block content %}
         <header>
-            <h1>No Logging</h1>
+            <div class="visdiv">
+                <button id="navbutton" onclick="navToggle()">☰</button>
+                <div class="headerbox">
+                    <a href="https://www.swapone.nz"><img class="logo" src="{% static 'images/cool_logo.png' %}" /></a>
+                </div>
+            </div>
+            <div id="navlinks">
+                <a class="button" href="/edit/{{ user.uuid }}">Edit Profile</a>
+                <a class="button" href="/dash/{{ user.uuid }}">View Dashboard</a>
+                <a class="button" href="/unsubscribe/{{ user.uuid }}">Unsubscribe</a>
+            </div>
         </header>
          <main>
+             <h1>Log a Missed Trip</h1>
             <div class="blurb">
-                <h3>Greetings, {{user.name}}.</h3>
                 <!--redirects to yes page-->
                 <a href=../yes/{{user.uuid}}>Oops! I meant to press yes!</a>
-                <h4>Sorry you didn't manage to swap a trip this week, but you have saved {{ user.emissions_saved|div:1000 }}kg of CO2e so far!</h4>
+                <h4>It's a shame you didn't manage to swap a trip this week. There's always next week, though!</h4>
                 {% endblock %}
-             </div>
-            <form method="post">
-                {% csrf_token %} {{ form }}
-                <input type="submit" value="Submit" class="submit button input"/>
-            </form>
+             
+                <form method="post">
+                    {% csrf_token %} {{ form }}
+                    <input type="submit" value="Submit" class="submit button input"/>
+                </form>
+                </div>
         </main>
+        <footer>
+            <div class="logobox">
+                <a href="https://www.nelsontasmanclimateforum.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/ntcf.png' %}"
+                /></a>
+                <a href="https://missionzero.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/missionzero.png' %}"
+                /></a>
+                <a href="https://www.nelsust.org.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/nelsust.png' %}"
+                /></a>
+                <a href="https://www.nelson.govt.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/ncc.png' %}"
+                /></a>
+            </div>
+            <p>
+                <b>
+                    Made with love by Arturo Neale |
+                    <a
+                        href="https://docs.google.com/document/d/16ZJs5ThK508UCH08u0rqlp89AmkNzo0Klvcf2od-W18/edit?usp=sharing"
+                        >Privacy Policy</a
+                    >
+                </b>
+            </p>
+        </footer>
         <script>
+            function navToggle() {
+                var x = document.getElementById("navlinks");
+                var y = document.getElementById("navbutton");
+                if (x.style.display === "flex") {
+                    console.log("a");
+                    x.style.display = "none";
+                    y.innerHTML = "☰";
+                } else {
+                    x.style.display = "flex";
+                    y.innerHTML = "✕";
+                    console.log("b");
+                    console.log("b");
+                }
+            }
+         document.addEventListener("DOMContentLoaded", function () {
+                    const form = document.querySelector("form");
+                    const submitButton = form.querySelector('[type="submit"]');
+
+                    form.addEventListener("submit", function () {
+                        submitButton.disabled = true;
+                        submitButton.value = "Processing...";
+                    });
+                });
          document.addEventListener("DOMContentLoaded", function () {
                 const form = document.querySelector("form");
                 const submitButton = form.querySelector('[type="submit"]');

@@ -5,21 +5,21 @@ from turnstile.fields import TurnstileField
 from .models import Employer, Region, User
 
 class SignUpForm(forms.Form):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': "name short-text input info", 'id': 'name'}), label="Name", max_length=20)
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': "email short-text input info", 'id': 'email'}), label="Email", max_length=320)
-    age_group = forms.ChoiceField(widget=forms.Select(attrs={'class': "age multi input"}), label="Age Group", choices=[("<13", "Under 13"), ("13-17", "13 - 17"), ("18-24", "18 - 24"), ("25-34", "25 - 34"), ("35-44", "35 - 44"), ("45-64", "45 - 64"), (">65", "More than 65"), ("prefer_not", "Prefer not to say")])
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': "name short-text input", 'id': 'name', 'placeholder': 'type your name'}), label="What's your name?", max_length=20)
+    age_group = forms.ChoiceField(widget=forms.Select(attrs={'class': "age multi input", 'id': 'age'}), label="How old are you?", choices=[("<13", "Under 13"), ("13-17", "13 - 17"), ("18-24", "18 - 24"), ("25-34", "25 - 34"), ("35-44", "35 - 44"), ("45-64", "45 - 64"), (">65", "More than 65"), ("prefer_not", "Prefer not to say")])
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': "email short-text input info", 'id': 'email', 'placeholder': 'type your email'}), label="Email", max_length=320)
     distance = forms.ChoiceField(widget=forms.Select(attrs={'class': "distance multi input info", 'id': 'distance'}), label="Commute Distance", choices=[(500, "0.5km"), (1000, "1km"), (2500, "2.5km"), (5000, "5km"), (10000, "10km"), (25000, "25km"), (50000, "50km")])
     #numbers returned are emission factors (g/km) for ease. Don't know/other returns typical petrol number
-    vehicle = forms.ChoiceField(widget=forms.Select(attrs={'class': "vehicle multi input info", 'id': 'vehicle'}), label="Vehicle Type", choices=[(243, "Petrol"), (265, "Diesel"), (192, "Hybrid"), (98, "Plug-in Hybrid"), (19, "Electric"), (243, "Other / Don't know")])
-    employer = forms.ModelChoiceField(widget=forms.Select(attrs={'class': "employer multi input"}), label="Employer", queryset=Employer.objects.annotate(
+    vehicle = forms.ChoiceField(widget=forms.Select(attrs={'class': "vehicle multi input", 'id': 'vehicle'}), label="Vehicle Type", choices=[(243, "Petrol"), (265, "Diesel"), (192, "Hybrid"), (98, "Plug-in Hybrid"), (19, "Electric"), (243, "Other / Don't know")])
+    employer = forms.ModelChoiceField(widget=forms.Select(attrs={'class': "employer multi input", 'id': "employer"}), label="Employer", queryset=Employer.objects.annotate(
         #orders list so none at top
         priority=Case(
         When(name='None / Other / Prefer Not To Say', then=Value(0)),
         default=Value(1),
         output_field=IntegerField()
     )
-).order_by('priority', 'name'), blank=False, initial='None / Other / Prefer Not To Say')
-    region = forms.ModelChoiceField(widget=forms.Select(attrs={'class': "region multi input"}), label="Region", queryset=Region.objects.all(), blank=False, initial='Nelson')
+    ).order_by('priority', 'name'), blank=False, initial='None / Other / Prefer Not To Say')
+    region = forms.ModelChoiceField(widget=forms.Select(attrs={'class': "region multi input", 'id': 'region'}), label="Region", queryset=Region.objects.all(), blank=False, initial='Nelson')
     captcha = TurnstileField(label="")
     
     def clean_name(self):
@@ -28,7 +28,7 @@ class SignUpForm(forms.Form):
 
 class YesLogForm(forms.Form):
     quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': "quantity multi input"}), label="How many high carbon trips (one way) did you swap this week?", min_value=1, max_value=14)
-    mode = forms.ChoiceField(widget=forms.Select(attrs={'class': "mode multi input"}), label="What mode of transport did you use?", choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool")])
+    mode = forms.ChoiceField(widget=forms.Select(attrs={'class': "mode multi input"}), label="What mode of transport did you use?", choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool"), ('wfh', 'Work from Home')])
     captcha = TurnstileField(label="")
 
 class NoLogForm(forms.Form):

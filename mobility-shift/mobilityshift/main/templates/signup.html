@@ -12,31 +12,61 @@
         <!-- Add additional CSS in static file -->
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/dropdown.css' %}" />
-        <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/signup.css' %}" />
+        <link rel="icon" type="image/x-icon" href="{% static '/images/favicon.ico' %}" />
     </head>
     <body>
-        <header>
-            <h1>Swap One Signup</h1>
+        <header class="signup">
+            <div class="hero" style="background-image: url(&quot;{% static 'images/Heroes/signup_hero.JPG' %}&quot;)">
+                <div class="overlay">
+                    <img class="hero_cover" src="{% static 'images/Graphics/circle_yellow.png' %}" />
+                </div>
+
+                <h1 class="title">Swap One</h1>
+            </div>
         </header>
+
         <main>
-            <div class="blurb">
-                <h3>Welcome to Swap One!</h3>
-                <h3>About the programme:</h3>
-            </div>
             <div class="content">
+                <h2>Sign Up</h2>
                 <p>
-                    Swap One is a programme designed to incentivise users to reduce their high carbon commutes ( car
-                    trips). We are working with Nelson organisaions to reduce the carbon impact. Any data you share with
-                    us will be used only for app operation or for climate related research.
+                    Real change can start with just one trip a week. Ditch the car and walk, bike, bus, or work from
+                    home instead. Swap One is a programme to help you do this. It's easy. It matters. Find out more: [<a
+                        href="swapone.nz"
+                        >swapone.nz</a
+                    >]
                 </p>
-                <h3>Register:</h3>
+                <form method="post">
+                    {% csrf_token %} {{ form }}
+                    <input type="submit" value="Submit" class="submit button input" />
+                </form>
             </div>
-            <form method="post">
-                {% csrf_token %} {{ form }}
-                <input type="submit" value="Register" class="submit button input" />
-            </form>
-            LINK TO PRIVACY POLICY HERE
         </main>
+        <footer>
+            <div class="logobox">
+                <a href="https://www.nelsontasmanclimateforum.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/ntcf.png' %}"
+                /></a>
+                <a href="https://missionzero.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/missionzero.png' %}"
+                /></a>
+                <a href="https://www.nelsust.org.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/nelsust.png' %}"
+                /></a>
+                <a href="https://www.nelson.govt.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/ncc.png' %}"
+                /></a>
+            </div>
+            <p>
+                <b>
+                    Made with love by Arturo Neale |
+                    <a
+                        href="https://docs.google.com/document/d/16ZJs5ThK508UCH08u0rqlp89AmkNzo0Klvcf2od-W18/edit?usp=sharing"
+                        >Privacy Policy</a
+                    >
+                </b>
+            </p>
+        </footer>
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
@@ -49,11 +79,8 @@
                 });
 
                 const infocontent = {
-                    name: "Input your first name, or whatever you want us to call you!",
-                    vehicle:
-                        "If you already don't commute using a high-carbon method, then you're amazing, but this program probably isn't for you. Check out alternatives like Love To Ride!",
                     distance: "Pick the distance that is the closest to your one-way travel distance.",
-                    email: "If possible, use your personal email. Swap One emails are often incorrectly quarantined by work email filters."
+                    email: "Please use your personal email. Work filters can block our messages (and your rewards!)."
                 };
 
                 for (elem of document.getElementsByClassName("info")) {
@@ -62,6 +89,30 @@
                     parent.insertBefore(infobox, elem);
                     infobox.outerHTML = "<div class='infobox'>" + infocontent[elem.id] + "</div>";
                 }
+
+                const placecontent = {
+                    age: "select your age bracket",
+                    distance: "select your travel distance",
+                    vehicle: "select your vehicle type",
+                    employer: "select your employer",
+                    region: "select your region"
+                };
+
+                document.querySelectorAll("option[selected]").forEach((option) => {
+                    option.removeAttribute("selected");
+                });
+
+                for (elem of document.getElementsByClassName("multi")) {
+                    elem.innerHTML =
+                        "<option value='' disabled selected>" + placecontent[elem.id] + "</option>" + elem.innerHTML;
+                    elem.classList.add("placeholder");
+                }
+
+                document.querySelectorAll(".multi").forEach(function (dropdown) {
+                    dropdown.addEventListener("change", function () {
+                        this.classList.remove("placeholder");
+                    });
+                });
             });
         </script>
     </body>

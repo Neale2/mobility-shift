@@ -13,23 +13,75 @@
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/dropdown.css' %}" />
         <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+        <link rel="icon" type="image/x-icon" href="{% static '/images/favicon.ico' %}" />
     </head>
     <body>
         <header>
-            <h1>Edit Profile</h1>
+            <div class="visdiv">
+                <button id="navbutton" onclick="navToggle()">☰</button>
+                <div class="headerbox">
+                    <a href="https://www.swapone.nz"><img class="logo" src="{% static 'images/cool_logo.png' %}" /></a>
+                </div>
+            </div>
+            <div id="navlinks">
+                <a class="button" href="/edit/{{ user.uuid }}">Edit Profile</a>
+                <a class="button" href="/dash/{{ user.uuid }}">View Dashboard</a>
+                <a class="button" href="/unsubscribe/{{ user.uuid }}">Unsubscribe</a>
+            </div>
         </header>
         <main>
-            <div class="blurb">
-                <h3>Edit your profile:</h3>
+            <h1>Edit Profile</h1>
+            <div class="content">
                 <h3>Change any needed values and then submit.</h3>
+                <br />
+                <form method="post">
+                    {% csrf_token %} {{ form }}
+                    <input type="submit" value="Submit" class="submit button input" />
+                </form>
             </div>
-            <form method="post">
-                {% csrf_token %} {{ form }}
-                <input type="submit" value="Submit" class="submit button input" />
-            </form>
         </main>
+        <footer>
+            <div class="logobox">
+                <a href="https://www.nelsontasmanclimateforum.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/ntcf.png' %}"
+                /></a>
+                <a href="https://missionzero.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/missionzero.png' %}"
+                /></a>
+                <a href="https://www.nelsust.org.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/nelsust.png' %}"
+                /></a>
+                <a href="https://www.nelson.govt.nz/"
+                    ><img class="logoimg" src="{% static 'images/Logos/ncc.png' %}"
+                /></a>
+            </div>
+            <p>
+                <b>
+                    Made with love by Arturo Neale |
+                    <a
+                        href="https://docs.google.com/document/d/16ZJs5ThK508UCH08u0rqlp89AmkNzo0Klvcf2od-W18/edit?usp=sharing"
+                        >Privacy Policy</a
+                    >
+                </b>
+            </p>
+        </footer>
 
         <script>
+            function navToggle() {
+                var x = document.getElementById("navlinks");
+                var y = document.getElementById("navbutton");
+                if (x.style.display === "flex") {
+                    console.log("a");
+                    x.style.display = "none";
+                    y.innerHTML = "☰";
+                } else {
+                    x.style.display = "flex";
+                    y.innerHTML = "✕";
+                    console.log("b");
+                    console.log("b");
+                }
+            }
+
             document.addEventListener("DOMContentLoaded", function () {
                 const form = document.querySelector("form");
                 const submitButton = form.querySelector('[type="submit"]');
