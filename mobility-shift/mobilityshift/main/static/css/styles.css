@@ -283,6 +283,7 @@ label {
     font-weight: 700;
     border-radius: 5px;
     text-decoration: none;
+    justify-content: center;
 }
 
 a.button {
