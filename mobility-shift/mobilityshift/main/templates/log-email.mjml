@@ -13,7 +13,7 @@
       <mj-column>
         <mj-text font-size="20px" color="#000" font-family="Lora, 'Times New Roman', Times, serif">Hi {{ name }}!</mj-text>
 
-        <mj-text font-size="16px" color="#000" font-family="Inter, Arial, Helvetica, sans-serif">So far you've saved {{ emissions }}kg of emissions. It's time to log last week's commute.
+        <mj-text font-size="16px" color="#000" font-family="Inter, Arial, Helvetica, sans-serif">So far you've saved {{ emissions_saved }}kg of emissions. It's time to log last week's commute.
 
         </mj-text>
         <mj-text font-size="16px" color="#000" font-family="Inter, Arial, Helvetica, sans-serif" font-weight="900">Did you Swap One last week?</mj-text>
