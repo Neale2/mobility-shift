@@ -175,7 +175,7 @@
                     </tr>
                     <tr>
                       <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                        <div style="font-family:Inter, Arial, Helvetica, sans-serif;font-size:16px;line-height:1;text-align:left;color:#000000;">So far you've saved {{ emissions_saved }}kg of emissions. It's time to log last week's commute.</div>
+                        <div style="font-family:Inter, Arial, Helvetica, sans-serif;font-size:16px;line-height:1;text-align:left;color:#000000;">So far you've saved {% load mathfilters %}{{ emissions_saved|div:1000  }}kg of emissions. It's time to log last week's commute.</div>
                       </td>
                     </tr>
                     <tr>
