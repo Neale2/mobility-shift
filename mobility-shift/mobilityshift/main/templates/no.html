@@ -30,6 +30,7 @@
                 <!--redirects to yes page-->
                 <a href=../yes/{{user.uuid}}>Oops! I meant to press yes!</a>
                 <h4>It's a shame you didn't manage to swap a trip this week. There's always next week, though!</h4>
+                <h4>Why couldn't you do a trip?</h4>
                 {% endblock %}
              
                 <form method="post">
@@ -58,12 +59,64 @@
                     Made with love by Arturo Neale |
                     <a
                         href="https://docs.google.com/document/d/16ZJs5ThK508UCH08u0rqlp89AmkNzo0Klvcf2od-W18/edit?usp=sharing"
-                        >Privacy Policy</a
-                    >
+                    >Ts & Cs / Privacy Policy</a>
                 </b>
             </p>
         </footer>
         <script>
+            document.addEventListener("DOMContentLoaded", (event) => {
+                form = document.getElementsByTagName("form")[0]
+                form.innerHTML = `
+                    <div class="checkboxbox">
+                        <input type="checkbox" id="sick" name="sick" class="checkbox" />
+                        <label for="sick" id="sick-l" class="checkboxLabel">Sick</label>
+                    </div>
+
+                    <div class="checkboxbox">
+                        <input type="checkbox" id="holiday" name="holiday" class="checkbox" />
+                        <label for="holiday" id="holiday-l" class="checkboxLabel">Holiday</label>
+                    </div>
+
+                    <div class="checkboxbox">
+                        <input type="checkbox" id="badWeather" name="badWeather" class="checkbox" />
+                        <label for="badWeather" id="badWeather-l" class="checkboxLabel">Bad weather</label>
+                    </div>
+
+                    <div class="checkboxbox">
+                        <input type="checkbox" id="neededCar" name="neededCar" class="checkbox" />
+                        <label for="neededCar" id="neededCar-l" class="checkboxLabel">Needed car for something else</label>
+                    </div>
+
+                    <div class="checkboxbox">
+                        <input type="checkbox" id="usualRideNotAvailable" name="usualRideNotAvailable" class="checkbox" />
+                        <label for="usualRideNotAvailable" id="usualRideNotAvailable-l" class="checkboxLabel">Usual ride not available</label>
+                    </div>
+
+                    <div class="checkboxbox">
+                        <input type="checkbox" id="busNotWorking" name="busNotWorking" class="checkbox" />
+                        <label for="busNotWorking" id="busNotWorking-l" class="checkboxLabel">Bus wasn’t working</label>
+                    </div>
+
+                    <div class="checkboxbox">
+                        <input type="checkbox" id="carWasFaster" name="carWasFaster" class="checkbox" />
+                        <label for="carWasFaster" id="carWasFaster-l" class="checkboxLabel">Car was faster</label>
+                    </div>
+                ` + form.innerHTML
+                console.log(form)
+                
+            });
+            
+            document.querySelector('form').addEventListener('submit', function(event) {
+             const checkboxes = document.querySelectorAll('.checkbox:checked');
+             const otherText = document.getElementById('id_text_response').value.trim();
+                
+             const selectedReasons = Array.from(checkboxes).map(cb => document.getElementById(cb.id + "-l").innerHTML);
+             if (otherText !== "") {
+              selectedReasons.push(otherText);
+             }
+             document.getElementById('id_text_response').value = selectedReasons.join(' | ');
+            }); 
+            
             function navToggle() {
                 var x = document.getElementById("navlinks");
                 var y = document.getElementById("navbutton");
@@ -87,15 +140,6 @@
                         submitButton.value = "Processing...";
                     });
                 });
-         document.addEventListener("DOMContentLoaded", function () {
-                const form = document.querySelector("form");
-                const submitButton = form.querySelector('[type="submit"]');
-
-                form.addEventListener("submit", function () {
-                    submitButton.disabled = true;
-                    submitButton.value = "Processing...";
-                });
-            });
         
         </script>
     </body>

@@ -17,7 +17,6 @@
 
         </mj-text>
         <mj-text font-size="16px" color="#000" font-family="Inter, Arial, Helvetica, sans-serif" font-weight="900">Did you Swap One last week?</mj-text>
-        <mj-text font-size="14px" color="#000" font-family="Inter, Arial, Helvetica, sans-serif">Warning: This email contains the permanent access link to your Swap One profile. Sharing it gives full access to any personal information you have provided.</mj-text>
       </mj-column>
     </mj-section>
     <mj-section background-color="#fff" >
@@ -26,6 +25,11 @@
       </mj-column>
       <mj-column>
         <mj-button background-color="#4A4A4A" color="#FFF" font-size="20px" font-family="Lora, 'Times New Roman', Times, serif" href="https://app.swapone.nz/no/{{ user_uuid }}" width="150px">No</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section padding-top="0" background-color="#fff">
+    <mj-column>
+              <mj-text font-size="14px" color="#000" font-family="Inter, Arial, Helvetica, sans-serif">Warning: This email contains the permanent access link to your Swap One profile. Sharing it gives full access to any personal information you have provided.</mj-text>
       </mj-column>
     </mj-section>
     <mj-section background-color="#F9D22C" full-width="full-width" padding="0">
@@ -54,7 +58,7 @@
     </mj-section>
     <mj-section background-color="#F9D22C" full-width="full-width" padding="0">
       <mj-column>
-        <mj-text font-size="12px" color="#000" align="center" font-family="Inter, Arial, Helvetica, sans-serif">Made with love by Arturo Neale | <a href="https://docs.google.com/document/d/16ZJs5ThK508UCH08u0rqlp89AmkNzo0Klvcf2od-W18/edit?usp=sharing">Privacy Policy</a></mj-text>
+        <mj-text font-size="12px" color="#000" align="center" font-family="Inter, Arial, Helvetica, sans-serif">Made with love by Arturo Neale | <a href="https://docs.google.com/document/d/16ZJs5ThK508UCH08u0rqlp89AmkNzo0Klvcf2od-W18/edit?usp=sharing">Ts & Cs / Privacy Policy</a></mj-text>
       </mj-column>
     </mj-section>
   </mj-body>

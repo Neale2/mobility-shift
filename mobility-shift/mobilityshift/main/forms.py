@@ -32,8 +32,7 @@ class YesLogForm(forms.Form):
     captcha = TurnstileField(label="")
 
 class NoLogForm(forms.Form):
-    #overriding default textinput widget since too small
-    text_response = forms.CharField(widget=forms.Textarea(attrs={'class': "no-log long-text input"}), label="Why didn't you do your trip this week?")
+    text_response = forms.CharField(widget=forms.TextInput(attrs={'class': "no-log long-text input"}), required=False, label="Other:")
     captcha = TurnstileField(label="")
     
 class UnsubForm(forms.Form):

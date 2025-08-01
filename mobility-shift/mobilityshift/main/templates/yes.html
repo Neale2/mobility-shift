@@ -32,8 +32,6 @@
         <main>
             <h1>Log a Completed Trip</h1>
             <div class="content">
-                <!--redirects to yes page-->
-                <a href=../no/{{user.uuid}}>Oops! I meant to press no!</a>
                 <h4>Great job on commuting sustainably this week!</h4>
                 {% endblock %}
             
@@ -41,6 +39,8 @@
                     {% csrf_token %} {{ form }}
                     <input type="submit" value="Submit" class="submit button input"/>
                 </form>
+                <!--redirects to yes page-->
+                <a  class="taligncenter" href=../no/{{user.uuid}}>Oops! I meant to press no!</a>
             </div>
         </main>
         <footer>
@@ -61,14 +61,13 @@
             <p>
                 <b>
                     Made with love by Arturo Neale |
-                    <a
-                        href="https://docs.google.com/document/d/16ZJs5ThK508UCH08u0rqlp89AmkNzo0Klvcf2od-W18/edit?usp=sharing"
-                        >Privacy Policy</a
-                    >
+                    <a href="https://docs.google.com/document/d/16ZJs5ThK508UCH08u0rqlp89AmkNzo0Klvcf2od-W18/edit?usp=sharing"
+                    > Ts & Cs / Privacy Policy</a>
                 </b>
             </p>
         </footer>
         <script>
+            
             function navToggle() {
                 var x = document.getElementById("navlinks");
                 var y = document.getElementById("navbutton");

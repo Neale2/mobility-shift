@@ -71,8 +71,6 @@ def make_spreadsheet():
             'Primary Vehicle (emission factor)',
             'Employer',
             'Region',
-            'Email',
-            'Name',
             
         ]
     ]
@@ -98,16 +96,6 @@ def make_spreadsheet():
                 trip.user.region,
                 
             ]
-            #deleted accounds don't have emails
-            try:
-                data.append(trip.user.email)
-            except:
-                data.append("DELETED")
-            #deleted accounds don't have names
-            try:
-                data.append(trip.user.name)
-            except:
-                data.append("DELETED")
             
         except Exception as e:
             data=["ERROR WITH USER. ERROR CODE:", e]

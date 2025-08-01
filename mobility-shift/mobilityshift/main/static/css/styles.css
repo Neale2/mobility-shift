@@ -309,3 +309,19 @@ a.button {
 .placeholder {
     color: #4a4a4a;
 }
+
+.taligncenter {
+    text-align: center;
+    width: 100%;
+    display: block;
+    padding-bottom: 20px;
+}
+
+.checkboxLabel {
+    font-weight: 400;
+}
+
+.checkboxbox {
+    display: inline;
+    padding-bottom: 5px;
+}
