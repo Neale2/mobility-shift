@@ -135,10 +135,10 @@ def make_spreadsheet():
         azure_storage_connection_string()
     )
     blob_client = blob_service_client.get_blob_client(
-        container=azure_spreadsheet_bucket_name(), blob="data.csv"
+        container=azure_spreadsheet_bucket_name(), blob=csv_file_path
     )
 
-    with open("data.csv", "rb") as data:
+    with open(csv_file_path, "rb") as data:
         blob_client.upload_blob(data, overwrite=True)
 
     sas_token = generate_blob_sas(
@@ -223,19 +223,19 @@ def make_spreadsheet():
         azure_storage_connection_string()
     )
     blob_client = blob_service_client.get_blob_client(
-        container=azure_spreadsheet_bucket_name(), blob="users.csv"
+        container=azure_spreadsheet_bucket_name(), blob=csv_file_path
     )
 
-    with open("users.csv", "rb") as data:
+    with open(csv_file_path, "rb") as data:
         blob_client.upload_blob(data, overwrite=True)
 
     sas_token = generate_blob_sas(
         account_name=blob_service_client.account_name,
         container_name=azure_spreadsheet_bucket_name(),
-        blob_name="users.csv",
+        blob_name=csv_file_path,
         account_key=blob_service_client.credential.account_key,
         permission=BlobSasPermissions(read=True),
-        expiry=datetime.utcnow() + timedelta(days=1),
+        expiry=datetime.now(datetime.timezone.utc) + timedelta(days=1),
     )
 
     user_download_url = f"{blob_client.url}?{sas_token}"
