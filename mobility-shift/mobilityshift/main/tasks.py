@@ -39,7 +39,7 @@ def email_user(imp_user):
 def email_users():
     template = get_template('log-email.html')
     users = list(User.objects.all())
-    def send(user):
+    for user in users:
         context = {
             'email': user.email,
             'user_uuid': user.uuid,
@@ -50,10 +50,7 @@ def email_users():
         html_body = template.render(context)      
         response = send_email(user.email, "It's your weekly logging time!", html_body, str(user.uuid))
         user.logged_this_week = False
-        user.save()
-        print(user.email, response)
-    with ThreadPoolExecutor(max_workers=10) as executor:
-        executor.map(send, users)
+
 
 
 def make_spreadsheet():

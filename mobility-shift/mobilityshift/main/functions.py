@@ -1,5 +1,6 @@
 import json
 import os
+import threading
 
 from azure.communication.email import EmailClient
 from django.shortcuts import get_object_or_404
@@ -7,7 +8,12 @@ from django.shortcuts import get_object_or_404
 from .secrets import azure_email_connection_string
 from .models import User
 
-
+def post_send(poller):
+    try:
+        result = poller.result()
+        print(result)
+    except Exception as e:
+        print("Background email result error:", e)
 
 def send_email(recipient, subject, html_body, uuid):
     try:
@@ -35,7 +41,7 @@ def send_email(recipient, subject, html_body, uuid):
         }
 
         poller = client.begin_send(message)
-        result = poller.result()
+        threading.Thread(target=post_send, args=(poller,)).start()
 
     except Exception as ex:
         print("Email Send error:", ex)
