@@ -91,3 +91,10 @@ class DeletedTrip(models.Model):
     log_time = models.DateTimeField(editable=False)
     text_response = models.TextField(null=True, blank=True)
     quantity = models.PositiveIntegerField()
+    
+class BackedEmail(models.Model):
+    recipient = models.EmailField()
+    subject = models.TextField()
+    html_body = models.TextField()
+    uuid = models.TextField()
+    priority = models.PositiveIntegerField()

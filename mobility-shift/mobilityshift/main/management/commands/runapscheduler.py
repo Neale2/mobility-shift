@@ -1,3 +1,5 @@
+import threading
+
 from django.conf import settings
 
 from apscheduler.schedulers.blocking import BlockingScheduler
@@ -8,6 +10,8 @@ from django_apscheduler.models import DjangoJobExecution
 from django_apscheduler import util
 
 from ...tasks import make_spreadsheet, email_users
+from ...functions import clear_backlog
+from ...models import BackedEmail
 
 
 
@@ -18,9 +22,23 @@ def spreadsheet():
 def logging_email():
     print("Sending Logging Email")
     email_users()
+
+processing_lock = threading.Lock()
     
+def check_emails():
+    if processing_lock.locked():
+        print("locked")
+        return
 
-
+    with processing_lock:
+        if not BackedEmail.objects.exists():
+            print("no backed up emails")
+            return
+        
+        print("yes backed up emails")
+        clear_backlog()
+    
+    
 # The `close_old_connections` decorator ensures that database connections, that have become
 # unusable or are obsolete, are closed before and after your job has run. You should use it
 # to wrap any jobs that you schedule that access the Django database in any way. 
@@ -43,7 +61,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         scheduler = BlockingScheduler(timezone=settings.TIME_ZONE)
         scheduler.add_jobstore(DjangoJobStore(), "default")
-
+        scheduler.add_job(check_emails, 'interval', minutes=1, id="check_backlog", max_instances=1, replace_existing=True,)
         scheduler.add_job(
             spreadsheet,
             trigger=CronTrigger(hour='7', minute='30'),  # At 7:30am each day, send database

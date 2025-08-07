@@ -218,7 +218,7 @@ def make_spreadsheet():
 
     user_download_url = f"{blob_client.url}?{sas_token}"
     
-    email_response = send_email("arturo.neale@gmail.com", "Daily Database Dump", "Hi! Here's the trips database from today: " + download_url + " And here's the users: " + user_download_url, 'N/A')
+    email_response = send_email("arturo.neale@gmail.com", "Daily Database Dump", "Hi! Here's the trips database from today: " + download_url + " And here's the users: " + user_download_url, 'N/A', 3)
     print(email_response)
     
     

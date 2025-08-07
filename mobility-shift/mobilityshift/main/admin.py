@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib import messages
-from .models import User, Trip, DeletedUser, DeletedTrip, Employer, Region, All, Post
+from .models import User, Trip, DeletedUser, DeletedTrip, Employer, Region, All, Post, BackedEmail
 from .tasks import email_user
 
 from markdownx.admin import MarkdownxModelAdmin
@@ -21,4 +21,5 @@ admin.site.register(DeletedTrip)
 admin.site.register(Employer)
 admin.site.register(Region)
 admin.site.register(All)
+admin.site.register(BackedEmail)
 admin.site.register(Post, MarkdownxModelAdmin)
