@@ -195,4 +195,11 @@ def unsubbed(request):
     return render(request, 'unsubbed.html')
 
 def bounce(request):
-    print(request)
+    try:
+        events = json.loads(request.body)
+        print(events)
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest("Invalid JSON.")
+    for event in events:
+        if event.get('eventType') == 'Microsoft.EventGrid.SubscriptionValidationEvent':
+            print("MS EVENT1!1!!!!!1!!!!1!!1")
