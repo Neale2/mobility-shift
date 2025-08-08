@@ -2,15 +2,17 @@ import sys
 import os
 import uuid
 import json
+import re
 
-from .functions import send_email
+from .functions import send_email, delete_list_user
+from .secrets import webhook_token
 
 from django.template.loader import get_template
 from django.shortcuts import HttpResponseRedirect, redirect
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import SignUpForm, YesLogForm, NoLogForm, UnsubForm, EditProfileForm
@@ -165,14 +167,7 @@ def unsub(request, pk):
             #Checking if error in saving
             try:
                 if form.cleaned_data['response'] == 'yes':
-                    userdata = DeletedUser(uuid=user.uuid, age_group=user.age_group, sign_up_time=user.sign_up_time, emissions_saved=user.emissions_saved, distance=user.distance, vehicle=user.vehicle, employer=user.employer, region=user.region)
-                    userdata.save()
-                    trips = Trip.objects.filter(user_id=user.uuid)
-                    for trip in trips:
-                        tripdata = DeletedTrip(user=userdata, text_response=trip.text_response, log_time=trip.log_time, mode=trip.mode, quantity=trip.quantity)
-                        tripdata.save()
-                    trips.delete()
-                    user.delete()
+                    delete_list_user(user)
                         
                     return HttpResponseRedirect("unsubbed/")
                 else:
@@ -197,17 +192,50 @@ def stillsubbed(request, pk):
 def unsubbed(request):
     return render(request, 'unsubbed.html')
 
+
 @csrf_exempt
 def bounce(request):
-    try:
-        events = json.loads(request.body)
-        print(events)
-    except json.JSONDecodeError:
-        return HttpResponseBadRequest("Invalid JSON.")
-    for event in events:
-        if event.get('eventType') == 'Microsoft.EventGrid.SubscriptionValidationEvent':
-            validation_code = event.get('data', {}).get('validationCode')
-            if validation_code:
-                return JsonResponse({'ValidationResponse': validation_code}, status=200)
+    token = request.GET.get('token')
+    if token == webhook_token():
+        try:
+            events = json.loads(request.body)
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest("Invalid JSON.")
+
+        for event in events:
+            event_type = event.get('eventType')
+
+            if event_type == 'Microsoft.EventGrid.SubscriptionValidationEvent':
+                validation_code = event['data'].get('validationCode')
+                return JsonResponse({'ValidationResponse': validation_code})
+
+            if event_type == 'Microsoft.Communication.EmailDeliveryReportReceived':
+                status = event['data'].get('status')
+                recipient = event['data'].get('recipient')
+                error_message=event['data'].get('deliveryStatusDetails').get('statusMessage')
+
+                if status == 'Bounced':
+                    print(f"BOUNCE: {recipient}")
+                    pattern = r'\b([45]\d{2})[- ]\d\.\d\.\d\b'
+                    matches = re.findall(pattern, error_message)
+                    print("code is:", matches)
+
+                    four = False
+
+                    for code in matches:
+                        if code[0] == "4":
+                            four = True
+                    if four == False:
+                        user = get_object_or_404(User, email=recipient)
+                        delete_list_user(user)
+                        print("user deleted :(")
+
+                elif status == 'Suppressed':
+                    print(f"SUPPRESSED: {recipient}")
+                    user = get_object_or_404(User, email=recipient)
+                    delete_list_user(user)
+
+        return JsonResponse({'status': 'ok'})
     
-    return JsonResponse({'status': 'success'}, status=200)
+    else:
+        return HttpResponse("Unauthorized", status=401)

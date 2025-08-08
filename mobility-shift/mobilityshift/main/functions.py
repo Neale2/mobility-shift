@@ -10,7 +10,17 @@ from azure.communication.email import EmailClient
 from django.shortcuts import get_object_or_404
 
 from .secrets import azure_email_connection_string
-from .models import User, BackedEmail
+from .models import User, BackedEmail, Trip, DeletedUser, DeletedTrip
+
+def delete_list_user(user):
+    userdata = DeletedUser(uuid=user.uuid, age_group=user.age_group, sign_up_time=user.sign_up_time, emissions_saved=user.emissions_saved, distance=user.distance, vehicle=user.vehicle, employer=user.employer, region=user.region)
+    userdata.save()
+    trips = Trip.objects.filter(user_id=user.uuid)
+    for trip in trips:
+        tripdata = DeletedTrip(user=userdata, text_response=trip.text_response, log_time=trip.log_time, mode=trip.mode, quantity=trip.quantity)
+        tripdata.save()
+    trips.delete()
+    user.delete()
 
 def clear_backlog():
     wait_time = 2
