@@ -1,6 +1,7 @@
 import sys
 import os
 import uuid
+import json
 
 from .functions import send_email
 
@@ -9,6 +10,8 @@ from django.shortcuts import HttpResponseRedirect, redirect
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import SignUpForm, YesLogForm, NoLogForm, UnsubForm, EditProfileForm
 from .models import User, Trip, DeletedUser, DeletedTrip, Employer, Region, All, Post
@@ -194,6 +197,7 @@ def stillsubbed(request, pk):
 def unsubbed(request):
     return render(request, 'unsubbed.html')
 
+@csrf_exempt
 def bounce(request):
     try:
         events = json.loads(request.body)
