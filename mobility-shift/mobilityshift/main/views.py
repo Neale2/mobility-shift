@@ -193,3 +193,6 @@ def stillsubbed(request, pk):
 
 def unsubbed(request):
     return render(request, 'unsubbed.html')
+
+def bounce(request):
+    print(request)
