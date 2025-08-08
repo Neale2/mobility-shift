@@ -206,4 +206,8 @@ def bounce(request):
         return HttpResponseBadRequest("Invalid JSON.")
     for event in events:
         if event.get('eventType') == 'Microsoft.EventGrid.SubscriptionValidationEvent':
-            print("MS EVENT1!1!!!!!1!!!!1!!1")
+            validation_code = event.get('data', {}).get('validationCode')
+            if validation_code:
+                return JsonResponse({'ValidationResponse': validation_code}, status=200)
+    
+    return JsonResponse({'status': 'success'}, status=200)
