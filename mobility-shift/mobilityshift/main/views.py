@@ -158,29 +158,33 @@ def no(request, pk):
     context = {'user': user, 'form': form}
     return render(request, 'no.html', context)
 
+@csrf_exempt
 def unsub(request, pk):
     user = get_object_or_404(User, pk=pk)
-    
     if request.method == "POST":
-        form = UnsubForm(request.POST)
-        if form.is_valid():
-            #Checking if error in saving
-            try:
-                if form.cleaned_data['response'] == 'yes':
-                    delete_list_user(user)
-                        
-                    return HttpResponseRedirect("unsubbed/")
-                else:
-                    return HttpResponseRedirect(f"stillsubbed/{pk}")
-            except Exception as e:
-                if str(e) == "database is locked":
-                    form.add_error(None, _("Unable to unsubscribe at this time since the database is in use - you might want to wait a couple seconds and try again."))
-                else:
-                    form.add_error(None, _("There's been an unidentified error! Sorry about that. The system error message is: " + str(e)))
-        
+        if request.META.get('HTTP_LIST_UNSUBSCRIBE_POST') == 'List-Unsubscribe=One-Click':
+            delete_list_user(user)
+            return HttpResponse("Success", status=200)
+        else:
+            form = UnsubForm(request.POST)
+            if form.is_valid():
+                #Checking if error in saving
+                try:
+                    if form.cleaned_data['response'] == 'yes':
+                        delete_list_user(user)
+
+                        return HttpResponseRedirect("unsubbed/")
+                    else:
+                        return HttpResponseRedirect(f"stillsubbed/{pk}")
+                except Exception as e:
+                    if str(e) == "database is locked":
+                        form.add_error(None, _("Unable to unsubscribe at this time since the database is in use - you might want to wait a couple seconds and try again."))
+                    else:
+                        form.add_error(None, _("There's been an unidentified error! Sorry about that. The system error message is: " + str(e)))
+
     else:
         form = UnsubForm()
-        
+
     context = {'user': user, 'form': form}
     return render(request, 'unsub.html', context)
 

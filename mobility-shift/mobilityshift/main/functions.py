@@ -73,7 +73,10 @@ def send_email(recipient, subject, html_body, uuid, priority=2):
                 "plainText": "Inbox not supported.",
                 "html": html_body
             },
-            
+            "headers": {
+                "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+                "List-Unsubscribe": f"<app.swapone.nz/unsubscribe/{uuid}>"
+            }
         }
         poller = None
         try:
