@@ -6,7 +6,7 @@
   <mj-body background-color="#FFF7D8">
     <mj-section background-color="#FFF7D8">
       <mj-column>
-        <mj-image href="https://www.swapone.nz" width="100px" src="https://app.swapone.nz/static/images/cool_logo.png" padding="0"></mj-image>
+        <mj-image href="https://www.swapone.nz" width="100px" src="https://app.swapone.nz/static/images/cool_logo.png" padding="0" alt="swapone logo"></mj-image>
       </mj-column>
     </mj-section>
     <mj-section background-color="#FFFFFF" padding-bottom="0">
@@ -19,7 +19,7 @@
         <mj-text font-size="16px" color="#000" font-family="Inter, Arial, Helvetica, sans-serif" font-weight="900">Did you Swap One last week?</mj-text>
       </mj-column>
     </mj-section>
-    <mj-section background-color="#fff" >
+    <mj-section background-color="#fff">
       <mj-column>
         <mj-button background-color="#F9D22C" color="#4A4A4A" font-size="20px" font-family="Lora, 'Times New Roman', Times, serif" href="https://app.swapone.nz/yes/{{ user_uuid }}" width="150px">Yes!</mj-button>
       </mj-column>
@@ -28,8 +28,8 @@
       </mj-column>
     </mj-section>
     <mj-section padding-top="0" background-color="#fff">
-    <mj-column>
-              <mj-text font-size="14px" color="#000" font-family="Inter, Arial, Helvetica, sans-serif">Warning: This email contains the permanent access link to your Swap One profile. Sharing it gives full access to any personal information you have provided.</mj-text>
+      <mj-column>
+        <mj-text font-size="14px" color="#000" font-family="Inter, Arial, Helvetica, sans-serif">Warning: This email contains the permanent access link to your Swap One profile. Sharing it gives full access to any personal information you have provided.</mj-text>
       </mj-column>
     </mj-section>
     <mj-section background-color="#F9D22C" full-width="full-width" padding="0">
@@ -43,16 +43,16 @@
     <mj-section background-color="#F9D22C" full-width="full-width" padding="0">
       <mj-group width="400px">
         <mj-column>
-          <mj-image href="https://nelsontasmanclimateforum.nz" src="https://app.swapone.nz/static/images/Logos/ntcf.png" padding="0"></mj-image>
+          <mj-image href="https://www.nelsontasmanclimateforum.nz" src="https://app.swapone.nz/static/images/Logos/ntcf.png" padding="0" alt="ntcf logo"></mj-image>
         </mj-column>
         <mj-column>
-          <mj-image href="https://missionzero.nz" src="https://app.swapone.nz/static/images/Logos/missionzero.png" padding="0"></mj-image>
+          <mj-image href="https://missionzero.nz" src="https://app.swapone.nz/static/images/Logos/missionzero.png" padding="0" alt="mz logo"></mj-image>
         </mj-column>
         <mj-column>
-          <mj-image href="https://nelsust.org.nz" src="https://app.swapone.nz/static/images/Logos/nelsust.png" padding="0"></mj-image>
+          <mj-image href="https://www.nelsust.org.nz" src="https://app.swapone.nz/static/images/Logos/nelsust.png" padding="0" alt="nelsust logo"></mj-image>
         </mj-column>
         <mj-column>
-          <mj-image href="https://nelson.govt.nz" src="https://app.swapone.nz/static/images/Logos/ncc.png" padding="0"></mj-image>
+          <mj-image href="https://www.nelson.govt.nz" src="https://app.swapone.nz/static/images/Logos/ncc.png" padding="0" alt="ncc logo"></mj-image>
         </mj-column>
       </mj-group>
     </mj-section>

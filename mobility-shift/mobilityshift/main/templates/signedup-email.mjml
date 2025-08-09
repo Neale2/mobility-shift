@@ -6,7 +6,7 @@
   <mj-body background-color="#FFF7D8">
     <mj-section background-color="#FFF7D8">
       <mj-column>
-        <mj-image href="https://www.swapone.nz" width="100px" src="https://app.swapone.nz/static/images/cool_logo.png"  padding="0"></mj-image>
+        <mj-image href="https://www.swapone.nz" width="100px" src="https://app.swapone.nz/static/images/cool_logo.png"  padding="0" alt="swapone logo"></mj-image>
       </mj-column>
     </mj-section>
     <mj-section background-color="#FFFFFF">
@@ -31,16 +31,16 @@
     <mj-section background-color="#F9D22C" full-width="full-width" padding="0">
       <mj-group width="400px">
         <mj-column>
-          <mj-image href="https://nelsontasmanclimateforum.nz" src="https://app.swapone.nz/static/images/Logos/ntcf.png" padding="0"></mj-image>
+          <mj-image href="https://www.nelsontasmanclimateforum.nz" src="https://app.swapone.nz/static/images/Logos/ntcf.png" padding="0" alt="ntcf logo"></mj-image>
         </mj-column>
         <mj-column>
-          <mj-image href="https://missionzero.nz" src="https://app.swapone.nz/static/images/Logos/missionzero.png" padding="0"></mj-image>
+          <mj-image href="https://missionzero.nz" src="https://app.swapone.nz/static/images/Logos/missionzero.png" padding="0" alt="mz logo"></mj-image>
         </mj-column>
         <mj-column>
-          <mj-image href="https://nelsust.org.nz" src="https://app.swapone.nz/static/images/Logos/nelsust.png" padding="0"></mj-image>
+          <mj-image href="https://www.nelsust.org.nz" src="https://app.swapone.nz/static/images/Logos/nelsust.png" padding="0" alt="nelsust logo"></mj-image>
         </mj-column>
         <mj-column>
-          <mj-image href="https://nelson.govt.nz" src="https://app.swapone.nz/static/images/Logos/ncc.png" padding="0"></mj-image>
+          <mj-image href="https://www.nelson.govt.nz" src="https://app.swapone.nz/static/images/Logos/ncc.png" padding="0" alt="ncc logo"></mj-image>
         </mj-column>
       </mj-group>
     </mj-section>
