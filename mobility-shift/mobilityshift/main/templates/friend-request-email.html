@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Friend Request from {{ from_user_name }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; background-color: #4CAF50; color: white; padding: 20px; border-radius: 8px; }
+        .content { padding: 20px; background-color: #f9f9f9; border-radius: 8px; margin-top: 20px; }
+        .button { display: inline-block; background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin: 10px 5px; }
+        .button.decline { background-color: #f44336; }
+        .friend-info { background-color: #fff; padding: 15px; border-radius: 5px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤝 Friend Request</h1>
+        <p>Someone wants to be your sustainability buddy!</p>
+    </div>
+    
+    <div class="content">
+        <p>Hi there!</p>
+        
+        <div class="friend-info">
+            <p><strong>{{ from_user_name }}</strong> has sent you a friend request on Swap One!</p>
+            <p>They've saved <strong>{{ from_user_emissions }}g of CO2e</strong> so far and are looking for a sustainability buddy to track friend streaks together.</p>
+        </div>
+        
+        <p>With friend streaks, both of you need to log at least one sustainable transport trip each week to maintain your shared streak. It's a fun way to stay motivated together!</p>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <a href="https://app.swapone.nz/friends/accept/{{ request_id }}" class="button">Accept Friend Request</a>
+            <a href="https://app.swapone.nz/friends/decline/{{ request_id }}" class="button decline">Decline</a>
+        </div>
+        
+        <p>If you don't have a Swap One account yet, you can <a href="https://app.swapone.nz/signup/">sign up here</a> to join {{ from_user_name }} in tracking sustainable transport!</p>
+        
+        <p>Happy commuting!</p>
+        <p>- The Swap One Team</p>
+    </div>
+</body>
+</html>

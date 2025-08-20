@@ -28,6 +28,7 @@
             var userName = "{{ user.name }}";
             var userSaved = {{ user.emissions_saved }};
             var userStreak = {{ user.current_streak }};
+            var friends = {{ friends_json|safe }};
             var employerName = "{{ employer.name }}";
             var employerSaved = {{ employer.emissions_saved }};
             var regionName = "{{ region.name }}";
@@ -93,6 +94,31 @@
                         </p>
                     </div>
                 </div>
+                ` + (friends.length > 0 ? `
+                <div class="emissionsbox">
+                    <h4>👥 Friend Streaks</h4>
+                    <div class="yroundbox">
+                        ${friends.map(friend => `
+                            <div style="background-color: #f0f8ff; padding: 10px; margin: 5px 0; border-radius: 5px; border-left: 4px solid #4CAF50;">
+                                <p style="margin: 0; font-weight: bold;">${friend.name}</p>
+                                <p style="margin: 2px 0; color: #ff6b47;">🔥 ${friend.streak} week${friend.streak !== 1 ? 's' : ''} together</p>
+                                <p style="margin: 2px 0; font-size: 0.9em; color: #666;">${(friend.emissions_saved / 1000).toFixed(1)}kg CO2e saved</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : `
+                <div class="emissionsbox">
+                    <h4>👥 Friends</h4>
+                    <div class="yroundbox">
+                        <p style="text-align: center; color: #666;">No friends yet! Add friends to track streaks together.</p>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <input type="email" id="friendEmail" placeholder="Friend's email" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-right: 10px;">
+                            <button onclick="sendFriendRequest()" style="padding: 8px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Add Friend</button>
+                        </div>
+                    </div>
+                </div>
+                `) + `
                 <div class="emissionsbox">
                     <h4>You</h4>
                     <div class="graphback">
@@ -197,6 +223,51 @@
                     console.log("b");
                     console.log("b");
                 }
+            }
+            
+            function sendFriendRequest() {
+                const email = document.getElementById('friendEmail').value.trim();
+                if (!email) {
+                    alert('Please enter an email address');
+                    return;
+                }
+                
+                fetch(`/friends/send/{{ user.uuid }}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: `friend_email=${encodeURIComponent(email)}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.success);
+                        document.getElementById('friendEmail').value = '';
+                        location.reload(); // Refresh to show new friend
+                    } else {
+                        alert(data.error || 'Error sending friend request');
+                    }
+                })
+                .catch(error => {
+                    alert('Error sending friend request: ' + error);
+                });
+            }
+            
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
             }
         </script>
     </head>

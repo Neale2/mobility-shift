@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Friend Request Declined</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+</head>
+<body>
+    <main style="max-width: 600px; margin: 50px auto; padding: 20px; text-align: center;">
+        <h1>Friend Request Declined</h1>
+        <div style="background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <p>You have declined the friend request from {{ request.from_user.name }}.</p>
+            <p>No worries! You can still track your individual sustainability streaks.</p>
+        </div>
+        <p>Interested in joining Swap One to track your own sustainable transport?</p>
+        <a href="https://app.swapone.nz/signup/" style="display: inline-block; background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin: 10px;">Sign Up</a>
+        <p style="margin-top: 30px; color: #666;">Thanks for considering!</p>
+    </main>
+</body>
+</html>

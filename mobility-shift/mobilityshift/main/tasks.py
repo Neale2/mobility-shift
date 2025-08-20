@@ -73,14 +73,16 @@ def email_users():
     
     template = get_template('log-email.html')
     streak_loss_template = get_template('streak-loss-email.html')
+    friend_streak_loss_template = get_template('friend-streak-loss-email.html')
     users = list(User.objects.all())
     
     # Get current week start (Monday) for tracking
     today = date.today()
     week_start = today - timedelta(days=today.weekday())
     
+    # Process individual streaks first
     for user in users:
-        # Handle streak logic before sending weekly email
+        # Handle individual streak logic before sending weekly email
         if user.logged_this_week:
             # User logged this week - increment or start streak
             user.current_streak += 1
@@ -103,7 +105,60 @@ def email_users():
                 streak_html_body = streak_loss_template.render(streak_context)
                 send_email(user.email, "You lost your streak :(", streak_html_body, str(user.uuid))
         
-        # Send regular weekly reminder email
+        user.save()
+    
+    # Process friend streaks
+    from .models import Friendship
+    processed_friendships = set()
+    
+    for user in users:
+        # Get all friendships for this user
+        friendships = list(user.friendships_as_user1.all()) + list(user.friendships_as_user2.all())
+        
+        for friendship in friendships:
+            # Avoid processing the same friendship twice
+            friendship_id = friendship.id
+            if friendship_id in processed_friendships:
+                continue
+            processed_friendships.add(friendship_id)
+            
+            # Get both users in the friendship
+            user1 = friendship.user1
+            user2 = friendship.user2
+            
+            # Check if both users logged this week
+            both_logged = user1.logged_this_week and user2.logged_this_week
+            
+            if both_logged:
+                # Both logged - increment friend streak
+                friendship.friend_streak += 1
+                friendship.last_both_logged_week = week_start
+            else:
+                # One or both didn't log - check if they had a friend streak to lose
+                if friendship.friend_streak > 0:
+                    previous_friend_streak = friendship.friend_streak
+                    friendship.friend_streak = 0
+                    
+                    # Send friend streak loss email to both users
+                    for friend_user in [user1, user2]:
+                        other_user = user2 if friend_user == user1 else user1
+                        
+                        friend_streak_context = {
+                            'email': friend_user.email,
+                            'user_uuid': friend_user.uuid,
+                            'name': friend_user.name,
+                            'friend_name': other_user.name,
+                            'previous_streak': previous_friend_streak,
+                            'individual_streak': friend_user.current_streak,
+                        }
+                        
+                        friend_streak_html_body = friend_streak_loss_template.render(friend_streak_context)
+                        send_email(friend_user.email, "You and your friend lost your streak :(", friend_streak_html_body, str(friend_user.uuid))
+            
+            friendship.save()
+    
+    # Send regular weekly reminder emails
+    for user in users:
         context = {
             'email': user.email,
             'user_uuid': user.uuid,

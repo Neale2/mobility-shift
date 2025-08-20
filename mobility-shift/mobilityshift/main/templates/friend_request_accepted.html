@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Friend Request Accepted</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+</head>
+<body>
+    <main style="max-width: 600px; margin: 50px auto; padding: 20px; text-align: center;">
+        <h1>🎉 Friend Request Accepted!</h1>
+        <div style="background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <p><strong>Great news!</strong> You are now friends with {{ request.from_user.name }}!</p>
+            <p>You can now track friend streaks together. Both of you need to log at least one sustainable transport trip each week to maintain your shared streak.</p>
+            <p>Current friend streak: <strong>{{ friendship.friend_streak }} weeks</strong></p>
+        </div>
+        <p>Ready to start building your streak together?</p>
+        <a href="https://app.swapone.nz/signup/" style="display: inline-block; background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin: 10px;">Sign Up / Log In</a>
+        <p style="margin-top: 30px; color: #666;">Happy commuting together!</p>
+    </main>
+</body>
+</html>

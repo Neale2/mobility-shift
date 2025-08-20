@@ -101,3 +101,46 @@ class BackedEmail(models.Model):
     html_body = models.TextField()
     uuid = models.TextField()
     priority = models.PositiveIntegerField()
+
+
+class FriendRequest(models.Model):
+    """Model for friend requests between users."""
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_friend_requests')
+    to_email = models.EmailField(max_length=320)
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_friend_requests', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_accepted = models.BooleanField(default=False)
+    is_declined = models.BooleanField(default=False)
+    
+    class Meta:
+        unique_together = ('from_user', 'to_email')
+    
+    def __str__(self):
+        return f"{self.from_user.name} -> {self.to_email}"
+
+
+class Friendship(models.Model):
+    """Model for established friendships between users."""
+    user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friendships_as_user1')
+    user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friendships_as_user2')
+    created_at = models.DateTimeField(auto_now_add=True)
+    friend_streak = models.PositiveIntegerField(default=0)
+    last_both_logged_week = models.DateField(null=True, blank=True)
+    
+    class Meta:
+        unique_together = ('user1', 'user2')
+    
+    def __str__(self):
+        return f"{self.user1.name} & {self.user2.name} (streak: {self.friend_streak})"
+    
+    @classmethod
+    def get_friendship(cls, user1, user2):
+        """Get friendship between two users regardless of order."""
+        try:
+            # Try both orders since friendship is bidirectional
+            return cls.objects.get(user1=user1, user2=user2)
+        except cls.DoesNotExist:
+            try:
+                return cls.objects.get(user1=user2, user2=user1)
+            except cls.DoesNotExist:
+                return None

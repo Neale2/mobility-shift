@@ -13,5 +13,9 @@ urlpatterns = [
     path('unsubscribe/<pk>', views.unsub, name='unsub'),
     path('unsubscribe/stillsubbed/<pk>', views.stillsubbed, name='stillsubbed'),
     path('unsubscribe/unsubbed/', views.unsubbed, name='unsubbed'),
-    path('wh/bounce', views.bounce, name='bounce')
+    path('wh/bounce', views.bounce, name='bounce'),
+    # Friend functionality
+    path('friends/send/<pk>', views.send_friend_request, name='send_friend_request'),
+    path('friends/accept/<int:request_id>', views.accept_friend_request, name='accept_friend_request'),
+    path('friends/decline/<int:request_id>', views.decline_friend_request, name='decline_friend_request'),
 ]

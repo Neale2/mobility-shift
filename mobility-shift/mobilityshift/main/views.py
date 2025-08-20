@@ -16,7 +16,7 @@ from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import SignUpForm, YesLogForm, NoLogForm, UnsubForm, EditProfileForm
-from .models import User, Trip, DeletedUser, DeletedTrip, Employer, Region, All, Post
+from .models import User, Trip, DeletedUser, DeletedTrip, Employer, Region, All, Post, FriendRequest, Friendship
 
 def signup(request):
     if request.method == "POST":
@@ -78,6 +78,7 @@ def confirm(request):
     return render(request, 'confirm.html')
 
 def dash(request, pk):
+    import json
     user = get_object_or_404(User, pk=pk)
     employer = get_object_or_404(Employer, pk=user.employer)
     region = get_object_or_404(Region, pk=user.region)
@@ -85,7 +86,26 @@ def dash(request, pk):
     #gets first post
     post = Post.objects.order_by('-updated_at').first()
     
-    context = {'user': user, 'employer': employer, 'region': region, 'all': all_model, 'post': post}
+    # Get user's friendships and friend streaks
+    friendships = list(user.friendships_as_user1.all()) + list(user.friendships_as_user2.all())
+    friend_data = []
+    for friendship in friendships:
+        other_user = friendship.user2 if friendship.user1 == user else friendship.user1
+        friend_data.append({
+            'name': other_user.name,
+            'streak': friendship.friend_streak,
+            'emissions_saved': other_user.emissions_saved
+        })
+    
+    context = {
+        'user': user, 
+        'employer': employer, 
+        'region': region, 
+        'all': all_model, 
+        'post': post,
+        'friends': friend_data,
+        'friends_json': json.dumps(friend_data)
+    }
     return render(request, 'dash.html', context)
 
 def yes(request, pk):
@@ -243,3 +263,112 @@ def bounce(request):
     
     else:
         return HttpResponse("Unauthorized", status=401)
+
+
+def send_friend_request(request, pk):
+    """Send a friend request to another user by email."""
+    user = get_object_or_404(User, pk=pk)
+    
+    if request.method == "POST":
+        friend_email = request.POST.get('friend_email', '').strip()
+        
+        if not friend_email:
+            return JsonResponse({'error': 'Email is required'}, status=400)
+        
+        if friend_email == user.email:
+            return JsonResponse({'error': 'You cannot add yourself as a friend'}, status=400)
+        
+        # Check if friend request already exists
+        existing_request = FriendRequest.objects.filter(
+            from_user=user, 
+            to_email=friend_email
+        ).first()
+        
+        if existing_request:
+            return JsonResponse({'error': 'Friend request already sent to this email'}, status=400)
+        
+        # Check if they are already friends
+        try:
+            to_user = User.objects.get(email=friend_email)
+            existing_friendship = Friendship.get_friendship(user, to_user)
+            if existing_friendship:
+                return JsonResponse({'error': 'You are already friends with this user'}, status=400)
+        except User.DoesNotExist:
+            to_user = None
+        
+        try:
+            # Create friend request
+            friend_request = FriendRequest.objects.create(
+                from_user=user,
+                to_email=friend_email,
+                to_user=to_user
+            )
+            
+            # Send friend request email
+            template = get_template('friend-request-email.html')
+            context = {
+                'from_user_name': user.name,
+                'from_user_emissions': user.emissions_saved,
+                'request_id': friend_request.id,
+            }
+            
+            html_body = template.render(context)
+            send_email(friend_email, f"Friend request from {user.name}", html_body, str(user.uuid))
+            
+            return JsonResponse({'success': 'Friend request sent successfully!'})
+            
+        except Exception as e:
+            return JsonResponse({'error': f'Error sending friend request: {str(e)}'}, status=500)
+    
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+def accept_friend_request(request, request_id):
+    """Accept a friend request."""
+    friend_request = get_object_or_404(FriendRequest, id=request_id)
+    
+    if friend_request.is_accepted or friend_request.is_declined:
+        return render(request, 'friend_request_already_handled.html', {'request': friend_request})
+    
+    try:
+        # Get or create the target user
+        to_user = friend_request.to_user
+        if not to_user:
+            try:
+                to_user = User.objects.get(email=friend_request.to_email)
+                friend_request.to_user = to_user
+            except User.DoesNotExist:
+                return render(request, 'friend_request_no_account.html', {'request': friend_request})
+        
+        # Mark request as accepted
+        friend_request.is_accepted = True
+        friend_request.save()
+        
+        # Create friendship (ensure consistent ordering)
+        user1, user2 = (friend_request.from_user, to_user) if str(friend_request.from_user.uuid) < str(to_user.uuid) else (to_user, friend_request.from_user)
+        
+        friendship, created = Friendship.objects.get_or_create(
+            user1=user1,
+            user2=user2
+        )
+        
+        return render(request, 'friend_request_accepted.html', {
+            'request': friend_request,
+            'friendship': friendship
+        })
+        
+    except Exception as e:
+        return render(request, 'friend_request_error.html', {'error': str(e)})
+
+
+def decline_friend_request(request, request_id):
+    """Decline a friend request."""
+    friend_request = get_object_or_404(FriendRequest, id=request_id)
+    
+    if friend_request.is_accepted or friend_request.is_declined:
+        return render(request, 'friend_request_already_handled.html', {'request': friend_request})
+    
+    friend_request.is_declined = True
+    friend_request.save()
+    
+    return render(request, 'friend_request_declined.html', {'request': friend_request})

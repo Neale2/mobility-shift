@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Friend Streak Lost :(</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; background-color: #ff6b6b; color: white; padding: 20px; border-radius: 8px; }
+        .content { padding: 20px; background-color: #f9f9f9; border-radius: 8px; margin-top: 20px; }
+        .button { display: inline-block; background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin-top: 15px; }
+        .friend-info { background-color: #fff; padding: 15px; border-radius: 5px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💔 Friend Streak Lost</h1>
+        <p>You and your friend missed a week!</p>
+    </div>
+    
+    <div class="content">
+        <p>Hi {{ name }},</p>
+        
+        <div class="friend-info">
+            <p><strong>Your friend streak with {{ friend_name }} has been reset.</strong></p>
+            <p><strong>Previous friend streak:</strong> {{ previous_streak }} week{{ previous_streak|pluralize }}</p>
+            <p><strong>Current friend streak:</strong> 0 weeks</p>
+        </div>
+        
+        <p>One of you didn't log a sustainable transport trip this week, so your shared streak has been reset. Don't worry though - you can start a new streak right away!</p>
+        
+        <p>Remember: Both friends need to log at least one trip each week to maintain your friend streak. It's a team effort! 💪</p>
+        
+        <p>Your individual streak: <strong>{{ individual_streak }} week{{ individual_streak|pluralize }}</strong></p>
+        
+        <p>Ready to restart your friend streak?</p>
+        
+        <a href="https://app.swapone.nz/yes/{{ user_uuid }}" class="button">Log a Trip Now</a>
+        
+        <p>Keep motivating each other!</p>
+        <p>- The Swap One Team</p>
+    </div>
+</body>
+</html>

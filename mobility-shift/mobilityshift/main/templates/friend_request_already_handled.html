@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Friend Request Already Handled</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+</head>
+<body>
+    <main style="max-width: 600px; margin: 50px auto; padding: 20px; text-align: center;">
+        <h1>Friend Request Already Handled</h1>
+        <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <p>This friend request has already been {% if request.is_accepted %}accepted{% else %}declined{% endif %}.</p>
+        </div>
+        <a href="https://app.swapone.nz/" style="display: inline-block; background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin: 10px;">Go to Swap One</a>
+    </main>
+</body>
+</html>
