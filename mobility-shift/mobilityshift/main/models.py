@@ -56,6 +56,9 @@ class User(models.Model):
     emissions_saved = models.PositiveIntegerField(default=0)
     logged_this_week = models.BooleanField(default=False)
     trigger_email = models.BooleanField(default=False)
+    # Streak tracking fields
+    current_streak = models.PositiveIntegerField(default=0)
+    last_logged_week = models.DateField(null=True, blank=True)
 
     def __str__(self):
         """String for representing the Model object."""

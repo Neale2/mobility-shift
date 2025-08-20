@@ -38,6 +38,18 @@
             <h1>Log a Completed Trip</h1>
             <div class="content">
                 <h4>Great job on commuting sustainably this week!</h4>
+                
+                {% if user.current_streak > 0 %}
+                <div style="background-color: #f0f8ff; border: 2px solid #4CAF50; border-radius: 8px; padding: 15px; margin: 15px 0; text-align: center;">
+                    <h3 style="color: #ff6b47; margin: 0;">🔥 Current Streak: {{ user.current_streak }} week{{ user.current_streak|pluralize }}</h3>
+                    <p style="margin: 5px 0; color: #666;">Keep logging trips to maintain your streak!</p>
+                </div>
+                {% else %}
+                <div style="background-color: #f9f9f9; border: 2px solid #ddd; border-radius: 8px; padding: 15px; margin: 15px 0; text-align: center;">
+                    <h3 style="color: #333; margin: 0;">Start Your Streak Today! 🚀</h3>
+                    <p style="margin: 5px 0; color: #666;">Log a trip this week to begin your sustainability streak!</p>
+                </div>
+                {% endif %}
                 {% endblock %}
             
                 <form method="post">

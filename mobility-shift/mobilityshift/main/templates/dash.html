@@ -27,6 +27,7 @@
 
             var userName = "{{ user.name }}";
             var userSaved = {{ user.emissions_saved }};
+            var userStreak = {{ user.current_streak }};
             var employerName = "{{ employer.name }}";
             var employerSaved = {{ employer.emissions_saved }};
             var regionName = "{{ region.name }}";
@@ -78,6 +79,20 @@
                 console.log(prevGoalEmp);
                 var parent = document.getElementById("emissions");
                 parent.innerHTML = `
+                <div class="emissionsbox">
+                    <h4>🔥 Your Streak</h4>
+                    <div class="yroundbox">
+                        <p style="font-size: 2.5em; margin: 10px 0; text-align: center; color: #ff6b47;">${userStreak}</p>
+                        <p style="text-align: center; margin: 5px 0;"><strong>${userStreak} week${userStreak !== 1 ? 's' : ''} in a row!</strong></p>
+                        <p style="text-align: center; font-size: 0.9em; color: #666;">
+                            ${userStreak === 0 ? 'Log a trip this week to start your streak!' : 
+                              userStreak === 1 ? 'Great start! Keep it up next week!' :
+                              userStreak < 5 ? 'You\'re building momentum! Keep going!' :
+                              userStreak < 10 ? 'Fantastic streak! You\'re on fire!' :
+                              'Amazing dedication! You\'re a sustainability champion!'}
+                        </p>
+                    </div>
+                </div>
                 <div class="emissionsbox">
                     <h4>You</h4>
                     <div class="graphback">

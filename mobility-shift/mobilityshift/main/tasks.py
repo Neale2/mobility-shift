@@ -16,36 +16,106 @@ from .models import User, Trip, DeletedUser, DeletedTrip
 
 #hacked together way to send a single user an email for demos
 def email_user(imp_user):
+    from datetime import date, timedelta
+    
     template = get_template('log-email.html')
+    streak_loss_template = get_template('streak-loss-email.html')
     users = [imp_user]
+    
+    # Get current week start (Monday) for tracking
+    today = date.today()
+    week_start = today - timedelta(days=today.weekday())
+    
     for user in users:
+        # Handle streak logic before sending weekly email
+        if user.logged_this_week:
+            # User logged this week - increment or start streak
+            user.current_streak += 1
+            user.last_logged_week = week_start
+        else:
+            # User didn't log this week - check if they had a streak to lose
+            if user.current_streak > 0:
+                # Send streak loss email
+                previous_streak = user.current_streak
+                user.current_streak = 0
+                
+                streak_context = {
+                    'email': user.email,
+                    'user_uuid': user.uuid,
+                    'emissions_saved': user.emissions_saved,
+                    'name': user.name,
+                    'previous_streak': previous_streak,
+                }
+                
+                streak_html_body = streak_loss_template.render(streak_context)
+                send_email(user.email, "You lost your streak :(", streak_html_body, str(user.uuid))
+        
+        # Send regular weekly reminder email
         context = {
             'email': user.email,
             'user_uuid': user.uuid,
             'emissions_saved': user.emissions_saved,
             'name': user.name,
+            'current_streak': user.current_streak,
         }
         
         html_body = template.render(context)      
         response = send_email(user.email, "It's your weekly logging time!", html_body, str(user.uuid))
+        
+        # Reset weekly logging flag
         user.logged_this_week = False
         user.save()
     
 
 #weekly email sent to all users asking if they had done a trip
 def email_users():
+    from datetime import date, timedelta
+    
     template = get_template('log-email.html')
+    streak_loss_template = get_template('streak-loss-email.html')
     users = list(User.objects.all())
+    
+    # Get current week start (Monday) for tracking
+    today = date.today()
+    week_start = today - timedelta(days=today.weekday())
+    
     for user in users:
+        # Handle streak logic before sending weekly email
+        if user.logged_this_week:
+            # User logged this week - increment or start streak
+            user.current_streak += 1
+            user.last_logged_week = week_start
+        else:
+            # User didn't log this week - check if they had a streak to lose
+            if user.current_streak > 0:
+                # Send streak loss email
+                previous_streak = user.current_streak
+                user.current_streak = 0
+                
+                streak_context = {
+                    'email': user.email,
+                    'user_uuid': user.uuid,
+                    'emissions_saved': user.emissions_saved,
+                    'name': user.name,
+                    'previous_streak': previous_streak,
+                }
+                
+                streak_html_body = streak_loss_template.render(streak_context)
+                send_email(user.email, "You lost your streak :(", streak_html_body, str(user.uuid))
+        
+        # Send regular weekly reminder email
         context = {
             'email': user.email,
             'user_uuid': user.uuid,
             'emissions_saved': user.emissions_saved,
             'name': user.name,
+            'current_streak': user.current_streak,
         }
         
         html_body = template.render(context)      
         response = send_email(user.email, "It's your weekly logging time!", html_body, str(user.uuid))
+        
+        # Reset weekly logging flag
         user.logged_this_week = False
         user.save()
 

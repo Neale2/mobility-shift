@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>You Lost Your Streak :(</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; background-color: #ff6b6b; color: white; padding: 20px; border-radius: 8px; }
+        .content { padding: 20px; background-color: #f9f9f9; border-radius: 8px; margin-top: 20px; }
+        .button { display: inline-block; background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin-top: 15px; }
+        .streak-info { background-color: #fff; padding: 15px; border-radius: 5px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>You Lost Your Streak :(</h1>
+        <p>Don't worry, you can start a new one!</p>
+    </div>
+    
+    <div class="content">
+        <p>Hi {{ name }},</p>
+        
+        <p>We noticed you didn't log any sustainable transport trips this week, so your streak has been reset.</p>
+        
+        <div class="streak-info">
+            <p><strong>Your previous streak:</strong> {{ previous_streak }} week{{ previous_streak|pluralize }}</p>
+            <p><strong>Your current streak:</strong> 0 weeks</p>
+        </div>
+        
+        <p>Don't let this discourage you! Starting a new streak is just one sustainable trip away. Remember, every small action contributes to a healthier planet and helps reduce emissions.</p>
+        
+        <p>Your total emissions saved so far: <strong>{{ emissions_saved }}g of CO2e</strong></p>
+        
+        <p>Ready to start your new streak?</p>
+        
+        <a href="https://app.swapone.nz/yes/{{ user_uuid }}" class="button">Log a Trip Now</a>
+        
+        <p>Keep up the great work!</p>
+        <p>- The Swap One Team</p>
+    </div>
+</body>
+</html>
