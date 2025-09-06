@@ -10,9 +10,19 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import sentry_sdk
+
 from pathlib import Path
 
 from main.secrets import cloudflare_turnstile_sitekey, cloudflare_turnstile_secretkey, django_secretkey
+
+
+sentry_sdk.init(
+    dsn="https://732ff773c563ddeb922e751f0ee4defd@o4509970654560256.ingest.de.sentry.io/4509970668322896",
+    # Add data like request headers and IP for users,
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=True,
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
