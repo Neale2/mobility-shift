@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="en">
-    <head><script
-      src="https://browser.sentry-cdn.com/10.8.0/bundle.tracing.replay.feedback.min.js"
-      integrity="sha384-Yy2UXIFrWRfe56w1BuJ8/pgltHwWyYP4Q7dYKueJ/c6RG8B/bPJmGv+TBTQSuTSv"
-      crossorigin="anonymous"
-    ></script>
-    <script>
-      Sentry.init({
-        dsn: "https://4f1b680b2af32bf11c468fbd4f104bea@o4509970654560256.ingest.de.sentry.io/4509970669895760",
-   });
-    </script>
+    <head>
+        <script
+            src="https://browser.sentry-cdn.com/10.8.0/bundle.tracing.replay.feedback.min.js"
+            integrity="sha384-Yy2UXIFrWRfe56w1BuJ8/pgltHwWyYP4Q7dYKueJ/c6RG8B/bPJmGv+TBTQSuTSv"
+            crossorigin="anonymous"></script>
+        <script>
+            Sentry.init({
+                dsn: "https://4f1b680b2af32bf11c468fbd4f104bea@o4509970654560256.ingest.de.sentry.io/4509970669895760"
+            });
+        </script>
         {% block title %}
         <title>Unsubscribed</title>
         {% endblock %}
@@ -37,8 +37,8 @@
             <h1>You've Been Unsubscribed!</h1>
             <div class="content">
                 <h3>
-                    We hope you enjoyed the programme, but you've been removed from our database. You'll recieve no more messages from us. If you want to sign up
-                    again, go back to
+                    We hope you enjoyed the programme, but you've been removed from our database. You'll recieve no more
+                    messages from us. If you want to sign up again, go back to
                     <a href="../../signup">the sign up page</a>. Feel free to close the page now.
                 </h3>
             </div>
@@ -63,10 +63,11 @@
                     Made with love by Arturo Neale |
                     <a
                         href="https://docs.google.com/document/d/16ZJs5ThK508UCH08u0rqlp89AmkNzo0Klvcf2od-W18/edit?usp=sharing"
-                    >Ts & Cs / Privacy Policy</a>
+                        >Ts & Cs / Privacy Policy</a
+                    >
                 </b>
             </p>
         </footer>
-        <script>
+        <script data-collect-dnt="true" async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
     </body>
 </html>

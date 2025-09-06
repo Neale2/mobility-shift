@@ -1,15 +1,29 @@
 <!doctype html>
 <html lang="en">
     <head>
-      <script
+        <script
       src="https://browser.sentry-cdn.com/10.8.0/bundle.tracing.replay.feedback.min.js"
       integrity="sha384-Yy2UXIFrWRfe56w1BuJ8/pgltHwWyYP4Q7dYKueJ/c6RG8B/bPJmGv+TBTQSuTSv"
       crossorigin="anonymous"
     ></script>
+
+    <!-- 2. Initialize Sentry with Full Configuration -->
     <script>
       Sentry.init({
         dsn: "https://4f1b680b2af32bf11c468fbd4f104bea@o4509970654560256.ingest.de.sentry.io/4509970669895760",
-   });
+        
+        // This is your new option to collect user IP addresses
+        sendDefaultPii: true,
+
+        // --- ADD THESE LINES TO ACTIVATE FEATURES ---
+
+        // To set a uniform sample rate
+        tracesSampleRate: 1.0, // Capture 100% of transactions for performance monitoring. Lower this in production.
+        
+        // To capture session replays
+        replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
+        replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
+      });
     </script>
         
         {% block title %}
@@ -40,8 +54,9 @@
             <div class="content">
                 <h3>Thanks for signing up!</h3>
                 <h3>
-                    Please only record trips that, prior to Swap One, would have been in a fossil fuel car. If your commute is already low carbon, become a <a href=https://www.swapone.nz/ />Swap One Champion</a>!
-                </h3><h3>    
+                    Please only record trips that, prior to Swap One, would have been in a fossil fuel car. If your commute is already low carbon, become a <a href=https://www.swapone.nz/ >Swap One Champion</a>!
+                </h3>
+                <h3>
                     You'll recieve an email within the next 5 minutes, but this is all you need to do for now. If you
                     haven't received it, check your spam inbox, since you might need to unblock our email.
                 </h3>
@@ -72,5 +87,6 @@
                 </b>
             </p>
         </footer>
+        <script data-collect-dnt="true" async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
     </body>
 </html>

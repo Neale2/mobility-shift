@@ -35,7 +35,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = django_secretkey()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["app.swapone.nz", "127.0.0.1"]
 
@@ -149,5 +149,5 @@ TURNSTILE_SITEKEY = cloudflare_turnstile_sitekey()
 TURNSTILE_SECRET = cloudflare_turnstile_secretkey()
 
 TURNSTILE_DEFAULT_CONFIG = {
-    'theme': 'light',  # do not use data- prefix
+    'theme': 'light',
 }
