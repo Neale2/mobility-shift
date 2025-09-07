@@ -1,6 +1,8 @@
 #tasks to be run at a certain time - add function here, then call from management/commands/runapscheduler.py
 import os
 import csv
+import sqlite3
+import shutil
 
 from azure.storage.blob import BlobServiceClient, BlobSasPermissions, generate_blob_sas
 from datetime import datetime, timedelta
@@ -189,7 +191,7 @@ def make_spreadsheet():
     try:
         csv_file_path = 'users.csv'
         # Open the file in write mode
-        with open(csv_file_path, 'w', newline='') as file:
+        with open(csv_file_path, 'w', newline=''):
             # Create a CSV writer object
             writer = csv.writer(file, quoting=csv.QUOTE_MINIMAL)
 
@@ -221,4 +223,26 @@ def make_spreadsheet():
     email_response = send_email("arturo.neale@gmail.com", "Daily Database Dump", "Hi! Here's the trips database from today: " + download_url + " And here's the users: " + user_download_url, 'N/A', 3)
     print(email_response)
     
+    #adding backup DB to this since already running lmao
     
+    main_db = sqlite3.connect('mobilityshift/db.sqlite3')
+    backup = sqlite3.connect("mobilityshift/backups/"+str(datetime.now().date())+"_backup.sqlite3")
+    with backup:
+        main_db.backup(backup, pages=0)
+    main_db.close()
+    backup.close()
+    
+    with os.scandir("mobilityshift/backups") as entries:
+        for entry in entries:
+            if entry.is_file():
+                if (datetime.strptime(entry.name.split("_")[0], "%Y-%m-%d") - datetime.now()).days < -30:
+                    os.remove(entry)
+    
+    shutil.make_archive("backups", 'zip', "mobilityshift/backups")
+    
+     #azure connect to storage
+    blob_service_client = BlobServiceClient.from_connection_string(azure_storage_connection_string())
+    blob_client = blob_service_client.get_blob_client(container=azure_spreadsheet_bucket_name(), blob="backups.zip")
+
+    with open("backups.zip", "rb") as data:
+        blob_client.upload_blob(data, overwrite=True)
