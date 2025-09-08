@@ -28,10 +28,10 @@
             //grams of CO2e
             const TreePerYear = 54352;
             const Targets = [
-                0, 100, 500, 1000, 2500, 5000, 7500, 10000, 12500, 15000, 17500, 20000, 22500, 25000, 30000, 40000,
-                50000, 75000, 100000, 125000, 150000, 200000, 250000, 500000, 750000, 1000000, 2500000, 5000000,
-                10000000, 25000000, 50000000, 100000000, 250000000, 500000000, 1000000000, 2500000000, 5000000000,
-                10000000000, 25000000000, 50000000000, 100000000000, 250000000000, 500000000000, 1000000000000
+                5000, 10000, 20000, 40000, 60000, 80000, 100000, 150000, 200000, 250000, 500000, 750000, 1000000,
+                2500000, 5000000, 10000000, 25000000, 50000000, 100000000, 250000000, 500000000, 1000000000, 2500000000,
+                5000000000, 10000000000, 25000000000, 50000000000, 100000000000, 250000000000, 500000000000,
+                1000000000000
             ];
 
             var userName = "{{ user.name }}";
@@ -42,8 +42,8 @@
             var regionSaved = {{ region.emissions_saved }};
             var allSaved = {{ all.emissions_saved }};
 
-            var prevGoal = 50;
-            var targetGoal = 100;
+            var prevGoal = 0;
+            var targetGoal = 5000;
 
             Targets.forEach(function (target, index) {
                 if (target <= userSaved) {
@@ -54,8 +54,8 @@
 
             var distToGoal = targetGoal - userSaved;
 
-            var prevGoalEmp = 50;
-            var targetGoalEmp = 100;
+            var prevGoalEmp = 0;
+            var targetGoalEmp = 5000;
 
             Targets.forEach(function (target, index) {
                 if (target <= employerSaved) {
@@ -64,8 +64,8 @@
                 }
             });
 
-            var prevGoalReg = 50;
-            var targetGoalReg = 100;
+            var prevGoalReg = 0;
+            var targetGoalReg = 5000;
 
             Targets.forEach(function (target, index) {
                 if (target <= regionSaved) {
@@ -74,8 +74,8 @@
                 }
             });
 
-            var prevGoalAll = 50;
-            var targetGoalAll = 100;
+            var prevGoalAll = 0;
+            var targetGoalAll = 5000;
 
             Targets.forEach(function (target, index) {
                 if (target <= allSaved) {
@@ -86,92 +86,109 @@
             addEventListener("DOMContentLoaded", function () {
                 console.log(prevGoalEmp);
                 var parent = document.getElementById("emissions");
-                parent.innerHTML = `
-                <div class="emissionsbox">
-                    <h4>You</h4>
-                    <div class="graphback">
-                        <div class="graphfront" style="width:${((userSaved / targetGoal) * 100).toFixed(1)}%;"></div>
-                        <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
-                        <span class="graphlabel" style="left:calc(${((prevGoal / targetGoal) * 100).toFixed(1)}% - 200px);">${(prevGoal / 1000).toFixed(1)}kg</span>
-                        <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoal / 1000}kg</span>
-                    </div>
-                    <div class="yroundbox">
-                    <p>You've saved ${(userSaved / 1000).toFixed(1)}kg of CO2e so far.</p>
-                    <p>You've hit the milestone of saving ${(prevGoal / 1000).toFixed(1)}kg!</p>
-                    <p>Keep up the great work - you're only ${(distToGoal / 1000).toFixed(1)} kilograms away from hitting your next milestone of ${(targetGoal / 1000).toFixed(1)}kg!</p>
-                </div></div>
-                `;
+                if (prevGoal == 0) {
+                    parent.innerHTML = `
+                        <div class="emissionsbox">
+                            <h4>You</h4>
+                            <div class="graphback">
+                                <div class="graphfront" style="width:${((userSaved / targetGoal) * 100).toFixed(1)}%;"></div>
+                                <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
+                                <span class="graphlabel" style="left:calc(${((prevGoal / targetGoal) * 100).toFixed(1)}% - 200px);">${(prevGoal / 1000).toFixed(1)}kg</span>
+                                <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoal / 1000}kg</span>
+                            </div>
+                            <div class="yroundbox">
+                                <p>You've saved ${(userSaved / 1000).toFixed(1)}kg of CO2e so far.</p>
+                                <p>Keep up the great work - you're only ${(distToGoal / 1000).toFixed(1)} kilograms away from hitting your next milestone of ${(targetGoal / 1000).toFixed(1)}kg!</p>
+                            </div>
+                        </div>`
+                } else {
+                    parent.innerHTML = `
+                        <div class="emissionsbox">
+                            <h4>You</h4>
+                            <div class="graphback">
+                                <div class="graphfront" style="width:${((userSaved / targetGoal) * 100).toFixed(1)}%;"></div>
+                                <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
+                                <span class="graphlabel" style="left:calc(${((prevGoal / targetGoal) * 100).toFixed(1)}% - 200px);">${(prevGoal / 1000).toFixed(1)}kg</span>
+                                <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoal / 1000}kg</span>
+                            </div>
+                            <div class="yroundbox">
+                                <p>You've saved ${(userSaved / 1000).toFixed(1)}kg of CO2e so far.</p>
+                                <p>You've hit the milestone of saving ${(prevGoal / 1000).toFixed(1)}kg!</p>
+                                <p>Keep up the great work - you're only ${(distToGoal / 1000).toFixed(1)} kilograms away from hitting your next milestone of ${(targetGoal / 1000).toFixed(1)}kg!</p>
+                            </div>
+                        </div>`
+                }
                 if (employerName != "None / Other / Prefer Not To Say") {
                     parent.innerHTML =
                         parent.innerHTML +
                         `
-                        <div class="emissionsbox">
-                            <h4>${employerName}</h4>
-                            <div class="graphback">
-                                <div class="graphfront" style="width:${((employerSaved / targetGoalEmp) * 100).toFixed(1)}%;"></div>
-                                <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
-                                <span class="graphlabel" style="left:calc(${((prevGoalEmp / targetGoalEmp) * 100).toFixed(1)}% - 200px);">${(prevGoalEmp / 1000).toFixed(1)}kg</span>
-                                <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalEmp / 1000}kg</span>
-                            </div>
-                            <div class="yroundbox">
-                            <p>So far, ${employerName} has saved ${(employerSaved / 1000).toFixed(0)}kg of CO2e.</p>
-                            <p>Encourage your coworkers to keep up the great work!</p>
-                        </div></div>
-                        `;
+                         <div class="emissionsbox">
+                             <h4>${employerName}</h4>
+                             <div class="graphback">
+                                 <div class="graphfront" style="width:${((employerSaved / targetGoalEmp) * 100).toFixed(1)}%;"></div>
+                                 <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
+                                 <span class="graphlabel" style="left:calc(${((prevGoalEmp / targetGoalEmp) * 100).toFixed(1)}% - 200px);">${(prevGoalEmp / 1000).toFixed(1)}kg</span>
+                                 <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalEmp / 1000}kg</span>
+                             </div>
+                             <div class="yroundbox">
+                             <p>So far, ${employerName} has saved ${(employerSaved / 1000).toFixed(0)}kg of CO2e.</p>
+                             <p>Encourage your coworkers to keep up the great work!</p>
+                         </div></div>
+                         `;
                 }
                 if (regionName != "Other") {
                     if (regionName == "Nelson") {
                         parent.innerHTML =
                             parent.innerHTML +
                             `
-                        <div class="emissionsbox">
-                            <h4>${regionName}</h4>
-                            <div class="graphback">
-                                <div class="graphfront" style="width:${((regionSaved / targetGoalReg) * 100).toFixed(1)}%;"></div>
-                                <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
-                                <span class="graphlabel" style="left:calc(${((prevGoalReg / targetGoalReg) * 100).toFixed(1)}% - 200px);">${(prevGoalReg / 1000).toFixed(1)}kg</span>
-                                <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalReg / 1000}kg</span>
-                            </div>
-                            <div class="yroundbox">
-                            <p>Together, ${regionName} has saved ${(regionSaved / 1000).toFixed(0)}kg of CO2e.</p>
-                            <p>Great job, Nelsonians!</p>
-                        </div></div>
-                        `;
+                         <div class="emissionsbox">
+                             <h4>${regionName}</h4>
+                             <div class="graphback">
+                                 <div class="graphfront" style="width:${((regionSaved / targetGoalReg) * 100).toFixed(1)}%;"></div>
+                                 <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
+                                 <span class="graphlabel" style="left:calc(${((prevGoalReg / targetGoalReg) * 100).toFixed(1)}% - 200px);">${(prevGoalReg / 1000).toFixed(1)}kg</span>
+                                 <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalReg / 1000}kg</span>
+                             </div>
+                             <div class="yroundbox">
+                             <p>Together, ${regionName} has saved ${(regionSaved / 1000).toFixed(0)}kg of CO2e.</p>
+                             <p>Great job, Nelsonians!</p>
+                         </div></div>
+                         `
                     } else {
                         parent.innerHTML =
                             parent.innerHTML +
                             `
-                        <div class="emissionsbox">
-                            <h4>${regionName}</h4>
-                            <div class="graphback">
-                                <div class="graphfront" style="width:${((regionSaved / targetGoalReg) * 100).toFixed(1)}%;"></div>
-                                <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
-                                <span class="graphlabel" style="left:calc(${((prevGoalReg / targetGoalReg) * 100).toFixed(1)}% - 200px);">${(prevGoalReg / 1000).toFixed(1)}kg</span>
-                                <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalReg / 1000}kg</span>
-                            </div>
-                            <div class="yroundbox">
-                            <p>Together, ${regionName} has saved ${(regionSaved / 1000).toFixed(0)}kg of CO2e.</p>
-                            <p>Great job, residents of ${regionName}!</p>
-                        </div></div>
-                        `;
+                         <div class="emissionsbox">
+                             <h4>${regionName}</h4>
+                             <div class="graphback">
+                                 <div class="graphfront" style="width:${((regionSaved / targetGoalReg) * 100).toFixed(1)}%;"></div>
+                                 <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
+                                 <span class="graphlabel" style="left:calc(${((prevGoalReg / targetGoalReg) * 100).toFixed(1)}% - 200px);">${(prevGoalReg / 1000).toFixed(1)}kg</span>
+                                 <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalReg / 1000}kg</span>
+                             </div>
+                             <div class="yroundbox">
+                             <p>Together, ${regionName} has saved ${(regionSaved / 1000).toFixed(0)}kg of CO2e.</p>
+                             <p>Great job, residents of ${regionName}!</p>
+                         </div></div>
+                         `;
                     }
                 }
                 parent.innerHTML =
                     parent.innerHTML +
                     `
-                        <div class="emissionsbox">
-                            <h4>Swap One</h4>
-                            <div class="graphback">
-                                <div class="graphfront" style="width:${((allSaved / targetGoalAll) * 100).toFixed(1)}%;"></div>
-                                <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
-                                <span class="graphlabel" style="left:calc(${((prevGoalAll / targetGoalAll) * 100).toFixed(1)}% - 200px);">${(prevGoalAll / 1000).toFixed(1)}kg</span>
-                                <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalAll / 1000}kg</span>
-                            </div>
-                            <div class="yroundbox">
-                            <p>In total, we've saved ${(allSaved / 1000).toFixed(0)}kg of CO2e.</p>
-                            <p>That's as much as ${(allSaved / TreePerYear).toFixed(0)} trees absorb in a year!</p>
-                        </div></div>
-                        `;
+                         <div class="emissionsbox">
+                             <h4>Swap One</h4>
+                             <div class="graphback">
+                                 <div class="graphfront" style="width:${((allSaved / targetGoalAll) * 100).toFixed(1)}%;"></div>
+                                 <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
+                                 <span class="graphlabel" style="left:calc(${((prevGoalAll / targetGoalAll) * 100).toFixed(1)}% - 200px);">${(prevGoalAll / 1000).toFixed(1)}kg</span>
+                                 <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalAll / 1000}kg</span>
+                             </div>
+                             <div class="yroundbox">
+                             <p>In total, we've saved ${(allSaved / 1000).toFixed(0)}kg of CO2e.</p>
+                             <p>That's as much as ${(allSaved / TreePerYear).toFixed(0)} trees absorb in a year!</p>
+                         </div></div>
+                         `;
 
                 if (window.location.search.slice(1) == "confirm_edit=true") {
                     alert("Successfully edited profile!");
@@ -235,7 +252,7 @@
                     Made with love by Arturo Neale |
                     <a
                         href="https://docs.google.com/document/d/16ZJs5ThK508UCH08u0rqlp89AmkNzo0Klvcf2od-W18/edit?usp=sharing"
-                        >Ts & Cs / Privacy Policy</a
+                        >T&Cs / Privacy</a
                     >
                 </b>
             </p>
