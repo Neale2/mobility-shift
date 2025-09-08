@@ -14,7 +14,7 @@ import sentry_sdk
 
 from pathlib import Path
 
-from main.secrets import cloudflare_turnstile_sitekey, cloudflare_turnstile_secretkey, django_secretkey
+from main.secrets import cloudflare_turnstile_sitekey, cloudflare_turnstile_secretkey, django_secretkey, postgres_data
 
 
 sentry_sdk.init(
@@ -90,13 +90,7 @@ WSGI_APPLICATION = 'mobilityshift.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-         'OPTIONS': {
-            'timeout': 5
-        },
-    }
+    'default': postgres_data(),
 }
 
 

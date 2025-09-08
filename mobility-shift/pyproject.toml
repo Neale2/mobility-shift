@@ -17,6 +17,7 @@ dependencies = [
     "django-markdownx (>=4.0.9,<5.0.0)",
     "gunicorn (>=23.0.0,<24.0.0)",
     "sentry-sdk[django] (>=2.37.0,<3.0.0)",
+    "psycopg2-binary (>=2.9.10,<3.0.0)",
 ]
 
 [tool.poetry]

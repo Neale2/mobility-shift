@@ -224,7 +224,7 @@ def make_spreadsheet():
     print(email_response)
     
     #adding backup DB to this since already running lmao
-    
+    ''' <- depricated because of db shift //to do: fix
     main_db = sqlite3.connect('mobilityshift/db.sqlite3')
     backup = sqlite3.connect("mobilityshift/backups/"+str(datetime.now().date())+"_backup.sqlite3")
     with backup:
@@ -246,3 +246,4 @@ def make_spreadsheet():
 
     with open("backups.zip", "rb") as data:
         blob_client.upload_blob(data, overwrite=True)
+    '''
