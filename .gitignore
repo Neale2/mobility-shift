@@ -188,3 +188,6 @@ mobility-shift/backups.zip
 /mobility-shift/mobilityshift/backups
 mobility-shift/start.sh
 mobility-shift/start.sh
+mobility-shift/start.sh
+*.sh
+mobility-shift/start.sh
