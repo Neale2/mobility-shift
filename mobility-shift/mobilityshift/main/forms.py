@@ -5,7 +5,7 @@ from turnstile.fields import TurnstileField
 from .models import Employer, Region, User
 
 class SignUpForm(forms.Form):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': "name short-text input", 'id': 'name', 'placeholder': 'type your name'}), label="What's your name?", max_length=20)
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': "name short-text input", 'id': 'name', 'placeholder': 'type your name'}), label="What's your name?", max_length=320)
     age_group = forms.ChoiceField(widget=forms.Select(attrs={'class': "age multi input", 'id': 'age'}), label="How old are you?", choices=[("<13", "Under 13"), ("13-17", "13 - 17"), ("18-24", "18 - 24"), ("25-34", "25 - 34"), ("35-44", "35 - 44"), ("45-64", "45 - 64"), (">65", "More than 65"), ("prefer_not", "Prefer not to say")])
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': "email short-text input info", 'id': 'email', 'placeholder': 'type your email'}), label="Email", max_length=320)
     distance = forms.ChoiceField(widget=forms.Select(attrs={'class': "distance multi input info", 'id': 'distance'}), label="Commute Distance", choices=[(500, "0.5km"), (1000, "1km"), (2500, "2.5km"), (5000, "5km"), (10000, "10km"), (25000, "25km"), (50000, "50km")])

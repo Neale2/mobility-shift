@@ -16,27 +16,37 @@ from ...models import BackedEmail
 
 
 def spreadsheet():
-    print("Made Daily Spreadsheet")
-    make_spreadsheet()
+    try:
+        print("Made Daily Spreadsheet")
+        make_spreadsheet()
+    except OperationalError as e:
+        pass
 
 def logging_email():
-    print("Sending Logging Email")
-    email_users()
-
+    try:
+        print("Sending Logging Email")
+        email_users()
+    except OperationalError as e:
+        pass
+    
 processing_lock = threading.Lock()
     
 def check_emails():
-    if processing_lock.locked():
-        print("locked")
-        return
-
-    with processing_lock:
-        if not BackedEmail.objects.exists():
-            print("no backed up emails")
+    try:
+        if processing_lock.locked():
+            print("locked")
             return
-        
-        print("yes backed up emails")
-        clear_backlog()
+
+        with processing_lock:
+            if not BackedEmail.objects.exists():
+                print("no backed up emails")
+                return
+
+            print("yes backed up emails")
+            clear_backlog()
+    except OperationalError as e:
+        pass
+            
     
     
 # The `close_old_connections` decorator ensures that database connections, that have become
@@ -52,8 +62,10 @@ def delete_old_job_executions(max_age=604_800):
     :param max_age: The maximum length of time to retain historical job execution records.
                   Defaults to 7 days.
     """
-    DjangoJobExecution.objects.delete_old_job_executions(max_age)
-
+    try:
+        DjangoJobExecution.objects.delete_old_job_executions(max_age)
+    except OperationalError as e:
+        pass
 
 class Command(BaseCommand):
     help = "Runs APScheduler."

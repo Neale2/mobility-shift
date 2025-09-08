@@ -47,7 +47,7 @@ class User(models.Model):
     email = models.EmailField(max_length=320, unique=True)
     sign_up_time = models.DateTimeField(editable=False, default=(datetime.datetime.now))
     age_group = models.CharField(choices=[("<13", "Less than 13"), ("13-17", "13 - 17"), ("18-24", "18 - 24"), ("25-34", "25 - 34"), ("35-44", "35 - 44"), ("45-64", "45 - 64"), (">65", "More than 65"), ("prefer_not", "Prefer not to say")])
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=320)
     distance = models.PositiveIntegerField(choices=[(500, "0.5km"), (1000, "1km"), (2500, "2.5km"), (5000, "5km"), (10000, "10km"), (25000, "25km"), (50000, "50km")])
     vehicle = models.PositiveIntegerField(choices=[(243, "Petrol"), (265, "Diesel"), (192, "Hybrid"), (98, "Plug-in Hybrid"), (19, "Electric"), (243, "Other / Don't know")])
     employer = models.ForeignKey(Employer, on_delete=models.SET_DEFAULT, default='None / Other / Prefer Not To Say')
