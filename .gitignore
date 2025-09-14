@@ -191,3 +191,4 @@ mobility-shift/start.sh
 mobility-shift/start.sh
 *.sh
 mobility-shift/start.sh
+/mobility-shift/mobilityshift/dummy_emails

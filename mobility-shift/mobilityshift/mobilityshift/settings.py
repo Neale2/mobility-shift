@@ -148,3 +148,5 @@ TURNSTILE_SECRET = cloudflare_turnstile_secretkey()
 TURNSTILE_DEFAULT_CONFIG = {
     'theme': 'light',
 }
+
+DUMMY_EMAIL_SENDING = True

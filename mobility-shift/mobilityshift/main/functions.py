@@ -8,6 +8,7 @@ from http import HTTPStatus
 
 from azure.communication.email import EmailClient
 from django.shortcuts import get_object_or_404
+from django.conf import settings
 
 from .secrets import azure_email_connection_string
 from .models import User, BackedEmail, Trip, DeletedUser, DeletedTrip
@@ -52,48 +53,60 @@ def post_send(poller):
         print("Background email result error:", e)
 
 def send_email(recipient, subject, html_body, uuid, priority=2):
-    try:
+    if settings.DUMMY_EMAIL_SENDING:
+        time.sleep(0.5)
+        
+        path = f'mobilityshift/dummy_emails/{recipient}/{subject}.html'
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        
+        with open(path, "w") as f:
+            f.write(html_body)
+            
+        print("Dummy email created")
+    else:
         try:
-            name = get_object_or_404(User, pk=uuid).name
-        except:
-            name = "None"
-        connection_string = azure_email_connection_string()
-        client = EmailClient.from_connection_string(connection_string, raw_response_hook=callback)
+            try:
+                name = get_object_or_404(User, pk=uuid).name
+            except:
+                name = "None"
+            connection_string = azure_email_connection_string()
+            client = EmailClient.from_connection_string(connection_string, raw_response_hook=callback)
 
-        message = {
-            "senderAddress": "no-reply@swapone.nz",
-            "recipients": {
-                "to": [{
-                    "address": recipient,
-                    "displayName": name
-                }]
-            },
-            "content": {
-                "subject": subject,
-                "plainText": "Inbox not supported.",
-                "html": html_body
-            },
-            "headers": {
-                "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
-                "List-Unsubscribe": f"<app.swapone.nz/unsubscribe/{uuid}>"
+            message = {
+                "senderAddress": "no-reply@swapone.nz",
+                "recipients": {
+                    "to": [{
+                        "address": recipient,
+                        "displayName": name
+                    }]
+                },
+                "content": {
+                    "subject": subject,
+                    "plainText": "Inbox not supported. Please sign up with another email address from app.swapone.nz",
+                    "html": html_body
+                },
+                "headers": {
+                    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+                    "List-Unsubscribe": f"<app.swapone.nz/unsubscribe/{uuid}>"
+                }
             }
-        }
-        poller = None
-        try:
-            poller = client.begin_send(message)
-        except Exception as e:
-            if "429" in str(e):
-                print("429")
-                data = BackedEmail(recipient=recipient, subject=subject, html_body=html_body, uuid=uuid, priority=priority)
-                data.save()
-                return("429")
+            poller = None
+            try:
+                poller = client.begin_send(message)
+            except Exception as e:
+                #too many requests
+                if "429" in str(e):
+                    print("429")
+                    data = BackedEmail(recipient=recipient, subject=subject, html_body=html_body, uuid=uuid, priority=priority)
+                    data.save()
+                    return("429")
 
-            else:
-                raise
-        if poller:
-            threading.Thread(target=post_send, args=(poller,)).start()
-    except Exception as ex:
-        print("Email Send error:", ex)
+                else:
+                    raise
+            if poller:
+                threading.Thread(target=post_send, args=(poller,)).start()
+        except Exception as ex:
+            print("Email Send error:", ex)
 
     
 
