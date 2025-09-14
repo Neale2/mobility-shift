@@ -3,10 +3,11 @@ import os
 import csv
 import sqlite3
 import shutil
+import subprocess
 
 from azure.storage.blob import BlobServiceClient, BlobSasPermissions, generate_blob_sas
 from datetime import datetime, timedelta
-from .secrets import azure_storage_connection_string, azure_spreadsheet_bucket_name
+from .secrets import azure_storage_connection_string, azure_spreadsheet_bucket_name, postgres_data
 
 import time
 
@@ -191,7 +192,7 @@ def make_spreadsheet():
     try:
         csv_file_path = 'users.csv'
         # Open the file in write mode
-        with open(csv_file_path, 'w', newline=''):
+        with open(csv_file_path, 'w', newline='') as file:
             # Create a CSV writer object
             writer = csv.writer(file, quoting=csv.QUOTE_MINIMAL)
 
@@ -223,14 +224,20 @@ def make_spreadsheet():
     email_response = send_email("arturo.neale@gmail.com", "Daily Database Dump", "Hi! Here's the trips database from today: " + download_url + " And here's the users: " + user_download_url, 'N/A', 3)
     print(email_response)
     
+    #backup database
+    os.environ['PGPASSWORD'] = postgres_data()['PASSWORD']
+    
+    subprocess.run([
+        "pg_dump",
+        "-U", postgres_data()['USER'],
+        "-h", postgres_data()['HOST'],
+        "-F", "p",
+        "-b",
+        "-f", "mobilityshift/backups/"+str(datetime.now().date())+"_backup.sql",
+        postgres_data()['NAME']
+    ], check=True)
+    
     #adding backup DB to this since already running lmao
-    ''' <- depricated because of db shift //to do: fix
-    main_db = sqlite3.connect('mobilityshift/db.sqlite3')
-    backup = sqlite3.connect("mobilityshift/backups/"+str(datetime.now().date())+"_backup.sqlite3")
-    with backup:
-        main_db.backup(backup, pages=0)
-    main_db.close()
-    backup.close()
     
     with os.scandir("mobilityshift/backups") as entries:
         for entry in entries:
@@ -246,4 +253,3 @@ def make_spreadsheet():
 
     with open("backups.zip", "rb") as data:
         blob_client.upload_blob(data, overwrite=True)
-    '''
