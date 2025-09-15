@@ -149,4 +149,4 @@ TURNSTILE_DEFAULT_CONFIG = {
     'theme': 'light',
 }
 
-DUMMY_EMAIL_SENDING = True
+DUMMY_EMAIL_SENDING = False

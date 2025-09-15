@@ -243,3 +243,8 @@ def bounce(request):
     
     else:
         return HttpResponse("Unauthorized", status=401)
+    
+def dummy_email(request, address, subject):
+    with open(f'mobilityshift/dummy_emails/{address}/{subject}.html', 'r') as f:
+            content = f.read()
+    return HttpResponse(content)

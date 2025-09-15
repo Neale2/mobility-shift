@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.conf import settings
 
 #url pattern handling here
 urlpatterns = [
@@ -15,3 +16,6 @@ urlpatterns = [
     path('unsubscribe/unsubbed/', views.unsubbed, name='unsubbed'),
     path('wh/bounce', views.bounce, name='bounce')
 ]
+
+if settings.DUMMY_EMAIL_SENDING:
+    urlpatterns += [path('dummy_email/<address>/<subject>', views.dummy_email, name='dummy_email')]
