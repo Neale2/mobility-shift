@@ -7,7 +7,7 @@ from .models import Employer, Region, User
 class SignUpForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': "name short-text input", 'id': 'name', 'placeholder': 'type your name'}), label="What's your name?", max_length=320)
     age_group = forms.ChoiceField(widget=forms.Select(attrs={'class': "age multi input", 'id': 'age'}), label="How old are you?", choices=[("<13", "Under 13"), ("13-17", "13 - 17"), ("18-24", "18 - 24"), ("25-34", "25 - 34"), ("35-44", "35 - 44"), ("45-64", "45 - 64"), (">65", "More than 65"), ("prefer_not", "Prefer not to say")])
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': "email short-text input info", 'id': 'email', 'placeholder': 'type your email'}), unique=True, label="Email", max_length=320)
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': "email short-text input info", 'id': 'email', 'placeholder': 'type your email'}), label="Email", max_length=320)
     distance = forms.ChoiceField(widget=forms.Select(attrs={'class': "distance multi input info", 'id': 'distance'}), label="Commute Distance", choices=[(500, "0.5km"), (1000, "1km"), (2500, "2.5km"), (5000, "5km"), (10000, "10km"), (25000, "25km"), (50000, "50km")])
     #numbers returned are emission factors (g/km) for ease. Don't know/other returns typical petrol number
     vehicle = forms.ChoiceField(widget=forms.Select(attrs={'class': "vehicle multi input", 'id': 'vehicle'}), label="Vehicle Type", choices=[(243, "Petrol"), (265, "Diesel"), (192, "Hybrid"), (98, "Plug-in Hybrid"), (19, "Electric"), (243, "Other / Don't know")])
@@ -25,6 +25,12 @@ class SignUpForm(forms.Form):
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
         return name.title()
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError("This email address is already in use. Please try another.")
+        return email
 
 class YesLogForm(forms.Form):
     quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': "quantity multi input"}), label="How many high carbon trips (one way) did you swap this week?", min_value=1, max_value=14)
