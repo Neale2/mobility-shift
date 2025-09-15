@@ -224,6 +224,8 @@ def make_spreadsheet():
     email_response = send_email("arturo.neale@gmail.com", "Daily Database Dump", "Hi! Here's the trips database from today: " + download_url + " And here's the users: " + user_download_url, 'N/A', 3)
     print(email_response)
     
+
+    
     #backup database
     os.environ['PGPASSWORD'] = postgres_data()['PASSWORD']
     
@@ -233,19 +235,19 @@ def make_spreadsheet():
         "-h", postgres_data()['HOST'],
         "-F", "p",
         "-b",
-        "-f", "mobilityshift/backups/"+str(datetime.now().date())+"_backup.sql",
+        "-f", "backups/"+str(datetime.now().date())+"_backup.sql",
         postgres_data()['NAME']
     ], check=True)
     
     #adding backup DB to this since already running lmao
     
-    with os.scandir("mobilityshift/backups") as entries:
+    with os.scandir("backups") as entries:
         for entry in entries:
             if entry.is_file():
                 if (datetime.strptime(entry.name.split("_")[0], "%Y-%m-%d") - datetime.now()).days < -30:
                     os.remove(entry)
     
-    shutil.make_archive("backups", 'zip', "mobilityshift/backups")
+    shutil.make_archive("backups", 'zip', "backups")
     
      #azure connect to storage
     blob_service_client = BlobServiceClient.from_connection_string(azure_storage_connection_string())
