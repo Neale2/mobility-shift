@@ -225,7 +225,7 @@ def make_spreadsheet():
     print(email_response)
     email_response = send_email("lindacardiff52@gmail.com", "Daily Database Dump", "Hi! Here's the trips database from today: " + download_url + " And here's the users: " + user_download_url, 'N/A', 3)
     print(email_response)
-    email_response = send_email("arturo.neael@gmail.com", "Daily Database Dump", "Hi! Here's the trips database from today: " + download_url + " And here's the users: " + user_download_url, 'N/A', 3)
+    email_response = send_email("arturo.neale@gmail.com", "Daily Database Dump", "Hi! Here's the trips database from today: " + download_url + " And here's the users: " + user_download_url, 'N/A', 3)
     print(email_response)
 
     
