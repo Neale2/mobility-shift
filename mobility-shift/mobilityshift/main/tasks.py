@@ -238,7 +238,7 @@ def make_spreadsheet():
         "-h", postgres_data()['HOST'],
         "-F", "p",
         "-b",
-        "-f", "backups/"+str(datetime.now().date())+"_backup.sql",
+        "-f", "mobilityshift/backups/"+str(datetime.now().date())+"_backup.sql",
         postgres_data()['NAME']
     ], check=True)
     
@@ -250,7 +250,7 @@ def make_spreadsheet():
                 if (datetime.strptime(entry.name.split("_")[0], "%Y-%m-%d") - datetime.now()).days < -30:
                     os.remove(entry)
     
-    shutil.make_archive("backups", 'zip', "backups")
+    shutil.make_archive("mobilityshift/backups", 'zip', root_dir="mobilityshift/backups")
     
      #azure connect to storage
     blob_service_client = BlobServiceClient.from_connection_string(azure_storage_connection_string())
