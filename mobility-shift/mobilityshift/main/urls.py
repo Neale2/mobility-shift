@@ -9,6 +9,7 @@ urlpatterns = [
     path('signup/confirm/', views.confirm, name='confirm'),
     path('yes/<pk>', views.yes, name='yes-log'),
     path('no/<pk>', views.no, name='no-log'),
+    path('nct/<pk>', views.nct, name='nct-log'),
     path('dash/<pk>/', views.dash, name='dash'),
     path('edit/<pk>/', views.edit, name='edit'),
     path('unsubscribe/<pk>', views.unsub, name='unsub'),

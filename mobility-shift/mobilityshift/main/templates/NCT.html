@@ -12,7 +12,7 @@
     </script>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Yes Logging</title>
+        <title>Non-Commute Trip Logging</title>
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
         <link rel="icon" type="image/png" href="{% static 'images/favicon/favicon-96x96.png' %}" sizes="96x96" />
@@ -44,16 +44,17 @@
         <script>
         </script>
         <main>
-            <h1>Log a Completed Trip</h1>
+            <h1>Log a Non-Commute Trip</h1>
             <div class="content">
-                <h4>Great job on commuting sustainably this week!</h4>
+                <p>A non-commute trip is any journey not related to traveling to or from work that you would normally make in a fossil-fuelled vehicle - for example, going shopping, visiting friends, or heading to the beach.</p>
                 {% endblock %}
-                <a class="taligncenter" href=../nct/{{user.uuid}}>Swapped a Non-Commute Trip? Click here.</a>
+            
                 <form method="post">
                     {% csrf_token %} {{ form }}
                     <input type="submit" value="Submit" class="submit button input"/>
                 </form>
-                <!--redirects to No page-->
+                <!--redirects to no page-->
+                <a  class="taligncenter" href=../yes/{{user.uuid}}>Oops! I wanted to log a commute!</a>
                 <a  class="taligncenter" href=../no/{{user.uuid}}>Oops! I meant to press no!</a>
             </div>
         </main>

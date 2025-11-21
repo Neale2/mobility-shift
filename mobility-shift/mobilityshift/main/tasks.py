@@ -59,15 +59,15 @@ def make_spreadsheet():
             'UUID',
             'Age Group',
             'Sign Up Time',
-            'Emissions Saved (g)',
+            'User Total Emissions Saved (g)',
             'Mode',
             'Number of Trips',
             'Log Time',
             'Text Response',
-            'Commute Distance (m)',
+            'Trip Distance (m)',
             'Primary Vehicle (emission factor)',
             'Employer',
-            'Region',
+            'Region'
             
         ]
     ]
@@ -86,11 +86,11 @@ def make_spreadsheet():
                 trip.mode,
                 trip.quantity,
                 str(trip.log_time.strftime('%Y-%m-%d %H:%M:%S')),
-                trip.text_response,
-                str(trip.user.distance),
+                trip.text_response,                    
+                str(trip.distance if trip.distance is not None else 0 if trip.quantity == 0 else trip.user.distance), #legacy trip handling -> None value means is old, so if q is 0 (No logged) than distance is 0. Else get value from user's selected val.
                 str(trip.user.vehicle),
                 trip.user.employer,
-                trip.user.region,
+                trip.user.region
                 
             ]
             

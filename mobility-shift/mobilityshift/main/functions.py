@@ -18,7 +18,7 @@ def delete_list_user(user):
     userdata.save()
     trips = Trip.objects.filter(user_id=user.uuid)
     for trip in trips:
-        tripdata = DeletedTrip(user=userdata, text_response=trip.text_response, log_time=trip.log_time, mode=trip.mode, quantity=trip.quantity)
+        tripdata = DeletedTrip(user=userdata, text_response=trip.text_response, log_time=trip.log_time, mode=trip.mode, quantity=trip.quantity, distance=trip.distance)
         tripdata.save()
     trips.delete()
     user.delete()

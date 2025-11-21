@@ -70,6 +70,7 @@ class Trip(models.Model):
     log_time = models.DateTimeField(editable=False, default=(datetime.datetime.now))
     text_response = models.TextField(null=True, blank=True)
     quantity = models.PositiveIntegerField()
+    distance = models.PositiveIntegerField(null=True)
 
 #when a user unsubscribes, they get moved here.    
 class DeletedUser(models.Model):
@@ -91,6 +92,7 @@ class DeletedTrip(models.Model):
     log_time = models.DateTimeField(editable=False)
     text_response = models.TextField(null=True, blank=True)
     quantity = models.PositiveIntegerField()
+    distance = models.PositiveIntegerField(null=True)
     
 class BackedEmail(models.Model):
     recipient = models.EmailField()

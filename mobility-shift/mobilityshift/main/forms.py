@@ -33,8 +33,13 @@ class SignUpForm(forms.Form):
         return email
 
 class YesLogForm(forms.Form):
-    quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': "quantity multi input"}), label="How many high carbon trips (one way) did you swap this week?", min_value=1, max_value=14)
+    quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': "quantity multi input"}), label="How many high carbon commutes (one way) did you swap this week?", min_value=1, max_value=14)
     mode = forms.ChoiceField(widget=forms.Select(attrs={'class': "mode multi input"}), label="What mode of transport did you use?", choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool"), ('wfh', 'Work from Home')])
+    captcha = TurnstileField(label="")
+    
+class NCTLogForm(forms.Form):
+    mode = forms.ChoiceField(widget=forms.Select(attrs={'class': "mode multi input"}), label="What mode of transport did you use?", choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool")])
+    distance = forms.ChoiceField(widget=forms.Select(attrs={'class': "distance multi input", 'id': 'distance'}), label="How far (approximately) did you travel?", choices=[(500, "0.5km"), (1000, "1km"), (2500, "2.5km"), (5000, "5km"), (10000, "10km"), (25000, "25km"), (50000, "50km")])
     captcha = TurnstileField(label="")
 
 class NoLogForm(forms.Form):
