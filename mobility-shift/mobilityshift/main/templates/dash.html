@@ -191,7 +191,7 @@
                          `;
 
                 if (window.location.search.slice(1) == "confirm_edit=true") {
-                    alert("Successfully edited profile!");
+                    niceAlert("Swap One", "Successfully edited profile!", "OK!");
                 }
             });
 
@@ -275,5 +275,20 @@
             </p>
         </footer>
         <script data-collect-dnt="true" async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+        <script>
+            function closePopup() {
+                document.getElementById("popup").remove();
+            }
+            function niceAlert(title, text, buttonmsg) {
+                document.querySelector("body").innerHTML += `
+                    <div class="popupbg" id="popup">
+                        <div class="popup">
+                            <div class="popupheader"><h2>${title}</h2></div>
+                            <div class="popuptext">${text}</div>
+                                <div class="popupbuttonbox"><button class="button centered" onclick="closePopup()">${buttonmsg}</button></div>
+                        </div>
+                    </div>`;
+            }
+        </script>
     </body>
 </html>

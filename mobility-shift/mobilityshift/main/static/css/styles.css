@@ -282,6 +282,7 @@ label {
     color: #4a4a4a;
     font-weight: 700;
     border-radius: 5px;
+    border: 0;
     text-decoration: none;
     justify-content: center;
 }
@@ -324,4 +325,50 @@ a.button {
 .checkboxbox {
     display: inline;
     padding-bottom: 5px;
+}
+
+.popupbg {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popup {
+    display: flex;
+    background-color: #fff;
+    width: 90%;
+    max-width: 600px;
+    min-height: 30%;
+    margin: 15% auto;
+    left: 20;
+    top: 20;
+    flex-direction: column;
+}
+
+.popupheader {
+    background-color: #f9d22c;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: left;
+    h2 {
+        text-align: left;
+        margin-left: 20px;
+    }
+}
+
+.popuptext {
+    flex-grow: 1;
+    text-align: left;
+    padding: 20px;
+    width: 100%;
+}
+
+.popupbuttonbox {
+    width: 100%;
+    text-align: center;
 }
