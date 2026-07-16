@@ -21,9 +21,6 @@
         <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}" />
         <meta name="apple-mobile-web-app-title" content="Swap One" />
         <link rel="manifest" href="{% static 'images/favicon/site.webmanifest' %}" />
-        {% if request.method == 'GET' and user.logged_this_week %}
-            <script>alert("You've already logged a trip this week! Feel free to log another if you want.");</script>
-        {% endif %}
     </head>
     <body>
         {% load mathfilters %}
@@ -47,8 +44,8 @@
             <h1>Log a Completed Trip</h1>
             <div class="content">
                 <h4>Great job on commuting sustainably this week!</h4>
+                <br>
                 {% endblock %}
-                <a class="taligncenter" href=../nct/{{user.uuid}}>Swapped a Non-Commute Trip? Click here.</a>
                 <form method="post">
                     {% csrf_token %} {{ form }}
                     <input type="submit" value="Submit" class="submit button input"/>
@@ -92,7 +89,50 @@
                 </b>
             </p>
         </footer>
+        {% if request.method == 'GET' and user.logged_this_week %}
+            <script>    
+                function closePopup() {
+                    document.getElementById("popup").remove();
+                }
+
+                //button input: list for buttons [[<text>, <isPrimary (t/f)>, <functionStr>]]
+                function niceAlert(title, text, buttons) {
+                    let buttonString = "";
+                    buttons.forEach((button) => {
+                        buttonString += '<button class="button centered';
+                        if (!button[1]) {
+                            buttonString += " secondary";
+                        }
+                        buttonString += `" onclick="${button[2]}">${button[0]}</button>`;
+                    });
+
+                    document.querySelector("body").innerHTML += `
+                        <div class="popupbg" id="popup">
+                            <div class="popup">
+                                <div class="popupheader"><h2>${title}</h2></div>
+                                <div class="popuptext">${text}</div>
+                                    <div class="popupbuttonbox">${buttonString}</div>
+                            </div>
+                        </div>`;
+                }
+
+                        if (window.location.search.slice(1) == "from_dash_popup=true") {
+                            const url = new URL(window.location.href);
+                            url.searchParams.delete('from_dash_popup');
+                            window.history.replaceState({}, '', url.pathname + url.search + url.hash);
+                        } else {   
+                            niceAlert("Swap One", "You've already logged a trip this week! Feel free to log another if you want.", [['OK!', true, "closePopup()"]]);
+                        }
+        </script>
+        {% endif %}
         <script>
+            const defaultOption = document.querySelector('[value="{{ user.distance }}"]');
+            if (defaultOption) {
+                defaultOption.innerHTML += " (your default)";
+                defaultOption.setAttribute('selected', '');
+            }
+            console.log(defaultOption)
+            
             
             function navToggle() {
                 var x = document.getElementById("navlinks");

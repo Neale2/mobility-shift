@@ -15,7 +15,7 @@ from django.views import generic
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .forms import SignUpForm, YesLogForm, NoLogForm, UnsubForm, EditProfileForm, NCTLogForm
+from .forms import SignUpForm, YesLogForm, NoLogForm, UnsubForm, EditProfileForm
 from .models import User, Trip, DeletedUser, DeletedTrip, Employer, Region, All, Post
 
 def signup(request):
@@ -88,6 +88,7 @@ def dash(request, pk):
     context = {'user': user, 'employer': employer, 'region': region, 'all': all_model, 'post': post}
     return render(request, 'dash.html', context)
 
+
 def yes(request, pk):
     user = get_object_or_404(User, pk=pk)
     employer = get_object_or_404(Employer, pk=user.employer)
@@ -97,50 +98,7 @@ def yes(request, pk):
     if request.method == "POST":
         form = YesLogForm(request.POST)
         #grams of emissions per km - carpool is half of personal vehicle emissions - assuming 2 people carpooling
-        mode_emissions = {'walk': 0, 'bike': 0, 'bus': 15, 'ev': 19, 'carpool': user.vehicle / 2, 'wfh': 0}
-        choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool"), ('wfh', 'Work from Home')]
-        if form.is_valid():
-            #Checking if error in saving
-            try:
-                print(mode_emissions[form.cleaned_data['mode']])
-                #gets emission factor in grams per km. subtracts factor of changed mode of transport. div by 1000 to get grams per meter. multiply by meters traveled and number of trips.
-                emissions_saved = int(form.cleaned_data['quantity'] * user.distance * (user.vehicle - mode_emissions[form.cleaned_data['mode']]) / 1000)
-                user.emissions_saved = user.emissions_saved + emissions_saved
-                user.logged_this_week = True
-                user.save()
-                region.emissions_saved = region.emissions_saved + emissions_saved
-                region.save()
-                employer.emissions_saved = employer.emissions_saved + emissions_saved
-                employer.save()
-                all_model.emissions_saved = all_model.emissions_saved + emissions_saved
-                all_model.save()
-                
-                
                 data = Trip(user=user, mode=form.cleaned_data['mode'], quantity=form.cleaned_data['quantity'], distance=user.distance)
-                data.save()
-                return redirect(f"/dash/{pk}?just_logged_yes=true")
-            except Exception as e:
-                if str(e) == "database is locked":
-                    form.add_error(None, _("Unable to save your response at this time - you might want to wait a couple seconds and try again."))
-                else:
-                    form.add_error(None, _("There's been an unidentified error! Sorry about that. The system error message is: " + str(e)))
-        
-    else:
-        form = YesLogForm()
-        
-    context = {'user': user, 'form': form}
-    
-    return render(request, 'yes.html', context)
-
-def nct(request, pk):
-    user = get_object_or_404(User, pk=pk)
-    employer = get_object_or_404(Employer, pk=user.employer)
-    region = get_object_or_404(Region, pk=user.region)
-    all_model = get_object_or_404(All, pk="all")
-    
-    if request.method == "POST":
-        form = NCTLogForm(request.POST)
-        #grams of emissions per km - carpool is half of personal vehicle emissions - assuming 2 people carpooling
         mode_emissions = {'walk': 0, 'bike': 0, 'bus': 15, 'ev': 19, 'carpool': user.vehicle / 2}
         choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool")]
         if form.is_valid():
@@ -159,9 +117,9 @@ def nct(request, pk):
                 all_model.save()
                 
                 
-                data = Trip(user=user, mode=form.cleaned_data['mode'], text_response="<from system> THIS IS A NON-COMMUTE TRIP.", quantity=form.cleaned_data['quantity'], distance=int(form.cleaned_data['distance']))
+                data = Trip(user=user, mode=form.cleaned_data['mode'], quantity=form.cleaned_data['quantity'], distance=int(form.cleaned_data['distance']))
                 data.save()
-                return redirect(f"/dash/{pk}")
+                return redirect(f"/dash/{pk}?just_logged_yes=true")
             except Exception as e:
                 if str(e) == "database is locked":
                     form.add_error(None, _("Unable to save your response at this time - you might want to wait a couple seconds and try again."))
@@ -169,11 +127,11 @@ def nct(request, pk):
                     form.add_error(None, _("There's been an unidentified error! Sorry about that. The system error message is: " + str(e)))
         
     else:
-        form = NCTLogForm()
+        form = YesLogForm()
         
     context = {'user': user, 'form': form}
     
-    return render(request, 'NCT.html', context)
+    return render(request, 'yes.html', context)
     
 def no(request, pk):
     user = get_object_or_404(User, pk=pk)
