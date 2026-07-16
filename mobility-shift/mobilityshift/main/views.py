@@ -98,7 +98,6 @@ def yes(request, pk):
     if request.method == "POST":
         form = YesLogForm(request.POST)
         #grams of emissions per km - carpool is half of personal vehicle emissions - assuming 2 people carpooling
-                data = Trip(user=user, mode=form.cleaned_data['mode'], quantity=form.cleaned_data['quantity'], distance=user.distance)
         mode_emissions = {'walk': 0, 'bike': 0, 'bus': 15, 'ev': 19, 'carpool': user.vehicle / 2}
         choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool")]
         if form.is_valid():
