@@ -191,7 +191,15 @@
                          `;
 
                 if (window.location.search.slice(1) == "confirm_edit=true") {
-                    niceAlert("Swap One", "Successfully edited profile!", "OK!");
+                    niceAlert("Swap One", "Successfully edited profile!", [['OK!', true, "closePopup()"]]);
+                    const url = new URL(window.location.href);
+                    url.searchParams.delete('confirm_edit');
+                    window.history.replaceState({}, '', url.pathname + url.search + url.hash);
+                } else if (window.location.search.slice(1) == "just_logged_yes=true") {
+                    niceAlert("Trip Logged!", "Would you like to log another trip with different distances or modes of transport?", [["Log Another", false, "logAnother()"], ["I'm Done!", true, "closePopup()"]]);
+                    const url = new URL(window.location.href);
+                    url.searchParams.delete('just_logged_yes');
+                    window.history.replaceState({}, '', url.pathname + url.search + url.hash);
                 }
             });
 
@@ -279,13 +287,28 @@
             function closePopup() {
                 document.getElementById("popup").remove();
             }
-            function niceAlert(title, text, buttonmsg) {
+
+            function logAnother() {
+                window.location.href = "/yes/{{ user.uuid }}";
+            }
+
+            //button input: list for buttons [[<text>, <isPrimary (t/f)>, <functionStr>]]
+            function niceAlert(title, text, buttons) {
+                let buttonString = "";
+                buttons.forEach((button) => {
+                    buttonString += '<button class="button centered';
+                    if (!button[1]) {
+                        buttonString += " secondary";
+                    }
+                    buttonString += `" onclick="${button[2]}">${button[0]}</button>`;
+                });
+
                 document.querySelector("body").innerHTML += `
                     <div class="popupbg" id="popup">
                         <div class="popup">
                             <div class="popupheader"><h2>${title}</h2></div>
                             <div class="popuptext">${text}</div>
-                                <div class="popupbuttonbox"><button class="button centered" onclick="closePopup()">${buttonmsg}</button></div>
+                                <div class="popupbuttonbox">${buttonString}</div>
                         </div>
                     </div>`;
             }

@@ -59,7 +59,6 @@ def make_spreadsheet():
             'UUID',
             'Age Group',
             'Sign Up Time',
-            'User Total Emissions Saved (g)',
             'Mode',
             'Number of Trips',
             'Log Time',
@@ -67,7 +66,9 @@ def make_spreadsheet():
             'Trip Distance (m)',
             'Primary Vehicle (emission factor)',
             'Employer',
-            'Region'
+            'Region',
+            'Total Distance (m)',
+            'Trip Emissions Saved (g)'
             
         ]
     ]
@@ -82,7 +83,6 @@ def make_spreadsheet():
                 str(trip.user.uuid),
                 trip.user.age_group,
                 str(trip.user.sign_up_time.strftime('%Y-%m-%d %H:%M:%S')),
-                trip.user.emissions_saved,
                 trip.mode,
                 trip.quantity,
                 str(trip.log_time.strftime('%Y-%m-%d %H:%M:%S')),
@@ -90,7 +90,9 @@ def make_spreadsheet():
                 str(trip.distance if trip.distance is not None else 0 if trip.quantity == 0 else trip.user.distance), #legacy trip handling -> None value means is old, so if q is 0 (No logged) than distance is 0. Else get value from user's selected val.
                 str(trip.user.vehicle),
                 trip.user.employer,
-                trip.user.region
+                trip.user.region,
+                (trip.distance if trip.distance is not None else 0 if trip.quantity == 0 else trip.user.distance) * trip.quantity, #total distance
+                (trip.user.vehicle - {'walk': 0, 'bike': 0, 'bus': 15, 'ev': 19, 'carpool': trip.user.vehicle / 2, 'wfh': 0}.get(trip.mode, 0)) * (trip.distance if trip.distance is not None else 0 if trip.quantity == 0 else trip.user.distance) * trip.quantity / 1000 #emissions saved
                 
             ]
             
@@ -146,7 +148,7 @@ def make_spreadsheet():
             'Region',
             'Email',
             'Name',
-            'Logged this week?'
+            'Logged this week?',
 
         ]
     ]
@@ -223,7 +225,7 @@ def make_spreadsheet():
     
     email_response = send_email("jim.sinner548@gmail.com", "Daily Database Dump", "Hi! Here's the trips database from today: " + download_url + " And here's the users: " + user_download_url, 'N/A', 3)
     print(email_response)
-    email_response = send_email("lindacardiff52@gmail.com", "Daily Database Dump", "Hi! Here's the trips database from today: " + download_url + " And here's the users: " + user_download_url, 'N/A', 3)
+    email_response = send_email("projects@missionzero.nz", "Daily Database Dump", "Hi! Here's the trips database from today: " + download_url + " And here's the users: " + user_download_url, 'N/A', 3)
     print(email_response)
     email_response = send_email("arturo.neale@gmail.com", "Daily Database Dump", "Hi! Here's the trips database from today: " + download_url + " And here's the users: " + user_download_url, 'N/A', 3)
     print(email_response)

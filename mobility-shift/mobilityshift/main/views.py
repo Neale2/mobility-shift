@@ -118,7 +118,7 @@ def yes(request, pk):
                 
                 data = Trip(user=user, mode=form.cleaned_data['mode'], quantity=form.cleaned_data['quantity'], distance=user.distance)
                 data.save()
-                return redirect(f"/dash/{pk}")
+                return redirect(f"/dash/{pk}?just_logged_yes=true")
             except Exception as e:
                 if str(e) == "database is locked":
                     form.add_error(None, _("Unable to save your response at this time - you might want to wait a couple seconds and try again."))

@@ -19,14 +19,16 @@ def spreadsheet():
     try:
         print("Made Daily Spreadsheet")
         make_spreadsheet()
-    except OperationalError as e:
+    except Exception as e:
+        print(e)
         pass
 
 def logging_email():
     try:
         print("Sending Logging Email")
         email_users()
-    except OperationalError as e:
+    except Exception as e:
+        print(e)
         pass
     
 processing_lock = threading.Lock()

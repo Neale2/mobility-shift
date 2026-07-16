@@ -372,3 +372,8 @@ a.button {
     width: 100%;
     text-align: center;
 }
+
+.secondary {
+    background-color: #fff;
+    border: 2px solid #4a4a4a;
+}
