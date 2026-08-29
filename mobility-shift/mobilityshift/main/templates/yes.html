@@ -43,7 +43,8 @@
         <main>
             <h1>Log a Completed Trip</h1>
             <div class="content">
-                <h4>Great job on commuting sustainably this week!</h4>
+                <h4>Great job on travelling sustainably this week!</h4>
+                <div class=infobox>Have different types of trips to log? Just submit your first one, and you can add more on the next screen!</div>
                 <br>
                 {% endblock %}
                 <form method="post">
@@ -89,8 +90,7 @@
                 </b>
             </p>
         </footer>
-        {% if request.method == 'GET' and user.logged_this_week %}
-            <script>    
+        <script>
                 function closePopup() {
                     document.getElementById("popup").remove();
                 }
@@ -115,6 +115,11 @@
                             </div>
                         </div>`;
                 }
+            
+            
+        </script>
+        {% if request.method == 'GET' and user.logged_this_week %}
+            <script>
 
                         if (window.location.search.slice(1) == "from_dash_popup=true") {
                             const url = new URL(window.location.href);
@@ -123,6 +128,18 @@
                         } else {   
                             niceAlert("Swap One", "You've already logged a trip this week! Feel free to log another if you want.", [['OK!', true, "closePopup()"]]);
                         }
+            </script>
+        {% else %}
+            <script>
+                function freakyClose() {
+                    localStorage.setItem('hasSeenNewLoggingAlert', 'true');
+                    closePopup();
+                }
+                
+                //FEATURE_PRESENTATION.mp3 - remove after introed enough
+                if (!localStorage.getItem('hasSeenNewLoggingAlert')) {
+                    niceAlert("We've updated Trip Logging!", `We've updated the way you log sustainable travel. <ul><li>You can now log your round trips (there and back) and one way trips on the same form.</li><li>Swapped different modes of transport or distances this week? Just submit your first set, then click "Log Another" on the next screen to add the rest!</li></ul>`, [["Got It!", true, "freakyClose()"]])
+                }    
         </script>
         {% endif %}
         <script>
@@ -156,7 +173,34 @@
                         submitButton.disabled = true;
                         submitButton.value = "Processing...";
                     });
+             
+                    const infocontent = {
+                        distance: "Don't worry, we'll double it if you did a round trip!"
+                    };
+
+                    for (elem of document.getElementsByClassName("info")) {
+                        var infobox = document.createElement("div");
+                        var parent = elem.parentElement;
+                        parent.insertBefore(infobox, elem);
+                        infobox.outerHTML = "<div class='infobox'>" + infocontent[elem.id] + "</div>";
+                    }
                 });
+        </script>
+        <script>
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.addEventListener('focus', function() {
+                    if (this.value === '0') {
+                        this.value = '';
+                    }
+                });
+
+                input.addEventListener('blur', function() {
+                    if (this.value === '') {
+                        this.value = '0';
+                    }
+                });
+            });
+        
         </script>
         <script data-collect-dnt="true" async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
     </body>

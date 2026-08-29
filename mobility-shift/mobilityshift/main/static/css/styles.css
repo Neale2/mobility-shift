@@ -96,7 +96,7 @@ header {
     gap: 0;
     position: fixed;
     top: 0;
-    z-index: 1;
+    z-index: 10;
 }
 
 footer {
@@ -299,7 +299,10 @@ a.button {
     font-weight: 600;
     display: inline-block;
     margin: 0;
-    padding: 0;
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 10px;
 }
 
 .nav {
@@ -335,6 +338,7 @@ a.button {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
+    pointer-events: auto;
 }
 
 .popup {
@@ -343,10 +347,13 @@ a.button {
     width: 90%;
     max-width: 600px;
     min-height: 30%;
-    margin: 15% auto;
+    max-height: calc(100vh - 150px);
+    margin: 150px auto;
     left: 20;
     top: 20;
     flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .popupheader {
@@ -362,10 +369,15 @@ a.button {
 }
 
 .popuptext {
+    flex-shrink: 1;
     flex-grow: 1;
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
     text-align: left;
     padding: 20px;
-    width: 100%;
+    box-sizing: border-box;
 }
 
 .popupbuttonbox {
@@ -377,3 +389,82 @@ a.button {
     background-color: #fff;
     border: 2px solid #4a4a4a;
 }
+
+.badgepanel {
+    position: relative;
+    width: calc(100%-40px);
+    background-color: #fff7d8;
+    padding: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.badgepanel:hover {
+    background-color: #f9d22c;
+}
+
+.threebox {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.scrollbox {
+    position: absolute;
+    z-index: 8;
+    left: 0;
+    top: 0;
+}
+
+.badgebox {
+    width: 30%;
+    max-width: 200px;
+    position: relative;
+}
+
+.badge {
+    width: 100%;
+}
+
+.popupbadge {
+    flex-shrink: 1;
+    min-height: 0;
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+}
+
+.badgegraph {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 9;
+    transform: rotate(-90deg);
+}
+
+.badgegraph circle {
+    stroke-width: 4;
+    stroke-linecap: round;
+    fill: none;
+}
+
+.incomplete {
+    filter: saturate(10%);
+}
+
+.plaintext {
+    padding: 0;
+    margin: 0;
+}
+
+.track {
+    stroke: #4a4a4a;
+    stroke-dasharray: 251.3272;
+    stroke-dashoffset: calc(251.3272 - (251.3272 * var(--percent)) / 100);
+    transition: stroke-dashoffset 0.5s ease;
+}
+
+/*.cutoff ~ * {
+    display: none;
+}*/

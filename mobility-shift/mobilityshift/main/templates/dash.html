@@ -34,6 +34,38 @@
                 1000000000000
             ];
 
+            const UserDistanceTargets = [
+              [10000, "City Loop", "Your first 10km swapped for a cleaner commute!"],
+              [35000, "Nelson to Richmond", "35km swapped! Connecting communities with low-carbon travel."],
+              [80000, "Coastline Cruiser", "80km of clean journeys logged across our region."],
+              [175000, "Great Taste Trailblazer", "175km swapped—matching the full length of the Great Taste Trail!"],
+              [350000, "Cook Strait Crossing", "350km logged! Far enough to cross Cook Strait and back clean."],
+              [750000, "Southern Alps Rover", "750km of low-carbon travel across the South Island."],
+              [1500000, "Tour of Aotearoa", "1,500km! You’ve travelled the length of New Zealand clean."]
+            ];
+
+            const UserTripTargets = [
+              [1, "The Spark", "Your low-carbon journey begins with a single swap!"],
+              [5, "Rhythm Maker", "5 swaps logged—you’re building a real low-carbon routine."],
+              [12, "Routine Master", "12 swaps in! Choosing cleaner travel is second nature."],
+              [25, "Quarter Century", "25 swaps logged! Inspiring momentum across our community."],
+              [50, "Golden Swapper", "50 swaps! A massive milestone for sustainable commuting."],
+              [100, "Century Club", "100 swaps! You are actively reshaping how our region moves."],
+              [200, "Swap Legend", "200+ swaps! An undisputed champion for local climate action."]
+            ];
+
+            const UserSavingsTargets = [
+              [5000, "Fresh Breeze", "5kg of CO₂e avoided! Our streets breathe a little easier."],
+              [15000, "Canopy Builder", "15kg of CO₂e saved—the equivalent of a growing native tree."],
+              [35000, "Clean Sky Defender", "35kg of CO₂e cut! Keeping the horizon bright and clear."],
+              [75000, "Heavy Lifter", "75kg of CO₂e avoided! Real weight lifted off our atmosphere."],
+              [150000, "Climate Cooler", "150kg of emissions eliminated through everyday swaps."],
+              [300000, "Atmosphere Guardian", "300kg of greenhouse gases prevented from entering the air."],
+              [500000, "Half-Tonne Hero", "500kg of CO₂e saved! Half a tonne of pure climate impact."]
+            ];
+
+            var trip_count = {{ trip_count }};
+            var distance = {{ distance }};
             var userName = "{{ user.name }}";
             var userSaved = {{ user.emissions_saved }};
             var employerName = "{{ employer.name }}";
@@ -42,18 +74,39 @@
             var regionSaved = {{ region.emissions_saved }};
             var allSaved = {{ all.emissions_saved }};
 
-            var prevGoal = 0;
-            var targetGoal = 5000;
+            var currDistance = 0;
+            var targetDistance = 10000;
+            function userTargets (distance, trip_count, userSaved) {
+                UserDistanceTargets.forEach(function (target, index) {
+                    if (target[0] <= distance) {
+                        targetDistance = UserDistanceTargets[index + 1]?.[0] ?? target[0];
+                        currDistance = target[0];
+                    }
+                });
 
-            Targets.forEach(function (target, index) {
-                if (target <= userSaved) {
-                    targetGoal = Targets[index + 1];
-                    prevGoal = target;
-                }
-            });
+                var currTrips = 0;
+                var targetTrips = 1;
 
-            var distToGoal = targetGoal - userSaved;
+                UserTripTargets.forEach(function (target, index) {
+                    if (target[0] <= trip_count) {
+                        targetTrips = UserTripTargets[index + 1]?.[0] ?? target[0];
+                        currTrips = target[0];
+                    }
+                });
 
+                var currSaved = 0;
+                var targetSaved = 1;
+
+                UserSavingsTargets.forEach(function (target, index) {
+                    if (target[0] <= userSaved) {
+                        targetSaved = UserSavingsTargets[index + 1]?.[0] ?? target[0];
+                        currSaved = target[0];
+                    }
+                });
+                return [currDistance, targetDistance, currTrips, targetTrips, currSaved, targetSaved];
+            }
+            var userTargetList = userTargets(distance, trip_count, userSaved);
+            console.log(userTargetList)
             var prevGoalEmp = 0;
             var targetGoalEmp = 5000;
 
@@ -84,40 +137,7 @@
                 }
             });
             addEventListener("DOMContentLoaded", function () {
-                console.log(prevGoalEmp);
                 var parent = document.getElementById("emissions");
-                if (prevGoal == 0) {
-                    parent.innerHTML = `
-                        <div class="emissionsbox">
-                            <h4>You</h4>
-                            <div class="graphback">
-                                <div class="graphfront" style="width:${((userSaved / targetGoal) * 100).toFixed(1)}%;"></div>
-                                <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
-                                <span class="graphlabel" style="left:calc(${((prevGoal / targetGoal) * 100).toFixed(1)}% - 200px);">${(prevGoal / 1000).toFixed(1)}kg</span>
-                                <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoal / 1000}kg</span>
-                            </div>
-                            <div class="yroundbox">
-                                <p>You've saved ${(userSaved / 1000).toFixed(1)}kg of CO₂e so far.</p>
-                                <p>Keep up the great work - you're only ${(distToGoal / 1000).toFixed(1)} kilograms away from hitting your next milestone of ${(targetGoal / 1000).toFixed(1)}kg!</p>
-                            </div>
-                        </div>`
-                } else {
-                    parent.innerHTML = `
-                        <div class="emissionsbox">
-                            <h4>You</h4>
-                            <div class="graphback">
-                                <div class="graphfront" style="width:${((userSaved / targetGoal) * 100).toFixed(1)}%;"></div>
-                                <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
-                                <span class="graphlabel" style="left:calc(${((prevGoal / targetGoal) * 100).toFixed(1)}% - 200px);">${(prevGoal / 1000).toFixed(1)}kg</span>
-                                <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoal / 1000}kg</span>
-                            </div>
-                            <div class="yroundbox">
-                                <p>You've saved ${(userSaved / 1000).toFixed(1)}kg of CO₂e so far.</p>
-                                <p>You've hit the milestone of saving ${(prevGoal / 1000).toFixed(1)}kg!</p>
-                                <p>Keep up the great work - you're only ${(distToGoal / 1000).toFixed(1)} kilograms away from hitting your next milestone of ${(targetGoal / 1000).toFixed(1)}kg!</p>
-                            </div>
-                        </div>`
-                }
                 if (employerName != "None / Other / Prefer Not To Say") {
                     parent.innerHTML =
                         parent.innerHTML +
@@ -130,10 +150,7 @@
                                  <span class="graphlabel" style="left:calc(${((prevGoalEmp / targetGoalEmp) * 100).toFixed(1)}% - 200px);">${(prevGoalEmp / 1000).toFixed(1)}kg</span>
                                  <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalEmp / 1000}kg</span>
                              </div>
-                             <div class="yroundbox">
-                             <p>So far, ${employerName} has saved ${(employerSaved / 1000).toFixed(0)}kg of CO₂e.</p>
-                             <p>Encourage your coworkers to keep up the great work!</p>
-                         </div></div>
+                             </div>
                          `;
                 }
                 if (regionName != "Other") {
@@ -149,10 +166,8 @@
                                  <span class="graphlabel" style="left:calc(${((prevGoalReg / targetGoalReg) * 100).toFixed(1)}% - 200px);">${(prevGoalReg / 1000).toFixed(1)}kg</span>
                                  <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalReg / 1000}kg</span>
                              </div>
-                             <div class="yroundbox">
-                             <p>Together, ${regionName} has saved ${(regionSaved / 1000).toFixed(0)}kg of CO₂e.</p>
-                             <p>Great job, Nelsonians!</p>
-                         </div></div>
+
+                         </div>
                          `
                     } else {
                         parent.innerHTML =
@@ -166,10 +181,7 @@
                                  <span class="graphlabel" style="left:calc(${((prevGoalReg / targetGoalReg) * 100).toFixed(1)}% - 200px);">${(prevGoalReg / 1000).toFixed(1)}kg</span>
                                  <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalReg / 1000}kg</span>
                              </div>
-                             <div class="yroundbox">
-                             <p>Together, ${regionName} has saved ${(regionSaved / 1000).toFixed(0)}kg of CO₂e.</p>
-                             <p>Great job, residents of ${regionName}!</p>
-                         </div></div>
+                             </div>
                          `;
                     }
                 }
@@ -184,21 +196,50 @@
                                  <span class="graphlabel" style="left:calc(${((prevGoalAll / targetGoalAll) * 100).toFixed(1)}% - 200px);">${(prevGoalAll / 1000).toFixed(1)}kg</span>
                                  <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalAll / 1000}kg</span>
                              </div>
-                             <div class="yroundbox">
-                             <p>In total, we've saved ${(allSaved / 1000).toFixed(0)}kg of CO₂e.</p>
-                             <p>That's as much as ${(allSaved / TreePerYear).toFixed(0)} trees absorb in a year!</p>
-                         </div></div>
+                             </div>
                          `;
-
-                if (window.location.search.slice(1) == "confirm_edit=true") {
-                    niceAlert("Swap One", "Successfully edited profile!", [['OK!', true, "closePopup()"]]);
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                if (urlParams.get('confirm_edit') == "true") {
+                    niceAlert("Swap One", "Successfully edited profile!", [['OK!', true, "closePopup('edited')"]], "edited");
                     const url = new URL(window.location.href);
                     url.searchParams.delete('confirm_edit');
                     window.history.replaceState({}, '', url.pathname + url.search + url.hash);
-                } else if (window.location.search.slice(1) == "just_logged_yes=true") {
-                    niceAlert("Trip Logged!", "Would you like to log another trip with different distances or modes of transport?", [["Log Another", false, "logAnother()"], ["I'm Done!", true, "closePopup()"]]);
+                } else if (urlParams.get('just_logged_yes') == "true") {
+
+                    var oldBlock = userTargets(urlParams.get('distance'), urlParams.get('trip_count'), urlParams.get('emissions_saved'));
+                    var newBadges = [];
+                    oldBlock.forEach((target, index) => {
+                        if (index % 2 == 0) {
+                            if (target != userTargetList[index]) {
+                                newBadges.push(index / 2);
+                            }
+                        }
+                    });
+                    niceAlert("Trip Logged!", "Would you like to log another trip with different distances or modes of transport?", [["Log Another", false, "logAnother()"], ["I'm Done!", true, "closePopup('logged')"]], "logged");
+                    newBadges.forEach((badgeid, index) => {
+                        var badgelist = ["Distance", "Trip Quantity", "Carbon Savings"];
+                        if (badgeid == 0) {
+                            match = UserDistanceTargets.find(([dist]) => dist === userTargetList[0])
+                        } else if (badgeid == 1) {
+                            match = UserTripTargets.find(([dist]) => dist === userTargetList[2])
+                        } else {
+                            match = UserSavingsTargets.find(([dist]) => dist === userTargetList[4])
+                        }
+
+                        console.log(match)
+
+
+                        niceAlert(`You've unlocked the ${match[1]} badge!`, `${match[2]}<br><img class="popupbadge" src="/static/images/Badges/gru.avif">`, [["Great!", true, `closePopup('${badgeid}')`]], badgeid);
+                    });
+                    console.log(newBadges)
+
+
                     const url = new URL(window.location.href);
                     url.searchParams.delete('just_logged_yes');
+                    url.searchParams.delete('distance');
+                    url.searchParams.delete('trip_count');
+                    url.searchParams.delete('emissions_saved');
                     window.history.replaceState({}, '', url.pathname + url.search + url.hash);
                 }
             });
@@ -216,6 +257,34 @@
                     console.log("b");
                     console.log("b");
                 }
+            }
+
+            function scrollToTopBlocking() {
+              return new Promise((resolve) => {
+                if (window.scrollY === 0) {
+                  resolve();
+                  return;
+                }
+
+                const handleScrollEnd = () => {
+                  window.removeEventListener('scrollend', handleScrollEnd);
+                  resolve();
+                };
+
+                window.addEventListener('scrollend', handleScrollEnd);
+
+                window.scrollTo({
+                  top: 0,
+                  behavior: 'smooth'
+                });
+              });
+            }
+
+            async function openBadgeView() {
+                await scrollToTopBlocking()
+                document.querySelector("body").innerHTML += `
+                    <div class="popupbg" id="popup"></div>`
+
             }
         </script>
     </head>
@@ -241,7 +310,27 @@
         <main>
             <h1>Dashboard</h1>
             <h2>Your Info</h2>
-            <div class="content" id="emissions"></div>
+            <div class="content" id="emissions" role="button" tabindex="0" onclick="openBadgeView()">
+                <div class="badgepanel" id="badgepanel">
+                    <div class="threebox">
+                        <div class="badgebox" id="emissions_b">
+                            <img class="badge incomplete" src="{% static 'images/Badges/gru.avif' %}" />
+                            <svg class="badgegraph" ViewBox="0 0 100 100">
+                                <circle class="track" cx="50" cy="50" r="40" style="--percent: 20"></circle>
+                            </svg>
+                        </div>
+                        <div class="badgebox" id="trips">
+                            <img class="badge incomplete" src="{% static 'images/Badges/gru.avif' %}" />
+                        </div>
+                        <div class="badgebox" id="distance">
+                            <img class="badge incomplete" src="{% static 'images/Badges/gru.avif' %}" />
+                        </div>
+                    </div>
+                    <p class="infobox plaintext">Click on a badge to view progress and see more information</p>
+                </div>
+                <div class="cutoff"></div>
+            </div>
+            <div class="cutoff"></div>
             <hr class="divider" />
             <div class="content"><div class="article">{{ post.formatted_markdown|safe }}</div></div>
         </main>
@@ -284,8 +373,8 @@
         </footer>
         <script data-collect-dnt="true" async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
         <script>
-            function closePopup() {
-                document.getElementById("popup").remove();
+            function closePopup(id) {
+                document.getElementById(`popup${id}`).remove();
             }
 
             function logAnother() {
@@ -293,7 +382,7 @@
             }
 
             //button input: list for buttons [[<text>, <isPrimary (t/f)>, <functionStr>]]
-            function niceAlert(title, text, buttons) {
+            function niceAlert(title, text, buttons, id) {
                 let buttonString = "";
                 buttons.forEach((button) => {
                     buttonString += '<button class="button centered';
@@ -304,7 +393,7 @@
                 });
 
                 document.querySelector("body").innerHTML += `
-                    <div class="popupbg" id="popup">
+                    <div class="popupbg" id="popup${id}">
                         <div class="popup">
                             <div class="popupheader"><h2>${title}</h2></div>
                             <div class="popuptext">${text}</div>

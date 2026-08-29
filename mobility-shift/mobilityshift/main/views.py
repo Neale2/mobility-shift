@@ -14,6 +14,8 @@ from django.utils.translation import gettext_lazy as _
 from django.views import generic
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Sum, F, FloatField, IntegerField
+from django.db.models.functions import Coalesce
 
 from .forms import SignUpForm, YesLogForm, NoLogForm, UnsubForm, EditProfileForm
 from .models import User, Trip, DeletedUser, DeletedTrip, Employer, Region, All, Post
@@ -85,7 +87,22 @@ def dash(request, pk):
     #gets first post
     post = Post.objects.order_by('-updated_at').first()
     
-    context = {'user': user, 'employer': employer, 'region': region, 'all': all_model, 'post': post}
+    stats = Trip.objects.filter(user=user).aggregate(
+        total_distance=Coalesce(
+            Sum(F('distance') * F('quantity'), output_field=FloatField()), 
+            0.0
+        ),
+        total_trips=Coalesce(
+            Sum('quantity', output_field=IntegerField()), 
+            0
+        )
+    )
+
+    distance = stats['total_distance']
+    trip_count = round(stats['total_trips'] / 2)
+    
+    print(trip_count, distance)
+    context = {'user': user, 'employer': employer, 'region': region, 'all': all_model, 'post': post, 'trip_count': trip_count, 'distance': distance}
     return render(request, 'dash.html', context)
 
 
@@ -100,11 +117,27 @@ def yes(request, pk):
         #grams of emissions per km - carpool is half of personal vehicle emissions - assuming 2 people carpooling
         mode_emissions = {'walk': 0, 'bike': 0, 'bus': 15, 'ev': 19, 'carpool': user.vehicle / 2}
         choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool")]
+        
+        stats = Trip.objects.filter(user=user).aggregate(
+            total_distance=Coalesce(
+                Sum(F('distance') * F('quantity'), output_field=FloatField()), 
+                0.0
+            ),
+            total_trips=Coalesce(
+                Sum('quantity', output_field=IntegerField()), 
+                0
+            )
+        )
+
+        distance = stats['total_distance']
+        trip_count = round(stats['total_trips'] / 2)
+        t_savings = user.emissions_saved
+        
         if form.is_valid():
             #Checking if error in saving
             try:
                 #gets emission factor in grams per km. subtracts factor of changed mode of transport. div by 1000 to get grams per meter. multiply by meters traveled and number of trips.
-                emissions_saved = int(int(form.cleaned_data['distance']) * int(form.cleaned_data['quantity']) * (user.vehicle - mode_emissions[form.cleaned_data['mode']]) / 1000)
+                emissions_saved = int(int(form.cleaned_data['distance']) * (int(form.cleaned_data['quantity'])*2 + int(form.cleaned_data['oneway'])) * (user.vehicle - mode_emissions[form.cleaned_data['mode']]) / 1000)
                 user.emissions_saved = user.emissions_saved + emissions_saved
                 user.logged_this_week = True
                 user.save()
@@ -116,9 +149,9 @@ def yes(request, pk):
                 all_model.save()
                 
                 
-                data = Trip(user=user, mode=form.cleaned_data['mode'], quantity=form.cleaned_data['quantity'], distance=int(form.cleaned_data['distance']))
+                data = Trip(user=user, mode=form.cleaned_data['mode'], quantity=(form.cleaned_data['quantity']*2 + form.cleaned_data['oneway']), distance=int(form.cleaned_data['distance']))
                 data.save()
-                return redirect(f"/dash/{pk}?just_logged_yes=true")
+                return redirect(f"/dash/{pk}?just_logged_yes=true&distance={distance}&trip_count={trip_count}&emissions_saved={t_savings}")
             except Exception as e:
                 if str(e) == "database is locked":
                     form.add_error(None, _("Unable to save your response at this time - you might want to wait a couple seconds and try again."))
