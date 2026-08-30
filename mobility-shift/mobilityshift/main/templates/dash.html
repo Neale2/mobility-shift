@@ -64,43 +64,45 @@
               [500000, "Half-Tonne Hero", "500kg of CO₂e saved! Half a tonne of pure climate impact."]
             ];
 
+            var next_employer = "{{ next_employer }}";
+            var emissions_to_pass = {{ emissions_to_pass }};
+            var rank = {{ rank }};
             var trip_count = {{ trip_count }};
+            var t_trip_count = {{ t_trip_count }};
             var distance = {{ distance }};
             var userName = "{{ user.name }}";
             var userSaved = {{ user.emissions_saved }};
             var employerName = "{{ employer.name }}";
             var employerSaved = {{ employer.emissions_saved }};
-            var regionName = "{{ region.name }}";
-            var regionSaved = {{ region.emissions_saved }};
             var allSaved = {{ all.emissions_saved }};
 
             var currDistance = 0;
-            var targetDistance = 10000;
+            var targetDistance = UserDistanceTargets[0];
             function userTargets (distance, trip_count, userSaved) {
                 UserDistanceTargets.forEach(function (target, index) {
                     if (target[0] <= distance) {
-                        targetDistance = UserDistanceTargets[index + 1]?.[0] ?? target[0];
-                        currDistance = target[0];
+                        targetDistance = UserDistanceTargets[index + 1] ?? target;
+                        currDistance = target;
                     }
                 });
 
                 var currTrips = 0;
-                var targetTrips = 1;
+                var targetTrips = UserTripTargets[0];
 
                 UserTripTargets.forEach(function (target, index) {
                     if (target[0] <= trip_count) {
-                        targetTrips = UserTripTargets[index + 1]?.[0] ?? target[0];
-                        currTrips = target[0];
+                        targetTrips = UserTripTargets[index + 1] ?? target;
+                        currTrips = target;
                     }
                 });
 
                 var currSaved = 0;
-                var targetSaved = 1;
+                var targetSaved = UserSavingsTargets[0];
 
                 UserSavingsTargets.forEach(function (target, index) {
                     if (target[0] <= userSaved) {
-                        targetSaved = UserSavingsTargets[index + 1]?.[0] ?? target[0];
-                        currSaved = target[0];
+                        targetSaved = UserSavingsTargets[index + 1] ?? target;
+                        currSaved = target;
                     }
                 });
                 return [currDistance, targetDistance, currTrips, targetTrips, currSaved, targetSaved];
@@ -117,87 +119,96 @@
                 }
             });
 
-            var prevGoalReg = 0;
-            var targetGoalReg = 5000;
-
-            Targets.forEach(function (target, index) {
-                if (target <= regionSaved) {
-                    targetGoalReg = Targets[index + 1];
-                    prevGoalReg = target;
-                }
-            });
-
-            var prevGoalAll = 0;
-            var targetGoalAll = 5000;
-
-            Targets.forEach(function (target, index) {
-                if (target <= allSaved) {
-                    targetGoalAll = Targets[index + 1];
-                    prevGoalAll = target;
-                }
-            });
             addEventListener("DOMContentLoaded", function () {
+
+
                 var parent = document.getElementById("emissions");
-                if (employerName != "None / Other / Prefer Not To Say") {
-                    parent.innerHTML =
-                        parent.innerHTML +
-                        `
-                         <div class="emissionsbox">
-                             <h4>${employerName}</h4>
-                             <div class="graphback">
-                                 <div class="graphfront" style="width:${((employerSaved / targetGoalEmp) * 100).toFixed(1)}%;"></div>
-                                 <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
-                                 <span class="graphlabel" style="left:calc(${((prevGoalEmp / targetGoalEmp) * 100).toFixed(1)}% - 200px);">${(prevGoalEmp / 1000).toFixed(1)}kg</span>
-                                 <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalEmp / 1000}kg</span>
-                             </div>
-                             </div>
-                         `;
+
+                parent.innerHTML += `<div class=yroundbox><p class="badgetext">Swap One impact: <span class="bignumber">${Math.round(allSaved/1000).toLocaleString('en-US')}kg</span> CO₂ saved across <span class="bignumber">${t_trip_count.toLocaleString('en-US')}</span> trips!</p></div><br>`
+
+                var badgepanel = `<div id="badgepanel" class="badgepanel"> <div class="threebox">`
+
+                var userValue = `${(userSaved/1000).toFixed(1)} / ${userTargetList[3][0]}`
+                var incomplete = 'incomplete'
+                if (userTargetList[5] == userTargetList[4]) {
+                    userValue = (userSaved / 1000).toFixed(1);
+                    incomplete = "";
                 }
-                if (regionName != "Other") {
-                    if (regionName == "Nelson") {
+                badgepanel += `
+
+                        <div class="badgebox" id="emissions_b">
+                            <img class="badge ${incomplete}" src="{% static 'images/Badges/' %}Savings_${userTargetList[5][0]}.png" />
+                            <p class="badgetext">${userValue}kg</p>
+                        </div>
+                `
+
+                var userValue = `${trip_count} / ${userTargetList[3][0]}`
+                var incomplete = 'incomplete'
+                if (userTargetList[3] == userTargetList[2]) {
+                    userValue = trip_count;
+                    incomplete = "";
+                }
+                badgepanel += `
+                        <div class="badgebox" id="trips">
+                            <img class="badge ${incomplete}" src="{% static 'images/Badges/' %}Trips_${userTargetList[3][0]}.png" />
+                            <p class="badgetext">${userValue} trips</p>
+                        </div>
+                `
+
+                var userValue = `${(distance / 1000).toFixed(1)} / ${userTargetList[1][0] / 1000}`
+                var incomplete = 'incomplete'
+                if (userTargetList[1] == userTargetList[0]) {
+                    userValue = (distance / 1000).toFixed(1);
+                    incomplete = "";
+                }
+                badgepanel += `
+                        <div class="badgebox" id="distance">
+                            <img class="badge ${incomplete}" src="{% static 'images/Badges/' %}Distance_${userTargetList[1][0]}.png" />
+                            <p class="badgetext">${userValue}km</p>
+                        </div>
+
+                `
+                parent.innerHTML = parent.innerHTML + badgepanel + `</div>
+                </div>`
+
+
+
+
+                if (employerName != "None / Other / Prefer Not To Say") {
+                    if (rank == 1) {
                         parent.innerHTML =
                             parent.innerHTML +
                             `
-                         <div class="emissionsbox">
-                             <h4>${regionName}</h4>
-                             <div class="graphback">
-                                 <div class="graphfront" style="width:${((regionSaved / targetGoalReg) * 100).toFixed(1)}%;"></div>
-                                 <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
-                                 <span class="graphlabel" style="left:calc(${((prevGoalReg / targetGoalReg) * 100).toFixed(1)}% - 200px);">${(prevGoalReg / 1000).toFixed(1)}kg</span>
-                                 <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalReg / 1000}kg</span>
-                             </div>
+                             <div class="emissionsbox">
+                                 <h4>${employerName}</h4>
+                                 <div class="graphback">
+                                     <div class="graphfront" style="width:${((employerSaved / employerSaved) * 100).toFixed(1)}%;"></div>
+                                     <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
+                                     <span class="graphlabel" style="left:calc(100% - 200px);">${(employerSaved / 1000).toFixed(1)}kg</span>
 
-                         </div>
-                         `
+                                 </div>
+                                 <p>${employerName} is in first place, with the most amount of emissions saved!</p>
+                                 </div>
+                             `;
+
                     } else {
                         parent.innerHTML =
                             parent.innerHTML +
                             `
-                         <div class="emissionsbox">
-                             <h4>${regionName}</h4>
-                             <div class="graphback">
-                                 <div class="graphfront" style="width:${((regionSaved / targetGoalReg) * 100).toFixed(1)}%;"></div>
-                                 <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
-                                 <span class="graphlabel" style="left:calc(${((prevGoalReg / targetGoalReg) * 100).toFixed(1)}% - 200px);">${(prevGoalReg / 1000).toFixed(1)}kg</span>
-                                 <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalReg / 1000}kg</span>
-                             </div>
-                             </div>
-                         `;
+                             <div class="emissionsbox">
+                                 <h4>${employerName}</h4>
+                                 <div class="graphback">
+                                     <div class="graphfront" style="width:${((employerSaved / (employerSaved + emissions_to_pass + 1)) * 100).toFixed(1)}%;"></div>
+                                     <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
+                                     <span class="graphlabel" style="left:calc(${((employerSaved / (employerSaved + emissions_to_pass + 1)) * 100).toFixed(1)}% - 200px);">${(employerSaved / 1000).toFixed(1)}kg</span>
+                                     <span class="graphlabel" style="left:calc(100% - 200px);">${((employerSaved + emissions_to_pass) / 1000).toFixed(1)}kg</span>
+
+                                 </div>
+                                 <p>${employerName} is in ${rank+getOrdinalSuffix(rank)} place, just ${(emissions_to_pass/1000).toFixed(1)}kg behind ${next_employer}!</p>
+                                 </div>
+                             `;
                     }
                 }
-                parent.innerHTML =
-                    parent.innerHTML +
-                    `
-                         <div class="emissionsbox">
-                             <h4>Swap One</h4>
-                             <div class="graphback">
-                                 <div class="graphfront" style="width:${((allSaved / targetGoalAll) * 100).toFixed(1)}%;"></div>
-                                 <span class="graphlabel" style="left:calc(0% - 200px);">0.0kg</span>
-                                 <span class="graphlabel" style="left:calc(${((prevGoalAll / targetGoalAll) * 100).toFixed(1)}% - 200px);">${(prevGoalAll / 1000).toFixed(1)}kg</span>
-                                 <span class="graphlabel" style="left:calc(100% - 200px);">${targetGoalAll / 1000}kg</span>
-                             </div>
-                             </div>
-                         `;
                 const queryString = window.location.search;
                 const urlParams = new URLSearchParams(queryString);
                 if (urlParams.get('confirm_edit') == "true") {
@@ -211,6 +222,8 @@
                     var newBadges = [];
                     oldBlock.forEach((target, index) => {
                         if (index % 2 == 0) {
+                            console.log(target)
+                            console.log(userTargetList[index])
                             if (target != userTargetList[index]) {
                                 newBadges.push(index / 2);
                             }
@@ -218,19 +231,19 @@
                     });
                     niceAlert("Trip Logged!", "Would you like to log another trip with different distances or modes of transport?", [["Log Another", false, "logAnother()"], ["I'm Done!", true, "closePopup('logged')"]], "logged");
                     newBadges.forEach((badgeid, index) => {
-                        var badgelist = ["Distance", "Trip Quantity", "Carbon Savings"];
+                        var badgelist = ["Distance", "Trips", "Savings"];
                         if (badgeid == 0) {
-                            match = UserDistanceTargets.find(([dist]) => dist === userTargetList[0])
+                            match = UserDistanceTargets.find(([dist]) => dist === userTargetList[0][0])
                         } else if (badgeid == 1) {
-                            match = UserTripTargets.find(([dist]) => dist === userTargetList[2])
+                            match = UserTripTargets.find(([dist]) => dist === userTargetList[2][0])
                         } else {
-                            match = UserSavingsTargets.find(([dist]) => dist === userTargetList[4])
+                            match = UserSavingsTargets.find(([dist]) => dist === userTargetList[4][0])
                         }
 
                         console.log(match)
 
 
-                        niceAlert(`You've unlocked the ${match[1]} badge!`, `${match[2]}<br><img class="popupbadge" src="/static/images/Badges/gru.avif">`, [["Great!", true, `closePopup('${badgeid}')`]], badgeid);
+                        niceAlert(`You've unlocked the ${match[1]} badge!`, `${match[2]}<br><img class="popupbadge" src="{% static 'images/Badges/' %}${badgelist[badgeid]}_${match[0]}.png">`, [["Great!", true, `closePopup('${badgeid}')`]], badgeid);
                     });
                     console.log(newBadges)
 
@@ -259,32 +272,24 @@
                 }
             }
 
-            function scrollToTopBlocking() {
-              return new Promise((resolve) => {
-                if (window.scrollY === 0) {
-                  resolve();
-                  return;
-                }
+            function getOrdinalSuffix(num) {
+              const j = num % 10;
+              const k = num % 100;
 
-                const handleScrollEnd = () => {
-                  window.removeEventListener('scrollend', handleScrollEnd);
-                  resolve();
-                };
+              if (k >= 11 && k <= 13) {
+                return "th";
+              }
+              if (j === 1) {
+                return "st";
+              }
+              if (j === 2) {
+                return "nd";
+              }
+              if (j === 3) {
+                return "rd";
+              }
 
-                window.addEventListener('scrollend', handleScrollEnd);
-
-                window.scrollTo({
-                  top: 0,
-                  behavior: 'smooth'
-                });
-              });
-            }
-
-            async function openBadgeView() {
-                await scrollToTopBlocking()
-                document.querySelector("body").innerHTML += `
-                    <div class="popupbg" id="popup"></div>`
-
+              return "th";
             }
         </script>
     </head>
@@ -309,25 +314,7 @@
         </header>
         <main>
             <h1>Dashboard</h1>
-            <h2>Your Info</h2>
-            <div class="content" id="emissions" role="button" tabindex="0" onclick="openBadgeView()">
-                <div class="badgepanel" id="badgepanel">
-                    <div class="threebox">
-                        <div class="badgebox" id="emissions_b">
-                            <img class="badge incomplete" src="{% static 'images/Badges/gru.avif' %}" />
-                            <svg class="badgegraph" ViewBox="0 0 100 100">
-                                <circle class="track" cx="50" cy="50" r="40" style="--percent: 20"></circle>
-                            </svg>
-                        </div>
-                        <div class="badgebox" id="trips">
-                            <img class="badge incomplete" src="{% static 'images/Badges/gru.avif' %}" />
-                        </div>
-                        <div class="badgebox" id="distance">
-                            <img class="badge incomplete" src="{% static 'images/Badges/gru.avif' %}" />
-                        </div>
-                    </div>
-                    <p class="infobox plaintext">Click on a badge to view progress and see more information</p>
-                </div>
+            <div class="content" id="emissions">
                 <div class="cutoff"></div>
             </div>
             <div class="cutoff"></div>

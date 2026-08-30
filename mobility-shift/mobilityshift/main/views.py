@@ -3,6 +3,7 @@ import os
 import uuid
 import json
 import re
+import math
 
 from .functions import send_email, delete_list_user
 from .secrets import webhook_token
@@ -97,12 +98,31 @@ def dash(request, pk):
             0
         )
     )
+    
+    programStats = Trip.objects.aggregate(
+        total_trips=Coalesce(
+            Sum('quantity', output_field=IntegerField()), 
+            0
+        )
+    )
+    
+    next_employer = Employer.objects.filter(
+        emissions_saved__gt=employer.emissions_saved
+    ).order_by('emissions_saved').first()
+    emissions_to_pass = -1
+    if next_employer:
+        emissions_to_pass = next_employer.emissions_saved - employer.emissions_saved
+    
+    rank = Employer.objects.filter(
+        emissions_saved__gt=employer.emissions_saved
+    ).count() + 1
 
     distance = stats['total_distance']
-    trip_count = round(stats['total_trips'] / 2)
+    trip_count = math.ceil(stats['total_trips'] / 2)
+    t_trip_count = math.ceil(programStats['total_trips'] / 2)
     
     print(trip_count, distance)
-    context = {'user': user, 'employer': employer, 'region': region, 'all': all_model, 'post': post, 'trip_count': trip_count, 'distance': distance}
+    context = {'user': user, 'employer': employer, 'region': region, 'all': all_model, 'post': post, 'trip_count': trip_count, 'distance': distance, 't_trip_count': t_trip_count, 'next_employer': next_employer, 'emissions_to_pass': emissions_to_pass, 'rank': rank}
     return render(request, 'dash.html', context)
 
 

@@ -33,7 +33,7 @@ class SignUpForm(forms.Form):
         return email
     
 class YesLogForm(forms.Form):
-    quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': "quantity multi input"}), initial=0, label="How many round trips did you swap this week?", min_value=0, max_value=14)
+    quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': "quantity multi input"}), initial=0, label="How many round trips did you swap this week?", min_value=0, max_value=7)
     oneway = forms.IntegerField(widget=forms.NumberInput(attrs={'class': "oneway multi input"}), initial=0, label="Any one-way trips?", min_value=0, max_value=14)
     mode = forms.ChoiceField(widget=forms.Select(attrs={'class': "mode multi input"}), label="What mode of transport did you use?", choices=[("walk", "Walk"), ("bike", "Bike / Scooter"), ("bus", "Bus"), ("ev", "EV"), ('carpool', "Carpool")])
     distance = forms.ChoiceField(widget=forms.Select(attrs={'class': "distance multi input info", 'id': 'distance'}), label="How far did you go, one way?", choices=[(500, "0.5km"), (1000, "1km"), (2500, "2.5km"), (5000, "5km"), (10000, "10km"), (25000, "25km"), (50000, "50km")])

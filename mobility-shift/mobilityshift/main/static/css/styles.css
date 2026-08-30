@@ -396,11 +396,11 @@ a.button {
     background-color: #fff7d8;
     padding: 20px;
     border-radius: 5px;
-    cursor: pointer;
+    /*cursor: pointer;*/
 }
-.badgepanel:hover {
+/*.badgepanel:hover {
     background-color: #f9d22c;
-}
+}*/
 
 .threebox {
     width: 100%;
@@ -426,6 +426,12 @@ a.button {
     width: 100%;
 }
 
+.badgetext {
+    text-align: center;
+    font-weight: bold;
+    color: #4a4a4a;
+}
+
 .popupbadge {
     flex-shrink: 1;
     min-height: 0;
@@ -434,23 +440,8 @@ a.button {
     object-fit: contain;
 }
 
-.badgegraph {
-    width: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 9;
-    transform: rotate(-90deg);
-}
-
-.badgegraph circle {
-    stroke-width: 4;
-    stroke-linecap: round;
-    fill: none;
-}
-
 .incomplete {
-    filter: saturate(10%);
+    filter: saturate(20%);
 }
 
 .plaintext {
@@ -463,6 +454,23 @@ a.button {
     stroke-dasharray: 251.3272;
     stroke-dashoffset: calc(251.3272 - (251.3272 * var(--percent)) / 100);
     transition: stroke-dashoffset 0.5s ease;
+}
+
+.bignumber {
+    font-size: 16pt;
+    color: black;
+}
+
+.stupiddumbbox {
+    display: flex;
+}
+
+.badge3 {
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 /*.cutoff ~ * {
