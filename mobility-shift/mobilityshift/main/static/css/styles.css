@@ -473,6 +473,11 @@ a.button {
     flex-direction: column-reverse;
 }
 
+.smallfont {
+    font-size: 8pt;
+    font-style: italic;
+}
+
 /*.cutoff ~ * {
     display: none;
 }*/
