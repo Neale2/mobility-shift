@@ -21,6 +21,9 @@ class Post(models.Model):
 
 class Employer(models.Model):
     name = models.CharField(primary_key=True, unique=True)
+    email = models.EmailField(max_length=320, null=True)
+    size = models.CharField(choices=[("small", "Small"), ("medium", "Medium"), ("large", "Large")])
+    
     emissions_saved = models.PositiveIntegerField(default=0)
     def __str__(self):
         """String for representing the Model object."""

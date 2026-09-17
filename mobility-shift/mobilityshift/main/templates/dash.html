@@ -119,6 +119,7 @@
                             }
                         });
 
+
                         addEventListener("DOMContentLoaded", function () {
 
 
@@ -128,7 +129,7 @@
 
                             var badgepanel = `<div id="badgepanel" class="badgepanel"> <div class="threebox">`
 
-                            var userValue = `${(userSaved/1000).toFixed(1)} / ${userTargetList[3][0]}`
+                            var userValue = `${(userSaved/1000).toFixed(1)} / ${(userTargetList[5][0]/1000).toFixed(0)}`
                             var incomplete = 'incomplete'
                             if (userTargetList[5] == userTargetList[4]) {
                                 userValue = (userSaved / 1000).toFixed(1);
@@ -137,7 +138,7 @@
                             badgepanel += `
 
                                     <div class="badgebox" id="emissions_b">
-                                        <img class="badge ${incomplete}" src="{% static 'images/Badges/' %}Savings_${userTargetList[5][0]}.png" />
+                                        <img class="badge" src="{% static 'images/Badges/' %}Savings_${userTargetList[4][0]}.png" />
                                         <p class="badgetext"><span class=smallfont>Next:</span> <br>${userValue}kg</p>
                                     </div>
                             `
@@ -150,7 +151,7 @@
                             }
                             badgepanel += `
                                     <div class="badgebox" id="trips">
-                                        <img class="badge ${incomplete}" src="{% static 'images/Badges/' %}Trips_${userTargetList[3][0]}.png" />
+                                        <img class="badge" src="{% static 'images/Badges/' %}Trips_${userTargetList[2][0]}.png" />
                                         <p class="badgetext"><span class=smallfont>Next:</span> <br>${userValue} trips</p>
                                     </div>
                             `
@@ -163,7 +164,7 @@
                             }
                             badgepanel += `
                                     <div class="badgebox" id="distance">
-                                        <img class="badge ${incomplete}" src="{% static 'images/Badges/' %}Distance_${userTargetList[1][0]}.png" />
+                                        <img class="badge" src="{% static 'images/Badges/' %}Distance_${userTargetList[0][0]}.png" />
                                         <p class="badgetext"><span class=smallfont>Next:</span> <br>${userValue}km</p>
                                     </div>
 
@@ -188,8 +189,8 @@
             style="left:calc(100% - 200px);">${(employerSaved / 1000).toFixed(1)}kg</span>
 
                                              </div>
-                                             <p>${employerName} is in first place, with the most amount of emissions saved!</p>
-                                             </div>
+                                             <p>${employerName} is in first place, with the most emissions saved — ${(employerSaved / 1000).toFixed(1)}kg!</p>
+                                             </div><br>
                                          `;
 
                                 } else {
@@ -205,7 +206,7 @@
                                                  <span class="graphlabel" style="left:calc(100% - 200px);">${((employerSaved + emissions_to_pass) / 1000).toFixed(1)}kg</span>
 
                                              </div>
-                                             <p>${employerName} is in ${rank+getOrdinalSuffix(rank)} place, just ${(emissions_to_pass/1000).toFixed(1)}kg behind ${next_employer}!</p>
+                                             <p>${employerName} is in ${rank+getOrdinalSuffix(rank)} place, just ${(emissions_to_pass/1000).toFixed(1)}kg behind ${next_employer}!</p><br>
                                              </div>
                                          `;
                                 }
