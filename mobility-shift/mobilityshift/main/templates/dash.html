@@ -74,6 +74,7 @@
                         var userSaved = {{ user.emissions_saved }};
                         var employerName = "{{ employer.name }}";
                         var employerSaved = {{ employer.emissions_saved }};
+                        var employerSize = "{{ employer.size }}";
                         var allSaved = {{ all.emissions_saved }};
 
                         var currDistance = 0;
@@ -189,7 +190,7 @@
             style="left:calc(100% - 200px);">${(employerSaved / 1000).toFixed(1)}kg</span>
 
                                              </div>
-                                             <p>${employerName} is in first place, with the most emissions saved — ${(employerSaved / 1000).toFixed(1)}kg!</p>
+                                             <p>${employerName} is in first place for ${employerSize} businesses, with the most emissions saved — ${(employerSaved / 1000).toFixed(1)}kg!</p>
                                              </div><br>
                                          `;
 
@@ -206,7 +207,7 @@
                                                  <span class="graphlabel" style="left:calc(100% - 200px);">${((employerSaved + emissions_to_pass) / 1000).toFixed(1)}kg</span>
 
                                              </div>
-                                             <p>${employerName} is in ${rank+getOrdinalSuffix(rank)} place, just ${(emissions_to_pass/1000).toFixed(1)}kg behind ${next_employer}!</p><br>
+                                             <p>${employerName} is in ${rank+getOrdinalSuffix(rank)} place for ${employerSize} businesses, just ${(emissions_to_pass/1000).toFixed(1)}kg behind ${next_employer}!</p><br>
                                              </div>
                                          `;
                                 }

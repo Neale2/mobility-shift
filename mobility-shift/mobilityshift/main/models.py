@@ -21,7 +21,7 @@ class Post(models.Model):
 
 class Employer(models.Model):
     name = models.CharField(primary_key=True, unique=True)
-    email = models.EmailField(max_length=320, null=True)
+    email = models.EmailField(max_length=320, blank=True)
     size = models.CharField(choices=[("small", "Small"), ("medium", "Medium"), ("large", "Large")])
     
     emissions_saved = models.PositiveIntegerField(default=0)

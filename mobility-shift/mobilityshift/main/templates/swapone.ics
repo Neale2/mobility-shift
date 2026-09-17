@@ -1,0 +1,45 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//SwapOne//WeeklyReminder//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+
+BEGIN:VTIMEZONE
+TZID:Pacific/Auckland
+BEGIN:STANDARD
+TZOFFSETFROM:+1300
+TZOFFSETTO:+1200
+TZNAME:NZST
+DTSTART:19700405T030000
+RRULE:FREQ=YEARLY;BYMONTH=4;BYDAY=1SU
+END:STANDARD
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+1200
+TZOFFSETTO:+1300
+TZNAME:NZDT
+DTSTART:19700927T020000
+RRULE:FREQ=YEARLY;BYMONTH=9;BYDAY=-1SU
+END:DAYLIGHT
+END:VTIMEZONE
+
+BEGIN:VEVENT
+UID:weekly-reminder-{{ pk }}@swapone.nz
+DTSTAMP:20260101T000000Z
+DTSTART;TZID=Pacific/Auckland:20260105T073000
+DTEND;TZID=Pacific/Auckland:20260105T074500
+RRULE:FREQ=WEEKLY;BYDAY=MO
+SUMMARY:Swap One Weekly Reminder
+URL:https://app.swapone.nz/yes/{{ pk }}
+LOCATION:https://app.swapone.nz/yes/{{ pk }}
+DESCRIPTION:Click here to log your swaps:\n\nhttps://app.swapone.nz/yes/{{ pk }}
+X-ALT-DESC;FMTTYPE=text/html:<!DOCTYPE HTML><html><body><p>Click here for this week's link:<br><br><a href="https://app.swapone.nz/yes/{{ pk }}">https://app.swapone.nz/yes/{{ pk }}</a></p></body></html>
+STATUS:CONFIRMED
+
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Weekly Reminder
+TRIGGER:-PT0M
+END:VALARM
+
+END:VEVENT
+END:VCALENDAR

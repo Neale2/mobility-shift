@@ -107,6 +107,7 @@ def dash(request, pk):
     )
     
     next_employer = Employer.objects.filter(
+        size=employer.size,
         emissions_saved__gt=employer.emissions_saved
     ).order_by('emissions_saved').first()
     emissions_to_pass = -1
@@ -114,6 +115,7 @@ def dash(request, pk):
         emissions_to_pass = next_employer.emissions_saved - employer.emissions_saved
     
     rank = Employer.objects.filter(
+        size=employer.size,
         emissions_saved__gt=employer.emissions_saved
     ).count() + 1
 
@@ -210,6 +212,14 @@ def no(request, pk):
         
     context = {'user': user, 'form': form}
     return render(request, 'no.html', context)
+
+def cal(request, pk):
+    user = get_object_or_404(User, pk=pk)
+        
+    context = {'pk': pk}
+    response =  render(request, 'swapone.ics', context, content_type='text/calendar; charset=utf-8')
+    response['Content-Disposition'] = 'attachment; filename="swapone.ics"'
+    return response
 
 @csrf_exempt
 def unsub(request, pk):

@@ -14,7 +14,8 @@ urlpatterns = [
     path('unsubscribe/<pk>', views.unsub, name='unsub'),
     path('unsubscribe/stillsubbed/<pk>', views.stillsubbed, name='stillsubbed'),
     path('unsubscribe/unsubbed/', views.unsubbed, name='unsubbed'),
-    path('wh/bounce', views.bounce, name='bounce')
+    path('wh/bounce', views.bounce, name='bounce'),
+    path('cal/<pk>', views.cal, name='cal')
 ]
 
 if settings.DUMMY_EMAIL_SENDING:
