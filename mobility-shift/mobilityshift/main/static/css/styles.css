@@ -477,6 +477,18 @@ a.button {
 .smallfont {
     font-size: 8pt;
     font-style: italic;
+    text-align: left;
+}
+
+.smallerish {
+    font-size: 10pt;
+    text-align: left;
+}
+
+.centered {
+    font-size: 22px;
+    text-align: center;
+    padding-bottom: 10px;
 }
 
 /*.cutoff ~ * {

@@ -134,43 +134,46 @@
 
                             var badgepanel = `<div id="badgepanel" class="badgepanel"> <div class="threebox">`
 
-                            var userValue = `${(userSaved/1000).toFixed(1)} / ${(userTargetList[5][0]/1000).toFixed(0)}`
+                            var userValue = `<span class=smallfont>Current:</span> ${(userSaved/1000).toFixed(1)}<span class=smallerish>kg</span><br><span class=smallfont>Next:</span> ${(userTargetList[5][0]/1000).toFixed(0)}<span class=smallerish>kg</span>`
                             var incomplete = 'incomplete'
                             if (userTargetList[5] == userTargetList[4]) {
-                                userValue = (userSaved / 1000).toFixed(1);
+                                userValue = `<span class=smallfont>Current:</span> ${(userSaved/1000).toFixed(1)}<span class=smallerish>kg</span>`;
                                 incomplete = "";
                             }
                             badgepanel += `
 
                                     <div class="badgebox" id="emissions_b">
+                                        <h2 class="centered">CO₂</h2>
                                         <img class="badge" src="{% static 'images/Badges/' %}Savings_${userTargetList[4][0]}.png" />
-                                        <p class="badgetext"><span class=smallfont>Next:</span> <br>${userValue}kg</p>
+                                        <p class="badgetext">${userValue}</p>
                                     </div>
                             `
 
-                            var userValue = `${trip_count} / ${userTargetList[3][0]}`
+                            var userValue = `<span class=smallfont>Current:</span> ${trip_count} <span class=smallerish>Trips</span> <br><span class=smallfont>Next:</span> ${userTargetList[3][0]} <span class=smallerish>Trips</span>`
                             var incomplete = 'incomplete'
                             if (userTargetList[3] == userTargetList[2]) {
-                                userValue = trip_count;
+                                userValue = `<span class=smallfont>Current:</span> ${trip_count} <span class=smallerish>Trips</span>`;
                                 incomplete = "";
                             }
                             badgepanel += `
                                     <div class="badgebox" id="trips">
+                                    <h2 class="centered">Trips</h2>
                                         <img class="badge" src="{% static 'images/Badges/' %}Trips_${userTargetList[2][0]}.png" />
-                                        <p class="badgetext"><span class=smallfont>Next:</span> <br>${userValue} trips</p>
+                                        <p class="badgetext">${userValue}</p>
                                     </div>
                             `
 
-                            var userValue = `${(distance / 1000).toFixed(1)} / ${userTargetList[1][0] / 1000}`
+                            var userValue = `<span class=smallfont>Current:</span> ${(distance / 1000).toFixed(1)} <span class=smallerish>km</span><br><span class=smallfont>Next:</span> ${userTargetList[1][0] / 1000} <span class=smallerish>km</span>`
                             var incomplete = 'incomplete'
                             if (userTargetList[1] == userTargetList[0]) {
-                                userValue = (distance / 1000).toFixed(1);
+                                userValue = `<span class=smallfont>Current:</span> ${(distance / 1000).toFixed(1)} <span class=smallerish>km</span>`;
                                 incomplete = "";
                             }
                             badgepanel += `
                                     <div class="badgebox" id="distance">
+                                        <h2 class="centered">Km</h2>
                                         <img class="badge" src="{% static 'images/Badges/' %}Distance_${userTargetList[0][0]}.png" />
-                                        <p class="badgetext"><span class=smallfont>Next:</span> <br>${userValue}km</p>
+                                        <p class="badgetext">${userValue}</p>
                                     </div>
 
                             `
