@@ -90,7 +90,10 @@ def dash(request, pk):
     
     stats = Trip.objects.filter(user=user).aggregate(
         total_distance=Coalesce(
-            Sum(F('distance') * F('quantity'), output_field=FloatField()), 
+            Sum(
+                Coalesce(F('distance'), F('user__distance'), output_field=FloatField()) * F('quantity'), 
+                output_field=FloatField()
+            ), 
             0.0
         ),
         total_trips=Coalesce(
