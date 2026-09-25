@@ -155,7 +155,7 @@ def yes(request, pk):
         )
 
         distance = stats['total_distance']
-        trip_count = round(stats['total_trips'] / 2)
+        trip_count = math.ceil(stats['total_trips'] / 2)
         t_savings = user.emissions_saved
         
         if form.is_valid():
